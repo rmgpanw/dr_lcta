@@ -20,8 +20,8 @@ This project analyzes the trajectories of diabetic retinopathy screening over th
    - In **RStudio**, go to **File > New Project > Version Control > Git**, and paste the URL to clone the project to your local environment.
 
 2. **Run the Analysis**:
-   - Open and run the `trajectories_drs.R` script to conduct the data analysis.
-   - **Note**: This script may take time to execute, depending on the dataset size.
+   - Open and run the `trajectories_drs.R` script to conduct the data analysis. This file will generate necessary output files for the next steps. **Please allow the script to run until it completes**.
+   - **Note**: This script may take time to execute.
 
 3. **Generate Final Output**:
    - Once the analysis completes, open and execute the `trajectories_drs.qmd` file to generate the final report.
