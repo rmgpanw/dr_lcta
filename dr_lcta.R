@@ -30,8 +30,7 @@
   ## coverage ---------------------------------------------------------------
   
   coverage_2011_2023 <- coverage_2011_2023 %>% 
-    filter(mes==12,
-           codigo_prestacion %in% c("P4150602","P4190950","P4190400", "P4180300")) %>% 
+    filter(codigo_prestacion %in% c("P4150602","P4190950","P4190400", "P4180300")) %>% 
     dplyr::group_by(ano, comuna, id_servicio, id_region, zona, codigo_prestacion) %>% 
     dplyr::summarise(cantidad = round(sum(col01))) %>% 
     tidyr::spread(codigo_prestacion, cantidad) %>% 
@@ -226,14 +225,12 @@
   m1dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2023_noq1)
   m2dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2023_noq1, B=m1dm_noq1)
   m3dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage_2011_2023_noq1, B=m1dm_noq1)
-  ##m3dm <- gridsearch(rep = 100, maxiter = 10, minit = m1dm, m= hlme(dm_coverage2 ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage2, B=m1dm))
   m4dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 4, data = coverage_2011_2023_noq1, B=m1dm_noq1)
   m5dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm_noq1, m= hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1))
 #m5dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 m6dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 
-##m6dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm, m= hlme(dm_coverage2 ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage2, B=m1dm))
-summary(m1dm_noq1)
+
 
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
 
@@ -252,6 +249,9 @@ tab_dm_2011_2023_noq1 <- as.data.frame(lcmm::summarytable(m1dm_noq1, m2dm_noq1, 
                                                                   "ICL2", 
                                                                   "%class")))
 
+LCTMtoolkit(m2dm_noq1)
+
+LCTMcompare(m2dm_noq1, m3dm_noq1)
 ## Merge classification of size DM trajectory ------------------------------
 dm_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m1dm_noq1$pprob,3), by = "comuna2") ##one trajectories
 dm_2011_2023_noq1$class <- as.factor(dm_2011_2023_noq1$class)
@@ -281,7 +281,7 @@ supplementary_data_DGCC_2011_2023 <- supplementary_data_DGCC_2011_2023 %>%
 supplementary_data_DGCC_2011_2023 %>% 
   select(completeness_2011_2023) %>% 
   summary() # 91.77 
-0.9177 *12
+
 
 write.csv(supplementary_data_DGCC_2011_2023, "supplementary_data_DGCC_2011_2023.csv")
 
@@ -301,28 +301,16 @@ dm5_2011_2023_noq1$class <- as.factor(dm5_2011_2023_noq1$class)
 dm6_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m6dm_noq1$pprob,3), by = "comuna2") ##five trajectories
 dm6_2011_2023_noq1$class <- as.factor(dm6_2011_2023_noq1$class)
 
-## average latent class posterior probability ------------------------------
-
-postprob(m1dm_noq1)
-postprob(m2dm_noq1)
-postprob(m3dm_noq1)
-postprob(m4dm_noq1)
-postprob(m5dm_noq1)
-postprob(m6dm_noq1)
 
 
-## Lo–Mendell–Rubin adjusted LRT  ------------------------------------------
 
-##calc_lrt(n, null_ll, null_param, null_classes, alt_ll, alt_param, alt_classes)
-tidyLPA::calc_lrt(m1dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[1],  tab_dm_2011_2023_noq1$npm[1], tab_dm_2011_2023_noq1$G[1], tab_dm_2011_2023_noq1$loglik[2], tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2])
-tidyLPA::calc_lrt(m2dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[2],  tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2], tab_dm_2011_2023_noq1$loglik[3], tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3])
-tidyLPA::calc_lrt(m3dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[3],  tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3], tab_dm_2011_2023_noq1$loglik[4], tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4])
-tidyLPA::calc_lrt(m4dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[4],  tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4], tab_dm_2011_2023_noq1$loglik[5], tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5])
-tidyLPA::calc_lrt(m5dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[5],  tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5], tab_dm_2011_2023_noq1$loglik[6], tab_dm_2011_2023_noq1$npm[6], tab_dm_2011_2023_noq1$G[6])
+# MODEL ADEQUACY ----------------------------------------------------------
+
+
 
 ## Model fit criteria ------------------------------------------------------
 
-model_fit_criteria_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
+model_fit_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
   dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
   dplyr::mutate(sample_size= c(m1dm_noq1$ns, m2dm_noq1$ns, m3dm_noq1$ns, m4dm_noq1$ns, m5dm_noq1$ns, m6dm_noq1$ns),
                 CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
@@ -335,64 +323,103 @@ model_fit_criteria_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>%
   dplyr::select(-rowname) 
 
 
-write.csv(model_fit_criteria_2011_2023_noq1, "model_fit_criteria_2011_2023_noq1.csv", row.names = F)
+write.csv(model_fit_criteria_dm_2011_2023_noq1, "model_fit_criteria_dm_2011_2023_noq1.csv", row.names = F)
 
 
 
 ## Diagnostic criteria -----------------------------------------------------
 
-# Load necessary library
-library(dplyr)
+## average latent class posterior probability ------------------------------
 
-# Function to calculate OCC
-calculate_occ1 <- function(p, pi) {
-  (p / (1 - p)) / (pi / (1 - pi))
+postprob(m1dm_noq1)
+postprob(m2dm_noq1)
+postprob(m3dm_noq1)
+postprob(m4dm_noq1)
+postprob(m5dm_noq1)
+postprob(m6dm_noq1)
+
+# Assuming postprob() returns a structured list
+posterior_probsm2dm_noq1 <- postprob(m2dm_noq1)  
+posterior_probsm3dm_noq1 <- postprob(m3dm_noq1)  
+posterior_probsm4dm_noq1 <- postprob(m4dm_noq1)  
+posterior_probsm5dm_noq1 <- postprob(m5dm_noq1)  
+posterior_probsm6dm_noq1 <- postprob(m6dm_noq1)  
+
+
+LCTMtoolkit(m2dm_noq1)
+
+# OCC
+# Assuming you have a list of your model objects
+models_list <- list(m2dm_noq1, m3dm_noq1, m4dm_noq1, m5dm_noq1, m6dm_noq1)  # Replace with your actual model objects
+
+# Extract the lower OCC values for each model
+lower_occ_values <- sapply(models_list, function(model) {
+  occ_values <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_occ_values)
+
+
+
+# Mismatch
+# Extract the lower OCC values for each model
+highest_mismatch_values <- sapply(models_list, function(model) {
+  mismatch_values <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values)
+
+
+
+# Define a function to extract p-value from calc_lrt output
+extract_p_value_from_lrt <- function(ns, loglik1, npm1, G1, loglik2, npm2, G2) {
+  # Capture the output of calc_lrt
+  output <- capture.output(tidyLPA::calc_lrt(ns, loglik1, npm1, G1, loglik2, npm2, G2))
+  
+  # Combine output into a single string
+  output_text <- paste(output, collapse = " ")
+  
+  # Extract the p-value part from the output
+  p_value <- str_extract(output_text, "(?<=p\\s).*")
+  return(str_trim(p_value))
 }
 
-# Data for the new models
-model_data1 <- list(
-  m1dm_noq1 = data.frame(Class = 1, prob = NA, pi = NA),
-  m2dm_noq1 = data.frame(Class = c(1, 2), prob = c(0.5140, 0.5138), pi = c(0.50, 0.50)),
-  m3dm_noq1 = data.frame(Class = c(1, 2, 3), prob = c(0.9256, 0.8230, 0.8366), pi = c(0.8833, 0.0733, 0.0433)),
-  m4dm_noq1 = data.frame(Class = c(1, 2, 3, 4), prob = c(0.6872, 0.9242, 0.8340, 0.7257), pi = c(0.02, 0.8733, 0.0733, 0.0333)),
-  m5dm_noq1 = data.frame(Class = c(1, 2, 3, 4, 5), prob = c(0.6446, 0.9256, 0.7718, 0.6960, 0.7584), pi = c(0.0267, 0.8633, 0.03, 0.01, 0.07)),
-  m6dm_noq1 = data.frame(Class = c(1, 2, 3, 4, 5, 6), prob = c(0.7659, 0.7265, 0.8823, 0.7830, 0.7622, 0.8858), pi = c(0.0867, 0.0233, 0.7567, 0.0167, 0.09, 0.0267))
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt <- list(
+  extract_p_value_from_lrt(m1dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[1], tab_dm_2011_2023_noq1$npm[1], tab_dm_2011_2023_noq1$G[1], tab_dm_2011_2023_noq1$loglik[2], tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m2dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[2], tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2], tab_dm_2011_2023_noq1$loglik[3], tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m3dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[3], tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3], tab_dm_2011_2023_noq1$loglik[4], tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m4dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[4], tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4], tab_dm_2011_2023_noq1$loglik[5], tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m5dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[5], tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5], tab_dm_2011_2023_noq1$loglik[6], tab_dm_2011_2023_noq1$npm[6], tab_dm_2011_2023_noq1$G[6])
 )
 
-# Calculate OCC for each new model
-results1 <- bind_rows(lapply(names(model_data1), function(model) {
-  data <- model_data1[[model]]
-  data %>% 
-    mutate(Model = model,
-           OCC = calculate_occ1(prob, pi)) %>% 
-    select(Model, Class, OCC)
-}))
+# Assuming outputs is already defined as your object
+values_vllrt <- sapply(outputs_vllrt, function(x) gsub("^= ", "", x))
 
-# Ensure that OCC calculation handles NA values correctly
-results1 <- results1 %>% mutate(OCC = ifelse(is.na(OCC), NA, OCC))
+# Print the vector
+print(values_vllrt)
 
-# Select the row with the minimum OCC value for each model
-min_occ_per_model_dm_2011_2023 <- results1 %>%
-  group_by(Model) %>%
-  slice_min(OCC, n = 1, with_ties = FALSE) %>%
-  ungroup()
+#Diagnistic criteria
 
-
-
-diagnostic_criteria_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
+diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(300, 150, 13, 6, 3, 5),
-         smallest_class_size_perc = c(300/m1dm_noq1$ns, 150/m2dm_noq1$ns, 13/m3dm_noq1$ns, 6/m4dm_noq1$ns, 3/m5dm_noq1$ns, 5/m6dm_noq1$ns),
+  mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]]), min(posterior_probsm3dm_noq1[[1]]), min(posterior_probsm4dm_noq1[[1]]), min(posterior_probsm5dm_noq1[[1]]), min(posterior_probsm6dm_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm2dm_noq1[[1]])/m2dm_noq1$ns, min(posterior_probsm3dm_noq1[[1]])/m3dm_noq1$ns, min(posterior_probsm4dm_noq1[[1]])/m4dm_noq1$ns, min(posterior_probsm5dm_noq1[[1]])/m5dm_noq1$ns, min(posterior_probsm6dm_noq1[[1]])/m6dm_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, 0.5138, 0.8230, 0.6872, 0.7229, 0.7265),
-         VLMRLRT = c(NA, 1.000, 0.002, 0.109, 0.020, 0.118)) %>% 
+         ALCPP = c(NA, min(diag(posterior_probsm2dm_noq1[[2]])), min(diag(posterior_probsm3dm_noq1[[2]])), min(diag(posterior_probsm4dm_noq1[[2]])), min(diag(posterior_probsm5dm_noq1[[2]])), min(diag(posterior_probsm6dm_noq1[[2]]))),
+         "Highest MMV" =c(NA, highest_mismatch_values),
+         "Lowest OCC" = c(NA, lower_occ_values),
+         VLMRLRT = c(NA, values_vllrt)
+         ) %>% 
   tibble::as.tibble() %>% 
   tibble::rownames_to_column() %>% 
-  dplyr::select(-rowname) %>% 
-cbind(min_occ_per_model_dm_2011_2023 %>% select(OCC)) %>% 
-  dplyr::rename("Lowest OCC" = "OCC")
+  dplyr::select(-rowname) 
 
-write.csv(diagnostic_criteria_2011_2023_noq1, "diagnostic_criteria_2011_2023_noq1.csv", row.names = F)
+write.csv(diagnostic_criteria_dm_2011_2023_noq1, "diagnostic_criteria_dm_2011_2023_noq1.csv", row.names = F)
 
 
 ## Plot trajectories -------------------------------------------------------
@@ -454,6 +481,10 @@ pdm6_2011_2023_noq1 <- ggplot(dm6_2011_2023_noq1, aes(x=ano2, y=dm_coverage, col
   geom_smooth(se = T, method = "loess", aes(group = class))
 
 gridExtra::grid.arrange(pdm_2011_2023_noq1, pdm2_2011_2023_noq1, pdm3_2011_2023_noq1, pdm4_2011_2023_noq1, pdm5_2011_2023_noq1, pdm6_2011_2023_noq1)
+
+
+
+
 
 ##  LCMM for DM coverage2 2011-2023-----------------------------------------
 coverage_2011_2023_noq1 %>% 
@@ -579,24 +610,10 @@ drs5_2011_2023_noq1$class <- as.factor(drs5_2011_2023_noq1$class)
 drs6_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m6drs_noq1$pprob,3), by = "comuna2") ##five trajectories
 drs6_2011_2023_noq1$class <- as.factor(drs6_2011_2023_noq1$class)
 
-## average latent class posterior probability ------------------------------
 
-postprob(m1drs_noq1)
-postprob(m2drs_noq1)
-postprob(m3drs_noq1)
-postprob(m4drs_noq1)
-postprob(m5drs_noq1)
-postprob(m6drs_noq1)
-
-## Lo–Mendell–Rubin adjusted LRT  ------------------------------------------
+# MODEL ADEQUACY ----------------------------------------------------------
 
 
-##calc_lrt(n, null_ll, null_param, null_classes, alt_ll, alt_param, alt_classes)
-tidyLPA::calc_lrt(m1drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[1],  tab_drs_2011_2023_noq1$npm[1], tab_drs_2011_2023_noq1$G[1], tab_drs_2011_2023_noq1$loglik[2], tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2])
-tidyLPA::calc_lrt(m2drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[2],  tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2], tab_drs_2011_2023_noq1$loglik[3], tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3])
-tidyLPA::calc_lrt(m3drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[3],  tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3], tab_drs_2011_2023_noq1$loglik[4], tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4])
-tidyLPA::calc_lrt(m4drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[4],  tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4], tab_drs_2011_2023_noq1$loglik[5], tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5])
-tidyLPA::calc_lrt(m5drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[5],  tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5], tab_drs_2011_2023_noq1$loglik[6], tab_drs_2011_2023_noq1$npm[6], tab_drs_2011_2023_noq1$G[6])
 
 ## Model fit criteria ------------------------------------------------------
 
@@ -606,65 +623,96 @@ model_fit_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>%
                 CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
                 AWE= -2*loglik + 2*(log(sample_size)+1.5),##𝐴𝑊𝐸 = −2(𝐿𝐿) +𝑑[𝑙𝑜𝑔(𝑛)+ 1.5]
                 SIC = -0.05*BIC,
-                BF = exp(lead(SIC)-SIC),
-                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC)))))%>%  ##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+                BF = exp(lead(SIC)-SIC),##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC))))) %>%  
   tibble::as.tibble() %>% 
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
+
 
 write.csv(model_fit_criteria_drs_2011_2023_noq1, "model_fit_criteria_drs_2011_2023_noq1.csv", row.names = F)
 
 
 
 ## Diagnostic criteria -----------------------------------------------------
-# Function to calculate OCC
-calculate_occ <- function(p, pi) {
-  (p / (1 - p)) / (pi / (1 - pi))
-}
 
-# Data for all models
-model_data <- list(
-  m1drs_noq1 = data.frame(Class = 1, prob = NA, pi = NA),
-  m2drs_noq1 = data.frame(Class = c(1, 2), prob = c(0.9178, 0.8375), pi = c(0.6867, 0.3133)),
-  m3drs_noq1 = data.frame(Class = c(2, 3), prob = c(0.4708, 0.7815), pi = c(0.64, 0.36)),
-  m4drs_noq1 = data.frame(Class = c(1, 2, 3, 4), prob = c(0.8313, 0.6665, 0.7514, 0.8067), pi = c(0.44, 0.3367, 0.05, 0.1733)),
-  m5drs_noq1 = data.frame(Class = c(1, 2, 3, 4, 5), prob = c(0.6262, 0.7174, 0.7786, 0.6584, 0.8247), pi = c(0.07, 0.19, 0.5033, 0.03, 0.2067)),
-  m6drs_noq1 = data.frame(Class = c(1, 2, 3, 4, 5, 6), prob = c(0.5560, 0.6583, 0.6517, 0.6898, 0.6667, 0.8274), pi = c(0.1167, 0.0933, 0.0833, 0.49, 0.03, 0.1867))
+## average latent class posterior probability ------------------------------
+
+postprob(m1drs_noq1)
+postprob(m2drs_noq1)
+postprob(m3drs_noq1)
+postprob(m4drs_noq1)
+postprob(m5drs_noq1)
+postprob(m6drs_noq1)
+
+# Assuming postprob() returns a structured list
+posterior_probsm2drs_noq1 <- postprob(m2drs_noq1)  
+posterior_probsm3drs_noq1 <- postprob(m3drs_noq1)  
+posterior_probsm4drs_noq1 <- postprob(m4drs_noq1)  
+posterior_probsm5drs_noq1 <- postprob(m5drs_noq1)  
+posterior_probsm6drs_noq1 <- postprob(m6drs_noq1)  
+
+
+# OCC
+# Assuming you have a list of your model objects
+models_list2 <- list(m2drs_noq1, m3drs_noq1, m4drs_noq1, m5drs_noq1, m6drs_noq1)  # Replace with your actual model objects
+
+# Extract the lower OCC values for each model
+lower_occ_values2 <- sapply(models_list2, function(model) {
+  occ_values2 <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values2[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_occ_values2)
+
+
+
+# Mismatch
+# Extract the lower OCC values for each model
+highest_mismatch_values2 <- sapply(models_list2, function(model) {
+  mismatch_values2 <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values2[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values2)
+
+
+
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt2 <- list(
+  extract_p_value_from_lrt(m1drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[1], tab_drs_2011_2023_noq1$npm[1], tab_drs_2011_2023_noq1$G[1], tab_drs_2011_2023_noq1$loglik[2], tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m2drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[2], tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2], tab_drs_2011_2023_noq1$loglik[3], tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m3drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[3], tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3], tab_drs_2011_2023_noq1$loglik[4], tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m4drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[4], tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4], tab_drs_2011_2023_noq1$loglik[5], tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m5drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[5], tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5], tab_drs_2011_2023_noq1$loglik[6], tab_drs_2011_2023_noq1$npm[6], tab_drs_2011_2023_noq1$G[6])
 )
 
-# Calculate OCC for each model
-results <- bind_rows(lapply(names(model_data), function(model) {
-  data <- model_data[[model]]
-  data %>% 
-    mutate(Model = model,
-           OCC = calculate_occ(prob, pi)) %>% 
-    select(Model, Class, OCC)
-}))
+# Assuming outputs is already defined as your object
+values_vllrt2 <- sapply(outputs_vllrt2, function(x) gsub("^= ", "", x))
 
-# Display the results
+# Print the vector
+print(values_vllrt2)
 
-# Select the row with the minimum OCC value for each model
-min_occ_per_model_drsc_2011_2023 <- results %>%
-  group_by(Model) %>%
-  slice_min(OCC, n = 1, with_ties = FALSE) %>%
-  ungroup()
-
-min_occ_per_model_drsc_2011_2023
+#Diagnistic criteria
 
 diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(300, 94, 108, 15, 9, 9 ),
-         smallest_class_size_perc = c(300/m1drs_noq1$ns, 94/m2drs_noq1$ns, 108/m3drs_noq1$ns, 15/m4drs_noq1$ns, 9/m5drs_noq1$ns, 9/m6drs_noq1$ns),
+  mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]]), min(posterior_probsm3drs_noq1[[1]]), min(posterior_probsm4drs_noq1[[1]]), min(posterior_probsm5drs_noq1[[1]]), min(posterior_probsm6drs_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm2drs_noq1[[1]])/m2drs_noq1$ns, min(posterior_probsm3drs_noq1[[1]])/m3drs_noq1$ns, min(posterior_probsm4drs_noq1[[1]])/m4drs_noq1$ns, min(posterior_probsm5drs_noq1[[1]])/m5drs_noq1$ns, min(posterior_probsm6drs_noq1[[1]])/m6drs_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, 0.8375, 0.4708, 0.6665, 0.6262, 0.5560),
-         VLMRLRT = c(NA,"p < 0.001", 1.000, "p < 0.001", 0.654, 0.679)) %>% 
+         ALCPP = c(NA, min(diag(posterior_probsm2drs_noq1[[2]])), min(diag(posterior_probsm3drs_noq1[[2]])), min(diag(posterior_probsm4drs_noq1[[2]])), min(diag(posterior_probsm5drs_noq1[[2]])), min(diag(posterior_probsm6drs_noq1[[2]]))),
+         "Highest MMV" =c(NA, highest_mismatch_values2),
+         "Lowest OCC" = c(NA, lower_occ_values2),
+         VLMRLRT = c(NA, values_vllrt2)
+  ) %>% 
   tibble::as.tibble() %>% 
   tibble::rownames_to_column() %>% 
-  dplyr::select(-rowname) %>% 
-  cbind(min_occ_per_model_drsc_2011_2023 %>% select(OCC)) %>% 
-  dplyr::rename("Lowest OCC" = "OCC")
+  dplyr::select(-rowname) 
 
 write.csv(diagnostic_criteria_drs_2011_2023_noq1, "diagnostic_criteria_drs_2011_2023_noq1.csv", row.names = F)
+
 
 
 ## Plot trajectories -------------------------------------------------------
@@ -972,28 +1020,10 @@ dm5_2011_2019_noq1$class <- as.factor(dm5_2011_2019_noq1$class)
 dm6_2011_2019_noq1 <- merge(coverage_2011_2019_noq1, round(m12dm_noq1$pprob,3), by = "comuna2") ##five trajectories
 dm6_2011_2019_noq1$class <- as.factor(dm6_2011_2019_noq1$class)
 
-## average latent class posterior probability ------------------------------
-
-
-postprob(m7dm_noq1)
-postprob(m8dm_noq1)
-postprob(m9dm_noq1)
-postprob(m10dm_noq1)
-postprob(m11dm_noq1)
-postprob(m12dm_noq1)
-
-## Lo–Mendell–Rubin adjusted LRT  ------------------------------------------
-
-##calc_lrt(n, null_ll, null_param, null_classes, alt_ll, alt_param, alt_classes)
-tidyLPA::calc_lrt(m7dm_noq1$ns, tab_dm_2011_2019_noq1$loglik[1],  tab_dm_2011_2019_noq1$npm[1], tab_dm_2011_2019_noq1$G[1], tab_dm_2011_2019_noq1$loglik[2], tab_dm_2011_2019_noq1$npm[2], tab_dm_2011_2019_noq1$G[2])
-tidyLPA::calc_lrt(m8dm_noq1$ns, tab_dm_2011_2019_noq1$loglik[2],  tab_dm_2011_2019_noq1$npm[2], tab_dm_2011_2019_noq1$G[2], tab_dm_2011_2019_noq1$loglik[3], tab_dm_2011_2019_noq1$npm[3], tab_dm_2011_2019_noq1$G[3])
-tidyLPA::calc_lrt(m9dm_noq1$ns, tab_dm_2011_2019_noq1$loglik[3],  tab_dm_2011_2019_noq1$npm[3], tab_dm_2011_2019_noq1$G[3], tab_dm_2011_2019_noq1$loglik[4], tab_dm_2011_2019_noq1$npm[4], tab_dm_2011_2019_noq1$G[4])
-tidyLPA::calc_lrt(m10dm_noq1$ns, tab_dm_2011_2019_noq1$loglik[4],  tab_dm_2011_2019_noq1$npm[4], tab_dm_2011_2019_noq1$G[4], tab_dm_2011_2019_noq1$loglik[5], tab_dm_2011_2019_noq1$npm[5], tab_dm_2011_2019_noq1$G[5])
-tidyLPA::calc_lrt(m11dm_noq1$ns, tab_dm_2011_2019_noq1$loglik[5],  tab_dm_2011_2019_noq1$npm[5], tab_dm_2011_2019_noq1$G[5], tab_dm_2011_2019_noq1$loglik[6], tab_dm_2011_2019_noq1$npm[6], tab_dm_2011_2019_noq1$G[6])
 
 ## Model fit criteria ------------------------------------------------------
 
-model_fit_criteria_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>% 
+model_fit_criteria_dm_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>% 
   dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
   dplyr::mutate(sample_size= c(m7dm_noq1$ns, m8dm_noq1$ns, m9dm_noq1$ns, m10dm_noq1$ns, m11dm_noq1$ns, m12dm_noq1$ns),
                 CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
@@ -1005,65 +1035,88 @@ model_fit_criteria_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>%
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
 
-write.csv(model_fit_criteria_2011_2019_noq1, "model_fit_criteria_2011_2019_noq1.csv", row.names = F)
+write.csv(model_fit_criteria_dm_2011_2019_noq1, "model_fit_dm_criteria_2011_2019_noq1.csv", row.names = F)
 
 
 
 ## Diagnostic criteria -----------------------------------------------------
 
-# Function to calculate OCC
-calculate_occ3 <- function(p, pi) {
-  (p / (1 - p)) / (pi / (1 - pi))
-}
+## average latent class posterior probability ------------------------------
 
-# Data for the new models
-model_data3 <- list(
-  m7dm_noq1 = data.frame(Class = 1, prob = NA, pi = NA),
-  m8dm_noq1 = data.frame(Class = c(1, 2), prob = c(0.5146, 0.5157), pi = c(0.5171, 0.4829)),
-  m9dm_noq1 = data.frame(Class = c(1, 2, 3), prob = c(0.8391, 0.8001, 0.8178), pi = c(0.6918, 0.1164, 0.1918)),
-  m10dm_noq1 = data.frame(Class = c(1, 2, 3, 4), prob = c(0.8056, 0.8335, 0.7092, 0.8301), pi = c(0.1096, 0.7055, 0.0068, 0.1781)),
-  m11dm_noq1 = data.frame(Class = c(1, 2, 3, 4, 5), prob = c(0.6568, 0.5800, 0.7965, 0.7006, 0.8257), pi = c(0.0377, 0.0788, 0.7089, 0.0068, 0.1678)),
-  m12dm_noq1 = data.frame(Class = c(1, 2, 3, 4, 5, 6), prob = c(0.7471, 0.8019, 0.5099, 0.7190, 0.7396, 0.977), pi = c(0.7295, 0.0788, 0.0685, 0.089, 0.024, 0.0103))
+postprob(m7dm_noq1)
+postprob(m8dm_noq1)
+postprob(m9dm_noq1)
+postprob(m10dm_noq1)
+postprob(m11dm_noq1)
+postprob(m12dm_noq1)
+
+# Assuming postprob() returns a structured list
+posterior_probsm8dm_noq1 <- postprob(m8dm_noq1)  
+posterior_probsm9dm_noq1 <- postprob(m9dm_noq1)  
+posterior_probsm10dm_noq1 <- postprob(m10dm_noq1)  
+posterior_probsm11dm_noq1 <- postprob(m11dm_noq1)  
+posterior_probsm12dm_noq1 <- postprob(m12dm_noq1)  
+
+
+# OCC
+# Assuming you have a list of your model objects
+models_list3 <- list(m8dm_noq1, m9dm_noq1, m10dm_noq1, m11dm_noq1, m12dm_noq1)  # Replace with your actual model objects
+
+# Extract the lower OCC values for each model
+lower_occ_values3 <- sapply(models_list3, function(model) {
+  occ_values3 <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values3[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_occ_values3)
+
+
+
+# Mismatch
+# Extract the lower OCC values for each model
+highest_mismatch_values3 <- sapply(models_list3, function(model) {
+  mismatch_values3 <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values3[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values3)
+
+
+
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt3 <- list(
+  extract_p_value_from_lrt(m7dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[1], tab_dm_2011_2023_noq1$npm[1], tab_dm_2011_2023_noq1$G[1], tab_dm_2011_2023_noq1$loglik[2], tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m8dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[2], tab_dm_2011_2023_noq1$npm[2], tab_dm_2011_2023_noq1$G[2], tab_dm_2011_2023_noq1$loglik[3], tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m9dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[3], tab_dm_2011_2023_noq1$npm[3], tab_dm_2011_2023_noq1$G[3], tab_dm_2011_2023_noq1$loglik[4], tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m10dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[4], tab_dm_2011_2023_noq1$npm[4], tab_dm_2011_2023_noq1$G[4], tab_dm_2011_2023_noq1$loglik[5], tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m11dm_noq1$ns, tab_dm_2011_2023_noq1$loglik[5], tab_dm_2011_2023_noq1$npm[5], tab_dm_2011_2023_noq1$G[5], tab_dm_2011_2023_noq1$loglik[6], tab_dm_2011_2023_noq1$npm[6], tab_dm_2011_2023_noq1$G[6])
 )
 
-# Calculate OCC for each new model
-results3 <- bind_rows(lapply(names(model_data3), function(model) {
-  data <- model_data3[[model]]
-  data %>% 
-    mutate(Model = model,
-           OCC = calculate_occ(prob, pi)) %>% 
-    select(Model, Class, OCC)
-}))
+# Assuming outputs is already defined as your object
+values_vllrt3 <- sapply(outputs_vllrt3, function(x) gsub("^= ", "", x))
 
-# Ensure that OCC calculation handles NA values correctly
-results3 <- results3 %>% 
-  mutate(OCC = ifelse(is.na(OCC), NA, OCC))
+# Print the vector
+print(values_vllrt3)
 
-# Select the row with the minimum OCC value for each model
-min_occ_per_dm_2011_2019  <- results3 %>%
-  group_by(Model) %>%
-  slice_min(OCC, n = 1, with_ties = FALSE) %>%
-  ungroup()%>%
-  arrange(factor(Model, levels = c("m7dm_noq1", "m8dm_noq1", "m9dm_noq1", "m10dm_noq1", "m11dm_noq1", "m12dm_noq1")))
+#Diagnistic criteria
 
-
-# Display the arranged results
-min_occ_per_dm_2011_2019
-
-diagnostic_criteria_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>% 
+diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(292, 141, 34, 2, 2, 3),
-         smallest_class_size_perc = c(292/m7dm_noq1$ns, 141/m8dm_noq1$ns, 34/m9dm_noq1$ns, 2/m10dm_noq1$ns, 2/m11dm_noq1$ns, 3/m12dm_noq1$ns),
+  mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]]), min(posterior_probsm3dm_noq1[[1]]), min(posterior_probsm4dm_noq1[[1]]), min(posterior_probsm5dm_noq1[[1]]), min(posterior_probsm6dm_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm2dm_noq1[[1]])/m2dm_noq1$ns, min(posterior_probsm3dm_noq1[[1]])/m3dm_noq1$ns, min(posterior_probsm4dm_noq1[[1]])/m4dm_noq1$ns, min(posterior_probsm5dm_noq1[[1]])/m5dm_noq1$ns, min(posterior_probsm6dm_noq1[[1]])/m6dm_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, 0.5146, 0.8001, 0.7092, 0.5800, 0.5099),
-         VLMRLRT = c(NA, 1.000, 0.035, 0.273, 0.903, "p<0.001")) %>% 
+         ALCPP = c(NA, min(diag(posterior_probsm2dm_noq1[[2]])), min(diag(posterior_probsm3dm_noq1[[2]])), min(diag(posterior_probsm4dm_noq1[[2]])), min(diag(posterior_probsm5dm_noq1[[2]])), min(diag(posterior_probsm6dm_noq1[[2]]))),
+         "Highest MMV" =c(NA, highest_mismatch_values3),
+         "Lowest OCC" = c(NA, lower_occ_values3),
+         VLMRLRT = c(NA, values_vllrt3)
+  ) %>% 
   tibble::as.tibble() %>% 
   tibble::rownames_to_column() %>% 
-  dplyr::select(-rowname) %>% 
-  cbind(min_occ_per_dm_2011_2019 %>% select(OCC)) %>% 
-  dplyr::rename("Lowest OCC" = "OCC")
+  dplyr::select(-rowname) 
 
-write.csv(diagnostic_criteria_2011_2019_noq1, "diagnostic_criteria_2011_2019_noq1.csv", row.names = F)
+write.csv(diagnostic_criteria_dm_2011_2023_noq1, "diagnostic_criteria_dm_2011_2023_noq1.csv", row.names = F)
 
 
 ## Plot trajectories -------------------------------------------------------
@@ -1245,6 +1298,25 @@ drs5_2011_2019_noq1$class <- as.factor(drs5_2011_2019_noq1$class)
 drs6_2011_2019_noq1 <- merge(coverage_2011_2019_noq1, round(m12drs_noq1$pprob,3), by = "comuna2") ##five trajectories
 drs6_2011_2019_noq1$class <- as.factor(drs6_2011_2019_noq1$class)
 
+## Model fit criteria ------------------------------------------------------
+
+model_fit_criteria_drs_2011_2019_noq1 <- tab_drs_2011_2019_noq1 %>% 
+  dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
+  dplyr::mutate(sample_size= c(m7drs_noq1$ns, m8drs_noq1$ns, m9drs_noq1$ns, m10drs_noq1$ns, m11drs_noq1$ns, m12drs_noq1$ns),
+                CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
+                AWE= -2*loglik + 2*(log(sample_size)+1.5),##𝐴𝑊𝐸 = −2(𝐿𝐿) +𝑑[𝑙𝑜𝑔(𝑛)+ 1.5]
+                SIC = -0.05*BIC,
+                BF = exp(lead(SIC)-SIC),##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC))))) %>%  
+  tibble::as.tibble() %>% 
+  tibble::rownames_to_column() %>% 
+  dplyr::select(-rowname) 
+
+write.csv(model_fit_criteria_drs_2011_2019_noq1, "model_fit_criteria_drs_2011_2019_noq1.csv", row.names = F)
+
+
+## Diagnostic criteria -----------------------------------------------------
+
 ## average latent class posterior probability ------------------------------
 
 postprob(m7drs_noq1)
@@ -1254,89 +1326,73 @@ postprob(m10drs_noq1)
 postprob(m11drs_noq1)
 postprob(m12drs_noq1)
 
-## Lo–Mendell–Rubin adjusted LRT  ------------------------------------------
+# Assuming postprob() returns a structured list
+posterior_probsm8drs_noq1 <- postprob(m8drs_noq1)  
+posterior_probsm9drs_noq1 <- postprob(m9drs_noq1)  
+posterior_probsm10drs_noq1 <- postprob(m10drs_noq1)  
+posterior_probsm11drs_noq1 <- postprob(m11drs_noq1)  
+posterior_probsm12drs_noq1 <- postprob(m12drs_noq1)  
 
 
-##calc_lrt(n, null_ll, null_param, null_classes, alt_ll, alt_param, alt_classes)
-tidyLPA::calc_lrt(m7drs_noq1$ns, tab_drs_2011_2019_noq1$loglik[1],  tab_drs_2011_2019_noq1$npm[1], tab_drs_2011_2019_noq1$G[1], tab_drs_2011_2019_noq1$loglik[2], tab_drs_2011_2019_noq1$npm[2], tab_drs_2011_2019_noq1$G[2])
-tidyLPA::calc_lrt(m8drs_noq1$ns, tab_drs_2011_2019_noq1$loglik[2],  tab_drs_2011_2019_noq1$npm[2], tab_drs_2011_2019_noq1$G[2], tab_drs_2011_2019_noq1$loglik[3], tab_drs_2011_2019_noq1$npm[3], tab_drs_2011_2019_noq1$G[3])
-tidyLPA::calc_lrt(m9drs_noq1$ns, tab_drs_2011_2019_noq1$loglik[3],  tab_drs_2011_2019_noq1$npm[3], tab_drs_2011_2019_noq1$G[3], tab_drs_2011_2019_noq1$loglik[4], tab_drs_2011_2019_noq1$npm[4], tab_drs_2011_2019_noq1$G[4])
-tidyLPA::calc_lrt(m10drs_noq1$ns, tab_drs_2011_2019_noq1$loglik[4],  tab_drs_2011_2019_noq1$npm[4], tab_drs_2011_2019_noq1$G[4], tab_drs_2011_2019_noq1$loglik[5], tab_drs_2011_2019_noq1$npm[5], tab_drs_2011_2019_noq1$G[5])
-tidyLPA::calc_lrt(m11drs_noq1$ns, tab_drs_2011_2019_noq1$loglik[5],  tab_drs_2011_2019_noq1$npm[5], tab_drs_2011_2019_noq1$G[5], tab_drs_2011_2019_noq1$loglik[6], tab_drs_2011_2019_noq1$npm[6], tab_drs_2011_2019_noq1$G[6])
+# OCC
+# Assuming you have a list of your model objects
+models_list4 <- list(m8drs_noq1, m9drs_noq1, m10drs_noq1, m11drs_noq1, m12drs_noq1)  # Replace with your actual model objects
 
-## Model fit criteria ------------------------------------------------------
+# Extract the lower OCC values for each model
+lower_occ_values4 <- sapply(models_list4, function(model) {
+  occ_values4 <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values4[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
 
-model_fit_criteria_drs_2011_2019_noq1 <- tab_drs_2011_2019_noq1 %>% 
-  dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
-  dplyr::mutate(sample_size= c(m7drs_noq1$ns, m8drs_noq1$ns, m9drs_noq1$ns, m10drs_noq1$ns, m11drs_noq1$ns, m12drs_noq1$ns),
-                CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
-                AWE= -2*loglik + 2*(log(sample_size)+1.5),##𝐴𝑊𝐸 = −2(𝐿𝐿) +𝑑[𝑙𝑜𝑔(𝑛)+ 1.5]
-                SIC = -0.05*BIC,
-                BF = exp(lead(SIC)-SIC),
-                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC)))))%>%  ##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+# Print the lower OCC values
+print(lower_occ_values3)
+
+
+
+# Mismatch
+# Extract the lower OCC values for each model
+highest_mismatch_values4 <- sapply(models_list4, function(model) {
+  mismatch_values4 <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values4[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values4)
+
+
+
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt4 <- list(
+  extract_p_value_from_lrt(m7drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[1], tab_drs_2011_2023_noq1$npm[1], tab_drs_2011_2023_noq1$G[1], tab_drs_2011_2023_noq1$loglik[2], tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m8drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[2], tab_drs_2011_2023_noq1$npm[2], tab_drs_2011_2023_noq1$G[2], tab_drs_2011_2023_noq1$loglik[3], tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m9drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[3], tab_drs_2011_2023_noq1$npm[3], tab_drs_2011_2023_noq1$G[3], tab_drs_2011_2023_noq1$loglik[4], tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m10drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[4], tab_drs_2011_2023_noq1$npm[4], tab_drs_2011_2023_noq1$G[4], tab_drs_2011_2023_noq1$loglik[5], tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m11drs_noq1$ns, tab_drs_2011_2023_noq1$loglik[5], tab_drs_2011_2023_noq1$npm[5], tab_drs_2011_2023_noq1$G[5], tab_drs_2011_2023_noq1$loglik[6], tab_drs_2011_2023_noq1$npm[6], tab_drs_2011_2023_noq1$G[6])
+)
+
+# Assuming outputs is already defined as your object
+values_vllrt4 <- sapply(outputs_vllrt4, function(x) gsub("^= ", "", x))
+
+# Print the vector
+print(values_vllrt4)
+
+#Diagnistic criteria
+
+diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
+  select(G, entropy) %>% 
+  mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]]), min(posterior_probsm3drs_noq1[[1]]), min(posterior_probsm4drs_noq1[[1]]), min(posterior_probsm5drs_noq1[[1]]), min(posterior_probsm6drs_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm2drs_noq1[[1]])/m2drs_noq1$ns, min(posterior_probsm3drs_noq1[[1]])/m3drs_noq1$ns, min(posterior_probsm4drs_noq1[[1]])/m4drs_noq1$ns, min(posterior_probsm5drs_noq1[[1]])/m5drs_noq1$ns, min(posterior_probsm6drs_noq1[[1]])/m6drs_noq1$ns),
+         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
+         ALCPP = c(NA, min(diag(posterior_probsm2drs_noq1[[2]])), min(diag(posterior_probsm3drs_noq1[[2]])), min(diag(posterior_probsm4drs_noq1[[2]])), min(diag(posterior_probsm5drs_noq1[[2]])), min(diag(posterior_probsm6drs_noq1[[2]]))),
+         "Highest MMV" =c(NA, highest_mismatch_values4),
+         "Lowest OCC" = c(NA, lower_occ_values4),
+         VLMRLRT = c(NA, values_vllrt4)
+  ) %>% 
   tibble::as.tibble() %>% 
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
 
-write.csv(model_fit_criteria_drs_2011_2019_noq1, "model_fit_criteria_drs_2011_2019_noq1.csv", row.names = F)
-
-
-
-## Diagnostic criteria -----------------------------------------------------
-
-# Function to calculate OCC
-calculate_occ4 <- function(p, pi) {
-  (p / (1 - p)) / (pi / (1 - pi))
-}
-
-# Data for the six new models
-model_data4 <- list(
-  m7drs_noq1 = data.frame(Class = 1, prob = NA, pi = NA),
-  m8drs_noq1 = data.frame(Class = c(1, 2), prob = c(0.9273, 0.8257), pi = c(0.7432, 0.2568)),
-  m9drs_noq1 = data.frame(Class = c(1, 2, 3), prob = c(0.5956, 0.8665, 0.7047), pi = c(0.1644, 0.7089, 0.1267)),
-  m10drs_noq1 = data.frame(Class = c(1, 2, 3, 4), prob = c(0.8629, 0.8871, 0.8764, 0.9152), pi = c(0.2158, 0.2774, 0.4452, 0.0616)),
-  m11drs_noq1 = data.frame(Class = c(1, 2, 3, 4, 5), prob = c(0.7163, 0.7879, 0.9661, 0.7474, 0.7014), pi = c(0.1164, 0.5993, 0.0068, 0.2123, 0.0651)),
-  m12drs_noq1 = data.frame(Class = c(1, 2, 3, 4, 5, 6), prob = c(0.6131, 0.6874, 0.8584, 0.9882, 0.8685, 0.9229), pi = c(0.0205, 0.2568, 0.4418, 0.0034, 0.2158, 0.0616))
-)
-
-# Calculate OCC for each new model
-results4 <- bind_rows(lapply(names(model_data4), function(model) {
-  data <- model_data4[[model]]
-  data %>% 
-    mutate(Model = model,
-           OCC = calculate_occ4(prob, pi)) %>% 
-    select(Model, Class, OCC)
-}))
-
-# Display the new results
-results4
-
-# Select the row with the minimum OCC value for each new model
-min_occ_per_model_drsc_2011_2019 <- results4 %>%
-  group_by(Model) %>%
-  slice_min(OCC, n = 1, with_ties = FALSE) %>%
-  ungroup() %>%
-  arrange(factor(Model, levels = c("m7drs_noq1", "m8drs_noq1", "m9drs_noq1", "m10drs_noq1", "m11drs_noq1", "m12drs_noq1")))
-
-
-min_occ_per_model_drsc_2011_2019
-
-
-diagnostic_criteria_drs_2011_2019_noq1 <- tab_drs_2011_2019_noq1 %>% 
-  select(G, entropy) %>% 
-  mutate(smallest_class_count = c(292, 75, 37, 18, 2, 1),
-         smallest_class_size_perc = c(292/m7drs_noq1$ns, 75/m8drs_noq1$ns, 37/m9drs_noq1$ns, 18/m10drs_noq1$ns, 2/m11drs_noq1$ns, 1/m12drs_noq1$ns),
-         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, 0.8257, 0.5956, 0.8629, 0.7014, 0.6131),
-         VLMRLRT = c(NA,0.001, 0.652, 0.016, 0.941, 0.144)) %>% 
-  tibble::as.tibble() %>% 
-  tibble::rownames_to_column() %>% 
-  dplyr::select(-rowname) %>% 
-cbind(min_occ_per_model_drsc_2011_2019 %>% select(OCC)) %>% 
-  dplyr::rename("Lowest OCC" = "OCC")
-
-write.csv(diagnostic_criteria_drs_2011_2019_noq1, "diagnostic_criteria_drs_2011_2019_noq1.csv", row.names = F)
-
+write.csv(diagnostic_criteria_drs_2011_2023_noq1, "diagnostic_criteria_drs_2011_2023_noq1.csv", row.names = F)
 
 ## Plot trajectories -------------------------------------------------------
 
