@@ -43,19 +43,7 @@
     dplyr::mutate(drs_coverage = dm_fo/dm,
                   dm_coverage = dm_hg_menor7/dm)
   
-  
-  # Check for duplicated communes ----------------------------------------------------
-  
-  
 
-  coverage_2011_2023 %>% 
-    group_by(ano) %>% 
-    select(comuna) %>% 
-    table() %>% 
-    as.data.frame() %>% 
-    arrange(-Freq)
-  
-  
   
   # fix duplicated comunas and unify in one only ------------------------------------------------
   
@@ -119,25 +107,7 @@
   coverage_2011_2023 <- coverage_2011_2023 %>% 
     mutate(zona = ifelse(id_region %in% 13, 2, zona)) 
   
-  
 
-  # Check for duplicated communes ----------------------------------------------------
-  
-  
-  coverage_2011_2023 %>%
-    ungroup() %>%
-    mutate(ano = as.character(as.numeric(ano))) %>% 
-    group_by(ano) %>%
-    summarise(cobertura_menor7 = sum(dm_hg_menor7, na.rm = TRUE) / sum(dm, na.rm = TRUE))
-  
-  coverage_2011_2023 %>%
-    ungroup() %>%
-    mutate(ano = factor(ano)) %>%
-    filter(ano=="2023") %>% 
-    group_by(ano) %>%
-    summarise(total_dm = sum(dm, na.rm = TRUE), 
-              total_dm_hg_menor7 = sum(dm_hg_menor7, na.rm = TRUE)) %>%
-    mutate(cobertura_menor7 = total_dm_hg_menor7 / total_dm)
   
   
   #Categorise dm quintiles -------------------------------------------------
@@ -163,17 +133,8 @@
     mutate(drs_coverage=replace(drs_coverage, drs_coverage>1, 1)) %>% 
     arrange(ano, comuna) 
   
-  
-  
-  #%>% 
-   # group_by(ano) %>% 
-    #select(comuna) %>% 
-    #table() %>% 
-    #as.data.frame() %>% 
-    #arrange(-Freq) 
-  ## Save coverage.csv -------------------------------------------------------
-  
-  
+
+
   ## Delete Q1 category ------------------------------------------------------
   
   coverage_2011_2023_noq1 <- coverage_2011_2023_noq1 %>% 
@@ -191,42 +152,21 @@
     mutate(drs_coverage=replace(drs_coverage, drs_coverage>1, 1)) %>% 
     arrange(ano, comuna)
   
-  max(coverage_2011_2023_noq1$ano2)
-  ##View(coverage_2011_2023)
-  
 
-    
+## Save coverage.csv -------------------------------------------------------
   
-  ## Save coverage.csv -------------------------------------------------------
   
-  coverage_2011_2023_noq1 %>% 
-    group_by(ano) %>% 
-    select(comuna) %>% 
-    table() %>% 
-    as.data.frame() %>% 
-    arrange(-Freq) 
-  
-  write.csv(coverage_2011_2023_noq1, "coverage_2011_2023_noq1.csv")
-  
-  ggplot(coverage_2011_2023_noq1, aes(x = drs_coverage)) +
-    geom_density() +
-    labs(title = "Density Plot", x = "DRSC", y = "Density")
+write.csv(coverage_2011_2023_noq1, "coverage_2011_2023_noq1.csv")
   
 
   
+##  LCMM for DM coverage2 2011-2019 (excluding Q1) -----------------------------------------
   
-  ##  LCMM for DM coverage2 2011-2019 (excluding Q1) -----------------------------------------
-  coverage_2011_2023_noq1 %>% 
-    select(comuna) %>% 
-    table() %>% 
-    as.data.frame() %>% 
-    arrange(-Freq)
-  
-  m1dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2023_noq1)
-  m2dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2023_noq1, B=m1dm_noq1)
-  m3dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage_2011_2023_noq1, B=m1dm_noq1)
-  m4dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 4, data = coverage_2011_2023_noq1, B=m1dm_noq1)
-  m5dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm_noq1, m= hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1))
+m1dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2023_noq1)
+m2dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2023_noq1, B=m1dm_noq1)
+m3dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage_2011_2023_noq1, B=m1dm_noq1)
+m4dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 4, data = coverage_2011_2023_noq1, B=m1dm_noq1)
+m5dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm_noq1, m= hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1))
 #m5dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 m6dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 
@@ -249,9 +189,6 @@ tab_dm_2011_2023_noq1 <- as.data.frame(lcmm::summarytable(m1dm_noq1, m2dm_noq1, 
                                                                   "ICL2", 
                                                                   "%class")))
 
-LCTMtoolkit(m2dm_noq1)
-
-LCTMcompare(m2dm_noq1, m3dm_noq1)
 ## Merge classification of size DM trajectory ------------------------------
 dm_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m1dm_noq1$pprob,3), by = "comuna2") ##one trajectories
 dm_2011_2023_noq1$class <- as.factor(dm_2011_2023_noq1$class)
@@ -278,16 +215,12 @@ supplementary_data_DGCC_2011_2023 <- supplementary_data_DGCC_2011_2023 %>%
          completeness_2011_2023 = round(completeness_2011_2023*100, 1),
          average_years = rowSums(!is.na(supplementary_data_DGCC_2011_2023[,2:13])))
 
-supplementary_data_DGCC_2011_2023 %>% 
-  select(completeness_2011_2023) %>% 
-  summary() # 91.77 
 
 
 write.csv(supplementary_data_DGCC_2011_2023, "supplementary_data_DGCC_2011_2023.csv")
 
 dm2_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m2dm_noq1$pprob,3), by = "comuna2") ##two trajectories
 dm2_2011_2023_noq1$class <- as.factor(dm2_2011_2023_noq1$class)
-
 
 dm3_2011_2023_noq1 <- merge(coverage_2011_2023_noq1, round(m3dm_noq1$pprob,3), by = "comuna2") ##three trajectories
 dm3_2011_2023_noq1$class <- as.factor(dm3_2011_2023_noq1$class)
@@ -305,7 +238,6 @@ dm6_2011_2023_noq1$class <- as.factor(dm6_2011_2023_noq1$class)
 
 
 # MODEL ADEQUACY ----------------------------------------------------------
-
 
 
 ## Model fit criteria ------------------------------------------------------
@@ -346,24 +278,39 @@ posterior_probsm5dm_noq1 <- postprob(m5dm_noq1)
 posterior_probsm6dm_noq1 <- postprob(m6dm_noq1)  
 
 
-LCTMtoolkit(m2dm_noq1)
+# Assuming you have a list of your model objects --------------------------
 
-# OCC
-# Assuming you have a list of your model objects
+
 models_list <- list(m2dm_noq1, m3dm_noq1, m4dm_noq1, m5dm_noq1, m6dm_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
 
 # Extract the lower OCC values for each model
 lower_occ_values <- sapply(models_list, function(model) {
   occ_values <- LCTMtoolkit(model)$occ
-  min(as.numeric(occ_values[1,]))  # Assuming OCC is in the first row of the OCC matrix
+  min(as.numeric(occ_values[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
 })
 
 # Print the lower OCC values
 print(lower_occ_values)
 
 
+## APPA ---------------------------------------------------------------------
 
-# Mismatch
+
+# Extract the lower OCC values for each model
+lower_appa_values <- sapply(models_list, function(model) {
+  appa_values <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
 # Extract the lower OCC values for each model
 highest_mismatch_values <- sapply(models_list, function(model) {
   mismatch_values <- LCTMtoolkit(model)$mismatch
@@ -373,6 +320,8 @@ highest_mismatch_values <- sapply(models_list, function(model) {
 # Print the lower OCC values
 print(highest_mismatch_values)
 
+
+## VLLRT test --------------------------------------------------------------
 
 
 # Define a function to extract p-value from calc_lrt output
@@ -403,14 +352,17 @@ values_vllrt <- sapply(outputs_vllrt, function(x) gsub("^= ", "", x))
 # Print the vector
 print(values_vllrt)
 
-#Diagnistic criteria
+
+
+## Diagnostic criteria table -----------------------------------------------
+
 
 diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
   mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]]), min(posterior_probsm3dm_noq1[[1]]), min(posterior_probsm4dm_noq1[[1]]), min(posterior_probsm5dm_noq1[[1]]), min(posterior_probsm6dm_noq1[[1]])),
          smallest_class_size_perc = c(1, min(posterior_probsm2dm_noq1[[1]])/m2dm_noq1$ns, min(posterior_probsm3dm_noq1[[1]])/m3dm_noq1$ns, min(posterior_probsm4dm_noq1[[1]])/m4dm_noq1$ns, min(posterior_probsm5dm_noq1[[1]])/m5dm_noq1$ns, min(posterior_probsm6dm_noq1[[1]])/m6dm_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, min(diag(posterior_probsm2dm_noq1[[2]])), min(diag(posterior_probsm3dm_noq1[[2]])), min(diag(posterior_probsm4dm_noq1[[2]])), min(diag(posterior_probsm5dm_noq1[[2]])), min(diag(posterior_probsm6dm_noq1[[2]]))),
+         "Lowest APPA" = c(NA, lower_appa_values),
          "Highest MMV" =c(NA, highest_mismatch_values),
          "Lowest OCC" = c(NA, lower_occ_values),
          VLMRLRT = c(NA, values_vllrt)
@@ -424,74 +376,27 @@ write.csv(diagnostic_criteria_dm_2011_2023_noq1, "diagnostic_criteria_dm_2011_20
 
 ## Plot trajectories -------------------------------------------------------
 
-pdm_2011_2023_noq1 <- ggplot(dm_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Define a function to create each plot
+create_plot <- function(data) {
+  ggplot(data, aes(x = ano2, y = dm_coverage, colour = class, group = comuna2)) +
+    # Removed individual points and lines to simplify the plot
+    scale_x_continuous(breaks = 0:12, labels = 2011:2023) +
+    xlab("Year") +
+    ylab("DGCC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
 
-pdm2_2011_2023_noq1 <- ggplot(dm2_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Create individual plots by calling the function with each dataset
+pdm_plots <- lapply(list(dm_2011_2023_noq1, dm2_2011_2023_noq1, dm3_2011_2023_noq1,
+                         dm4_2011_2023_noq1, dm5_2011_2023_noq1, dm6_2011_2023_noq1), create_plot)
 
-pdm3_2011_2023_noq1 <- ggplot(dm3_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdm4_2011_2023_noq1 <- ggplot(dm4_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdm5_2011_2023_noq1 <- ggplot(dm5_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-str(dm5_2011_2023_noq1)
-
-pdm6_2011_2023_noq1 <- ggplot(dm6_2011_2023_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-gridExtra::grid.arrange(pdm_2011_2023_noq1, pdm2_2011_2023_noq1, pdm3_2011_2023_noq1, pdm4_2011_2023_noq1, pdm5_2011_2023_noq1, pdm6_2011_2023_noq1)
-
-
+# Arrange all plots in a grid layout
+gridExtra::grid.arrange(grobs = pdm_plots)
 
 
 
 ##  LCMM for DM coverage2 2011-2023-----------------------------------------
-coverage_2011_2023_noq1 %>% 
-  select(comuna) %>% 
-  table() %>% 
-  as.data.frame() %>% 
-  arrange(-Freq)
 
 m1drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2023_noq1)
 m2drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2023_noq1, B=m1drs_noq1)
@@ -613,8 +518,6 @@ drs6_2011_2023_noq1$class <- as.factor(drs6_2011_2023_noq1$class)
 
 # MODEL ADEQUACY ----------------------------------------------------------
 
-
-
 ## Model fit criteria ------------------------------------------------------
 
 model_fit_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
@@ -652,23 +555,38 @@ posterior_probsm4drs_noq1 <- postprob(m4drs_noq1)
 posterior_probsm5drs_noq1 <- postprob(m5drs_noq1)  
 posterior_probsm6drs_noq1 <- postprob(m6drs_noq1)  
 
+# Assuming you have a list of your model objects --------------------------
 
-# OCC
-# Assuming you have a list of your model objects
 models_list2 <- list(m2drs_noq1, m3drs_noq1, m4drs_noq1, m5drs_noq1, m6drs_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
 
 # Extract the lower OCC values for each model
 lower_occ_values2 <- sapply(models_list2, function(model) {
   occ_values2 <- LCTMtoolkit(model)$occ
-  min(as.numeric(occ_values2[1,]))  # Assuming OCC is in the first row of the OCC matrix
+  min(as.numeric(occ_values2[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
 })
 
 # Print the lower OCC values
 print(lower_occ_values2)
 
 
+## APPA ---------------------------------------------------------------------
 
-# Mismatch
+
+# Extract the lower OCC values for each model
+lower_appa_values2 <- sapply(models_list2, function(model) {
+  appa_values2 <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values2[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values2)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
 # Extract the lower OCC values for each model
 highest_mismatch_values2 <- sapply(models_list2, function(model) {
   mismatch_values2 <- LCTMtoolkit(model)$mismatch
@@ -678,6 +596,8 @@ highest_mismatch_values2 <- sapply(models_list2, function(model) {
 # Print the lower OCC values
 print(highest_mismatch_values2)
 
+
+## VLLRT test --------------------------------------------------------------
 
 
 # Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
@@ -695,14 +615,16 @@ values_vllrt2 <- sapply(outputs_vllrt2, function(x) gsub("^= ", "", x))
 # Print the vector
 print(values_vllrt2)
 
-#Diagnistic criteria
+
+## Diagnostic criteria table -----------------------------------------------
+
 
 diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
   mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]]), min(posterior_probsm3drs_noq1[[1]]), min(posterior_probsm4drs_noq1[[1]]), min(posterior_probsm5drs_noq1[[1]]), min(posterior_probsm6drs_noq1[[1]])),
          smallest_class_size_perc = c(1, min(posterior_probsm2drs_noq1[[1]])/m2drs_noq1$ns, min(posterior_probsm3drs_noq1[[1]])/m3drs_noq1$ns, min(posterior_probsm4drs_noq1[[1]])/m4drs_noq1$ns, min(posterior_probsm5drs_noq1[[1]])/m5drs_noq1$ns, min(posterior_probsm6drs_noq1[[1]])/m6drs_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, min(diag(posterior_probsm2drs_noq1[[2]])), min(diag(posterior_probsm3drs_noq1[[2]])), min(diag(posterior_probsm4drs_noq1[[2]])), min(diag(posterior_probsm5drs_noq1[[2]])), min(diag(posterior_probsm6drs_noq1[[2]]))),
+         "Lowest APPA" = c(NA, lower_appa_values2),
          "Highest MMV" =c(NA, highest_mismatch_values2),
          "Lowest OCC" = c(NA, lower_occ_values2),
          VLMRLRT = c(NA, values_vllrt2)
@@ -713,65 +635,24 @@ diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>%
 
 write.csv(diagnostic_criteria_drs_2011_2023_noq1, "diagnostic_criteria_drs_2011_2023_noq1.csv", row.names = F)
 
-
-
 ## Plot trajectories -------------------------------------------------------
+# Define a generic function named create_plot2 for the second set of plots (DRSC)
 
-pdrs_2011_2023_noq1 <- ggplot(drs_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+create_plot2 <- function(data) {
+  ggplot(data, aes(x = ano2, y = drs_coverage, colour = class, group = comuna2)) +
+    scale_x_continuous(breaks = 0:12, labels = 2011:2023) +
+    xlab("Year") +
+    ylab("DRSC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
 
-pdrs2_2011_2023_noq1 <- ggplot(drs2_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Generate DRSC plots by applying create_plot2 to each dataset
+drsc_plots <- lapply(list(drs_2011_2023_noq1, drs2_2011_2023_noq1, drs3_2011_2023_noq1,
+                          drs4_2011_2023_noq1, drs5_2011_2023_noq1, drs6_2011_2023_noq1), create_plot2)
 
-pdrs3_2011_2023_noq1 <- ggplot(drs3_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs4_2011_2023_noq1 <- ggplot(drs4_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs5_2011_2023_noq1 <- ggplot(drs5_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs6_2011_2023_noq1 <- ggplot(drs6_2011_2023_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:12), labels=2011:2023) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-grid.arrange(pdrs_2011_2023_noq1, pdrs2_2011_2023_noq1, pdrs3_2011_2023_noq1, pdrs4_2011_2023_noq1, pdrs5_2011_2023_noq1, pdrs6_2011_2023_noq1)
+# Arrange the plots in a grid layout
+gridExtra::grid.arrange(grobs = drsc_plots)
 
 
 
@@ -786,25 +667,6 @@ isde <- isde %>%
   arrange(comuna)
 
 
-#class <- drs2_2011_2023_noq1 %>% 
-#  mutate(ano2=match(ano, unique(ano)),
-#         id_region = ifelse(id_region==16, 8, id_region), #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
-#         id_region2 = match(id_region, unique(id_region)),
-#         zona = factor(zona),
-#         id_servicio2 = match(id_servicio, unique(id_servicio))) %>% 
-#  dplyr::group_by(comuna2,
-#                  class,
-#                    comuna,
-#                    id_servicio,
-#                    id_region,
-#                  zona,
-#                  quintil_dm_category
-#                  ) %>% 
-#  dplyr::summarise(mean_drs_coverage = mean(drs_coverage, na.rm=T),
-#                   mean_dm_coverage = mean(dm_coverage, na.rm=T)) %>% 
-#  distinct(comuna2, .keep_all = TRUE) 
-
-
 class <- drs2_2011_2023_noq1 %>% 
   mutate(ano2=match(ano, unique(ano)),
          id_region = ifelse(id_region==16, 8, id_region), #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
@@ -817,17 +679,6 @@ class <- drs2_2011_2023_noq1 %>%
   distinct(comuna, .keep_all = TRUE) %>% 
   mutate(comuna2 = cur_group_id()) 
 
-
-
-
-
-
-#class <- drs2_2011_2023_noq1 %>% 
-#  dplyr::select(ano, ano2, comuna, comuna2, id_region, id_servicio, class) %>% 
- # dplyr::group_by(class) %>% 
-#  distinct(comuna, .keep_all = TRUE)
-#summary(class)
-
 class[!(class$comuna %in% isde$comuna), ] 
 
 isde$comuna[isde$comuna == "Aisen"] <- "Aisén"
@@ -838,17 +689,10 @@ isde$comuna[isde$comuna =="San Juan de La Costa"] <- "San Juan de la Costa"
 
 class[!(class$comuna %in% isde$comuna), ] 
 
-#class <- class %>% 
- # mutate(zona = ifelse(zona %in% NA, 3, zona)) 
-
-
 data_reglog <- right_join(class, isde) 
-
-##View(data_reglog)
 
 data_reglog <- data_reglog %>% 
   mutate(class_membership = ifelse(class==2, 1, 0)) 
-
 
 data_reglog$index_standardized <- scale(data_reglog$index)
 
@@ -929,11 +773,6 @@ write.csv(coverage_2011_2019_noq1, "coverage_2011_2019_noq1.csv")
 
 
 ##  LCMM for DM coverage2 2011-2019 (excluding Q1) -----------------------------------------
-coverage_2011_2019_noq1 %>% 
-  select(comuna) %>% 
-  table() %>% 
-  as.data.frame() %>% 
-  arrange(-Freq)
 
 m7dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2019_noq1)
 m8dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2019_noq1, B=m7dm_noq1)
@@ -944,8 +783,6 @@ m10dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, su
 m11dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2019_noq1, B=m7dm_noq1)
 m12dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2019_noq1, B=m7dm_noq1)
 
-##m6dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm, m= hlme(dm_coverage2 ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage2, B=m1dm))
-summary(m7dm_noq1)
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
 
 
@@ -978,15 +815,10 @@ h <- dm_2011_2019_noq1 %>%
   spread(ano, dm_coverage) %>% 
   select(comuna, comuna2, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
 
-
-
-
 gh <- merge(h, g, by= "comuna2")
-
 
 supplementary_data_DGCC_2011_2019 <- gh %>% 
                                         select(-comuna2)
-#supplementary_data_DGCC_2011_2019 <- select(-comuna2)
 
 
 supplementary_data_DGCC_2011_2019 <- supplementary_data_DGCC_2011_2019 %>% 
@@ -1000,7 +832,6 @@ supplementary_data_DGCC_2011_2019 %>%
 
 mean(supplementary_data_DGCC_2011_2019$completeness_2011_2019)
 sd(supplementary_data_DGCC_2011_2019$completeness_2011_2019)
-
 
 
 write.csv(supplementary_data_DGCC_2011_2019, "supplementary_data_DGCC_2011_2019.csv")
@@ -1035,7 +866,7 @@ model_fit_criteria_dm_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>%
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
 
-write.csv(model_fit_criteria_dm_2011_2019_noq1, "model_fit_dm_criteria_2011_2019_noq1.csv", row.names = F)
+write.csv(model_fit_criteria_dm_2011_2019_noq1, "model_fit_criteria_dm_2011_2019_noq1.csv", row.names = F)
 
 
 
@@ -1057,23 +888,38 @@ posterior_probsm10dm_noq1 <- postprob(m10dm_noq1)
 posterior_probsm11dm_noq1 <- postprob(m11dm_noq1)  
 posterior_probsm12dm_noq1 <- postprob(m12dm_noq1)  
 
+# Assuming you have a list of your model objects --------------------------
 
-# OCC
-# Assuming you have a list of your model objects
 models_list3 <- list(m8dm_noq1, m9dm_noq1, m10dm_noq1, m11dm_noq1, m12dm_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
 
 # Extract the lower OCC values for each model
 lower_occ_values3 <- sapply(models_list3, function(model) {
   occ_values3 <- LCTMtoolkit(model)$occ
-  min(as.numeric(occ_values3[1,]))  # Assuming OCC is in the first row of the OCC matrix
+  min(as.numeric(occ_values3[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
 })
 
 # Print the lower OCC values
 print(lower_occ_values3)
 
 
+## APPA ---------------------------------------------------------------------
 
-# Mismatch
+
+# Extract the lower OCC values for each model
+lower_appa_values3 <- sapply(models_list3, function(model) {
+  appa_values3 <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values3[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values3)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
 # Extract the lower OCC values for each model
 highest_mismatch_values3 <- sapply(models_list3, function(model) {
   mismatch_values3 <- LCTMtoolkit(model)$mismatch
@@ -1083,6 +929,8 @@ highest_mismatch_values3 <- sapply(models_list3, function(model) {
 # Print the lower OCC values
 print(highest_mismatch_values3)
 
+
+## VLLRT test --------------------------------------------------------------
 
 
 # Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
@@ -1100,14 +948,16 @@ values_vllrt3 <- sapply(outputs_vllrt3, function(x) gsub("^= ", "", x))
 # Print the vector
 print(values_vllrt3)
 
-#Diagnistic criteria
 
-diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
+## Diagnostic criteria table -----------------------------------------------
+
+
+diagnostic_criteria_dm_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]]), min(posterior_probsm3dm_noq1[[1]]), min(posterior_probsm4dm_noq1[[1]]), min(posterior_probsm5dm_noq1[[1]]), min(posterior_probsm6dm_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm2dm_noq1[[1]])/m2dm_noq1$ns, min(posterior_probsm3dm_noq1[[1]])/m3dm_noq1$ns, min(posterior_probsm4dm_noq1[[1]])/m4dm_noq1$ns, min(posterior_probsm5dm_noq1[[1]])/m5dm_noq1$ns, min(posterior_probsm6dm_noq1[[1]])/m6dm_noq1$ns),
+  mutate(smallest_class_count = c(m7dm_noq1$ns, min(posterior_probsm8dm_noq1[[1]]), min(posterior_probsm9dm_noq1[[1]]), min(posterior_probsm10dm_noq1[[1]]), min(posterior_probsm11dm_noq1[[1]]), min(posterior_probsm12dm_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm8dm_noq1[[1]])/m8dm_noq1$ns, min(posterior_probsm9dm_noq1[[1]])/m9dm_noq1$ns, min(posterior_probsm10dm_noq1[[1]])/m10dm_noq1$ns, min(posterior_probsm11dm_noq1[[1]])/m11dm_noq1$ns, min(posterior_probsm12dm_noq1[[1]])/m12dm_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, min(diag(posterior_probsm2dm_noq1[[2]])), min(diag(posterior_probsm3dm_noq1[[2]])), min(diag(posterior_probsm4dm_noq1[[2]])), min(diag(posterior_probsm5dm_noq1[[2]])), min(diag(posterior_probsm6dm_noq1[[2]]))),
+         "Lowest APPA" = c(NA, lower_appa_values3),
          "Highest MMV" =c(NA, highest_mismatch_values3),
          "Lowest OCC" = c(NA, lower_occ_values3),
          VLMRLRT = c(NA, values_vllrt3)
@@ -1116,66 +966,26 @@ diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>%
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
 
-write.csv(diagnostic_criteria_dm_2011_2023_noq1, "diagnostic_criteria_dm_2011_2023_noq1.csv", row.names = F)
-
+write.csv(diagnostic_criteria_dm_2011_2019_noq1, "diagnostic_criteria_dm_2011_2019_noq1.csv", row.names = F)
 
 ## Plot trajectories -------------------------------------------------------
 
-pdm_2011_2019_noq1 <- ggplot(dm_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Define a generic function named create_plot3 for the second set of plots (DGCC)
+create_plot3 <- function(data) {
+  ggplot(data, aes(x = ano2, y = dm_coverage, colour = class, group = comuna2)) +
+    scale_x_continuous(breaks = 0:8, labels = 2011:2019) +
+    xlab("Year") +
+    ylab("DGCC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
 
-pdm2_2011_2019_noq1 <- ggplot(dm2_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Generate DGCC plots by applying create_plot3 to each dataset
+pdm_plots2 <- lapply(list(dm_2011_2019_noq1, dm2_2011_2019_noq1, dm3_2011_2019_noq1,
+                          dm4_2011_2019_noq1, dm5_2011_2019_noq1, dm6_2011_2019_noq1), create_plot3)
 
-pdm3_2011_2019_noq1 <- ggplot(dm3_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdm4_2011_2019_noq1 <- ggplot(dm4_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdm5_2011_2019_noq1 <- ggplot(dm5_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdm6_2011_2019_noq1 <- ggplot(dm6_2011_2019_noq1, aes(x=ano2, y=dm_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DGCC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-gridExtra::grid.arrange(pdm_2011_2019_noq1, pdm2_2011_2019_noq1, pdm3_2011_2019_noq1, pdm4_2011_2019_noq1, pdm5_2011_2019_noq1, pdm6_2011_2019_noq1  )
+# Arrange the plots in a grid layout
+gridExtra::grid.arrange(grobs = pdm_plots2)
 
 
 ##  LCMM for DM coverage2 2011-2019-----------------------------------------
@@ -1334,22 +1144,38 @@ posterior_probsm11drs_noq1 <- postprob(m11drs_noq1)
 posterior_probsm12drs_noq1 <- postprob(m12drs_noq1)  
 
 
-# OCC
-# Assuming you have a list of your model objects
+# Assuming you have a list of your model objects --------------------------
+
 models_list4 <- list(m8drs_noq1, m9drs_noq1, m10drs_noq1, m11drs_noq1, m12drs_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
 
 # Extract the lower OCC values for each model
 lower_occ_values4 <- sapply(models_list4, function(model) {
   occ_values4 <- LCTMtoolkit(model)$occ
-  min(as.numeric(occ_values4[1,]))  # Assuming OCC is in the first row of the OCC matrix
+  min(as.numeric(occ_values4[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
 })
 
 # Print the lower OCC values
-print(lower_occ_values3)
+print(lower_occ_values4)
 
 
+## APPA ---------------------------------------------------------------------
 
-# Mismatch
+
+# Extract the lower OCC values for each model
+lower_appa_values4 <- sapply(models_list4, function(model) {
+  appa_values4 <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values4[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values4)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
 # Extract the lower OCC values for each model
 highest_mismatch_values4 <- sapply(models_list4, function(model) {
   mismatch_values4 <- LCTMtoolkit(model)$mismatch
@@ -1359,6 +1185,8 @@ highest_mismatch_values4 <- sapply(models_list4, function(model) {
 # Print the lower OCC values
 print(highest_mismatch_values4)
 
+
+## VLLRT test --------------------------------------------------------------
 
 
 # Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
@@ -1376,14 +1204,16 @@ values_vllrt4 <- sapply(outputs_vllrt4, function(x) gsub("^= ", "", x))
 # Print the vector
 print(values_vllrt4)
 
-#Diagnistic criteria
 
-diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
+## Diagnostic criteria table -----------------------------------------------
+
+
+diagnostic_criteria_drs_2011_2019_noq1 <- tab_drs_2011_2019_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]]), min(posterior_probsm3drs_noq1[[1]]), min(posterior_probsm4drs_noq1[[1]]), min(posterior_probsm5drs_noq1[[1]]), min(posterior_probsm6drs_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm2drs_noq1[[1]])/m2drs_noq1$ns, min(posterior_probsm3drs_noq1[[1]])/m3drs_noq1$ns, min(posterior_probsm4drs_noq1[[1]])/m4drs_noq1$ns, min(posterior_probsm5drs_noq1[[1]])/m5drs_noq1$ns, min(posterior_probsm6drs_noq1[[1]])/m6drs_noq1$ns),
+  mutate(smallest_class_count = c(m7drs_noq1$ns, min(posterior_probsm8drs_noq1[[1]]), min(posterior_probsm9drs_noq1[[1]]), min(posterior_probsm10drs_noq1[[1]]), min(posterior_probsm11drs_noq1[[1]]), min(posterior_probsm12drs_noq1[[1]])),
+         smallest_class_size_perc = c(1, min(posterior_probsm8drs_noq1[[1]])/m8drs_noq1$ns, min(posterior_probsm9drs_noq1[[1]])/m9drs_noq1$ns, min(posterior_probsm10drs_noq1[[1]])/m10drs_noq1$ns, min(posterior_probsm11drs_noq1[[1]])/m11drs_noq1$ns, min(posterior_probsm12drs_noq1[[1]])/m6drs_noq1$ns),
          smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
-         ALCPP = c(NA, min(diag(posterior_probsm2drs_noq1[[2]])), min(diag(posterior_probsm3drs_noq1[[2]])), min(diag(posterior_probsm4drs_noq1[[2]])), min(diag(posterior_probsm5drs_noq1[[2]])), min(diag(posterior_probsm6drs_noq1[[2]]))),
+         "Lowest APPA" = c(NA, lower_appa_values4),
          "Highest MMV" =c(NA, highest_mismatch_values4),
          "Lowest OCC" = c(NA, lower_occ_values4),
          VLMRLRT = c(NA, values_vllrt4)
@@ -1392,65 +1222,27 @@ diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>%
   tibble::rownames_to_column() %>% 
   dplyr::select(-rowname) 
 
-write.csv(diagnostic_criteria_drs_2011_2023_noq1, "diagnostic_criteria_drs_2011_2023_noq1.csv", row.names = F)
+write.csv(diagnostic_criteria_drs_2011_2019_noq1, "diagnostic_criteria_drs_2011_2019_noq1.csv", row.names = F)
+
 
 ## Plot trajectories -------------------------------------------------------
 
-pdrs_2011_2019_noq1 <- ggplot(drs_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Define a generic function named create_plot4 for the DRSC plots
+create_plot4 <- function(data) {
+  ggplot(data, aes(x = ano2, y = drs_coverage, colour = class, group = comuna2)) +
+    scale_x_continuous(breaks = 0:8, labels = 2011:2019) +
+    xlab("Year") +
+    ylab("DRSC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
 
-pdrs2_2011_2019_noq1 <- ggplot(drs2_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
+# Generate DRSC plots by applying create_plot_drs to each dataset
+drsc_plots2 <- lapply(list(drs_2011_2019_noq1, drs2_2011_2019_noq1, drs3_2011_2019_noq1,
+                          drs4_2011_2019_noq1, drs5_2011_2019_noq1, drs6_2011_2019_noq1), create_plot4)
 
-pdrs3_2011_2019_noq1 <- ggplot(drs3_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs4_2011_2019_noq1 <- ggplot(drs4_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs5_2011_2019_noq1 <- ggplot(drs5_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-pdrs6_2011_2019_noq1 <- ggplot(drs6_2011_2019_noq1, aes(x=ano2, y=drs_coverage, colour = class, group = comuna2)) +
-  ##geom_point(size = .1) + 
-  ##geom_line(size = .05) +
-  scale_x_continuous(breaks = c(0:8), labels=2011:2019) +
-  xlab("Year") +
-  ylab("DRSC")+
-  theme(legend.position = "none") +
-  geom_smooth(se = T, method = "loess", aes(group = class))
-
-grid.arrange(pdrs_2011_2019_noq1, pdrs2_2011_2019_noq1, pdrs3_2011_2019_noq1, pdrs4_2011_2019_noq1, pdrs5_2011_2019_noq1, pdrs6_2011_2019_noq1)
+# Arrange the plots in a grid layout
+gridExtra::grid.arrange(grobs = drsc_plots2)
 
 
 ## Índice sociodemográfico -------------------------------------------------
@@ -1475,8 +1267,6 @@ class2 <- drs2_2011_2019_noq1 %>%
                    mean_dm_coverage = mean(dm_coverage, na.rm=T)) %>% 
   distinct(comuna, .keep_all = TRUE) %>% 
   mutate(comuna2 = cur_group_id()) 
-
-
 
 
 class2[!(class2$comuna %in% isde2$comuna), ] 
@@ -1525,7 +1315,6 @@ data_reglog2 <- right_join(data_reglog2, rurality)
 data_reglog2 <- data_reglog2 %>%
   mutate(zona = ifelse(zona == 1, 'norte', 
                        ifelse(zona == 2, 'centro', 'sur')))
-
 
 write.csv(data_reglog2, "data_reglog2.csv")
 
@@ -1672,13 +1461,6 @@ sd(supplementary_data_DRSC_2011_2023 %>%
   select(completeness_2011_2023))
 
 
-
-
-
-
-
-
-
 data_summary1 <- modelsummary::datasummary_skim(data_reglog2[1:300,] %>% 
                                                   select("dm_coverage", 
                                                          "drs_coverage", 
@@ -1733,115 +1515,3 @@ data_summary %>%
     rows = c(1:3)
   )
 
-
-
-# Load necessary library
-library(tibble)
-
-# Create dataframe
-df <- tibble::tibble(
-  Step = 1:8,
-  `Step description` = c(
-    "Scope model by provisionally selecting a plausible number of classes based on available literature and the structure based on plausible clinical patterns.",
-    "Refine the model from step 1 to confirm the optimal number of classes, typically testing K=1–7 classes.",
-    "Refine optimal model structure from fixed through to unrestricted random effects of the model using the favoured K derived in step 2.",
-    "Run model adequacy assessments as described in online supplementary table S3 including posterior probability of assignments (APPA), odds of correct classification (OCC) and relative entropy.",
-    "Investigate graphical presentation",
-    "Run additional tools to assess discrimination including Degrees of separation (DoS) and Elsensohn’s envelope of residuals",
-    "Assess for clinical characterisation and plausibility.",
-    "Conduct sensitivity analyses, for example, testing models without complete data at all time points."
-  ),
-  `Criteria for selection` = c(
-    "Examine linearity of the shape of standardised residual plots for each of the classes in a model with no random effects.",
-    "Lowest Bayesian information criteria value.",
-    "",
-    "APPA: average of maximum probabilities should be greater than 70% for all classes.\nOCC values greater than 5.0.\nRelative entropy values greater than 0.5.",
-    "Plot mean trajectories across time for each class in a single graph.\nPlot mean trajectories with 95% predictive intervals for each class (one class per graph).\nPlot individual class ‘spaghetti plots’ across time for a random sample.",
-    "DoS greater than zero.\nEnvelope of residuals is assessed in plots by observing clear separations between classes.",
-    "Tabulation of characteristics by latent classes. Are the trajectory patterns clinically meaningful? Perhaps, consider classes with a minimum percentage of the population.\nAre the trajectory patterns clinically plausible?\nConcordance of class characteristics with those for other well-established variables.",
-    "General assessment of patterns of trajectories compared with main model."
-  )
-)
-
-# Display dataframe
-print(df)
-
-
-
-
-# Load necessary library
-library(dplyr)
-
-# Assuming your dataset is named 'dataset' and has columns: 'Comunes', 'drs_coverage', and 'Years'
-
-# Calculate the overall mean of all drs_coverage values, ignoring NA values
-overall_mean <- mean(dataset$drs_coverage, na.rm = TRUE)
-
-# Calculate the mean drs_coverage for each commune
-longitudinal_means <- dataset %>%
-  group_by(Comunes) %>%
-  summarize(mean_drs_coverage = mean(drs_coverage, na.rm = TRUE))
-
-# Calculate the difference between each longitudinal mean and the overall mean
-longitudinal_means <- longitudinal_means %>%
-  mutate(difference = mean_drs_coverage - overall_mean)
-
-# Print the results
-print(longitudinal_means)
-
-
-
-
-
-
-
-
-# Summarize counts for columns 9 to 10
-drs2_2011_2023_noq1 %>%
-  dplyr::summarize(
-    across(9:10,
-           list(
-             observations = ~ length(.),
-             non_na_observations = ~ sum(!is.na(.)),
-             `Missing (n)` = ~ sum(is.na(.))
-           ),
-           .names = "{.col}_{.fn}"
-    )
-  ) %>%
-  pivot_longer(
-    cols = everything(),
-    names_to = c("Metric", ".value"),
-    names_pattern = "(.*)_(.*)"
-  ) %>%
-  slice(3 ,1) %>% 
-  mutate(Metric = dplyr::recode(Metric,
-                         "dm_coverage" = "DGCC",
-                         "drs_coverage" = "DRSC")) 
-
-
-
-drs2_2011_2019_noq1 %>%
-  dplyr::summarize(
-    across(9:10,
-           list(
-             observations = ~ length(.),
-             non_na_observations = ~ sum(!is.na(.)),
-             `Missing (n)` = ~ sum(is.na(.))
-           ),
-           .names = "{.col}_{.fn}"
-    )
-  ) %>%
-  pivot_longer(
-    cols = everything(),
-    names_to = c("Metric", ".value"),
-    names_pattern = "(.*)_(.*)"
-  ) %>%
-  slice(3 ,1) %>% 
-  mutate(Metric = dplyr::recode(Metric,
-                                "dm_coverage" = "DGCC",
-                                "drs_coverage" = "DRSC")) 
-
-
-
-
-summary(model5)
