@@ -2050,148 +2050,17 @@ supplementary_data_DGCC <- sm_dgcc %>%
 
 write.csv(supplementary_data_DGCC, "supplementary_data_DGCC.csv")
 
+# Create a new workbook
+wb <- createWorkbook()
 
-write.xlsx(supplementary_data_DGCC, "Supplementary material DGCC.xlsx", sheetName = "DGCC", append = TRUE, row.names = FALSE)
-write.xlsx(supplementary_data_DRSC, "Supplementary material DRSC.xlsx", sheetName = "DRSC", append = TRUE, row.names = FALSE)
+# Add DGCC data to a sheet
+addWorksheet(wb, "DGCC")
+writeData(wb, "DGCC", supplementary_data_DGCC)
 
+# Add DRSC data to another sheet
+addWorksheet(wb, "DRSC")
+writeData(wb, "DRSC", supplementary_data_DRSC)
 
-#Completeness DGCC
-skimr::skim(supplementary_data_DGCC_2011_2023) 
-
-supplementary_data_DGCC_2011_2023 %>% 
-  select(1:13) %>% 
-  gather(key, value,2:13) %>% 
-  summarise(mean = mean(value, na.rm=T))
-  
-  
-  
-mean(supplementary_data_DGCC_2011_2023$completeness_2011_2023)
-sd(supplementary_data_DGCC_2011_2023$completeness_2011_2023)
-mean(supplementary_data_DGCC_2011_2023$average_years)
-sd(supplementary_data_DGCC_2011_2023$average_years)
-skimr::skim(supplementary_data_DGCC_2011_2019)
-mean(supplementary_data_DGCC_2011_2019$completeness_2011_2019)
-sd(supplementary_data_DGCC_2011_2019$completeness_2011_2019)
-mean(supplementary_data_DGCC_2011_2019$average_years)
-sd(supplementary_data_DGCC_2011_2019$average_years)
-
-#Completeness DRSC
-skimr::skim(supplementary_data_DRSC_2011_2023)
-mean(supplementary_data_DRSC_2011_2023$completeness_2011_2023)
-sd(supplementary_data_DRSC_2011_2023$completeness_2011_2023)
-mean(supplementary_data_DRSC_2011_2023$average_years)
-sd(supplementary_data_DRSC_2011_2023$average_years)
-skimr::skim(supplementary_data_DRSC_2011_2019)
-mean(supplementary_data_DRSC_2011_2019$completeness_2011_2019)
-sd(supplementary_data_DRSC_2011_2019$completeness_2011_2019)
-mean(supplementary_data_DRSC_2011_2019$average_years)
-sd(supplementary_data_DRSC_2011_2019$average_years)
-
-#Completeness DRSC 2011-2023
-skimr::skim(supplementary_data_DRSC_2011_2023 %>% 
-              filter(class==2))
-
-supplementary_data_DRSC_2011_2023 %>% 
-  filter(class==2) %>% 
-  select(3) %>% 
- drop_na()
-
-modelsummary::datasummary_skim(supplementary_data_DRSC_2011_2023 %>% 
-                                 filter(class==2),
-                               fmt = "%.4f")
-
-modelsummary::datasummary_skim(supplementary_data_DRSC_2011_2023)
-
-supplementary_data_DRSC_2011_2023 %>% 
-  filter(class==1)%>%
-  summarise(mean_percentage = mean(completeness_2011_2023),
-            sd_percentage =sd(completeness_2011_2023),
-            mean_years = mean(average_years),
-            sd_years = sd(average_years))
-
-supplementary_data_DRSC_2011_2023 %>% 
-  filter(class==2)%>%
-  summarise(mean_percentage = mean(completeness_2011_2023),
-            sd_percentage =sd(completeness_2011_2023),
-            mean_years = mean(average_years),
-            sd_years = sd(average_years))
-
-#Completeness DRSC 2011-2019
-skimr::skim(supplementary_data_DRSC_2011_2019 %>% 
-              filter(class==1))
-
-supplementary_data_DRSC_2011_2019 %>% 
-  filter(class==1)%>%
-  summarise(mean_percentage = mean(completeness_2011_2019),
-            sd_percentage =sd(completeness_2011_2019),
-            mean_years = mean(average_years),
-            sd_years = sd(average_years))
-
-supplementary_data_DRSC_2011_2019 %>% 
-  filter(class==2)%>%
-  summarise(mean_percentage = mean(completeness_2011_2019),
-            sd_percentage =sd(completeness_2011_2019),
-            mean_years = mean(average_years),
-            sd_years = sd(average_years))
-
-
-
-sd(supplementary_data_DRSC_2011_2023 %>% 
-  filter(class==1) %>%
-  select(completeness_2011_2023))
-
-
-data_summary1 <- modelsummary::datasummary_skim(data_reglog2[1:300,] %>% 
-                                                  select("dm_coverage", 
-                                                         "drs_coverage", 
-                                                         "index_standardized")%>% 
-                                                  mutate_if(is.character, as.factor),
-                                                type="numeric",
-                                                histogram=T,
-                                                fmt = "%.4f",
-                                                output="gt") %>% 
-  as.data.frame() 
-
-data_summary2 <- modelsummary::datasummary_skim(data_reglog2[1:292,] %>% 
-                                                  select("dm_coverage", 
-                                                         "drs_coverage", 
-                                                         "index_standardized")%>% 
-                                                  mutate_if(is.character, as.factor),
-                                                type="numeric",
-                                                histogram=T,
-                                                fmt = "%.4f",
-                                                output="gt") %>% 
-  as.data.frame()
-
-data_summary <- rbind(data_summary2, data_summary1)
-
-
-data_summary <- data_summary %>% 
-  mutate_at(vars(-1, -ncol(.)), as.numeric) %>% 
-  mutate(across(4:8, ~ if_else(row_number() %in% c(3, 6), .x, round(.x * 100, 2)))) %>% 
-  mutate(Metric= rep(c("DGCC", "DRSC", "ISDE"), 2)) %>% 
-  select(Metric, 2:9)
-
-data_summary %>% 
-  gt::gt() %>%
-  #tab_spanner(label = 'Model fit and diagnostic criteria', columns = 2:16) %>%
-  tab_options(
-    table.font.size = 10,
-    data_row.padding = px(1),
-    table.border.top.color = "black",
-    heading.border.bottom.color = "black",
-    row_group.border.top.color = "black",
-    row_group.border.bottom.color = "white",
-    table.border.bottom.color = "white",
-    column_labels.border.top.color = "black",
-    column_labels.border.bottom.color = "black",
-    table_body.border.bottom.color = "black",
-    table_body.hlines.color = "white") %>% 
-  tab_row_group(group = "2011-2023",
-                rows = c(4:6)
-  ) %>%
-  tab_row_group(
-    group = "2011-2019",
-    rows = c(1:3)
-  )
+# Save the workbook to a file
+saveWorkbook(wb, "Supplementary_material.xlsx", overwrite = TRUE)
 
