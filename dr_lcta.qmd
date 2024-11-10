@@ -612,28 +612,6 @@ data_summary4 <- modelsummary::datasummary_skim(dr1 %>%
                                                 output="gt") %>% 
   as.data.frame() 
 
-#obs2023 <- dr1 %>%
-  #dplyr::summarize(
-   # dplyr::across(9:10,
-      #            list(
-      #              Observations = ~ length(.),
-       #             non_na_observations = ~ sum(!is.na(.)),
-       #             `Missing (n)` = ~ sum(is.na(.))
-       #           ),
-       #           .names = "{.col}_{.fn}"
-    #)
-  #) %>%
- # pivot_longer(
-  #  cols = everything(),
-  #  names_to = c("Metric", ".value"),
-  #  names_pattern = "(.*)_(.*)"
-  #) %>%
- # slice(3 ,1) %>% 
-  #mutate(Metric = dplyr::recode(Metric,
-   #                             "dm_coverage" = "DGCC",
-    #                            "drs_coverage" = "DRSC")) 
-
-#data_summary4 <- cbind(data_summary4, obs2023)
 
 # Summarize data for dr2
 data_summary5 <- modelsummary::datasummary_skim(dr2 %>% 
@@ -645,28 +623,7 @@ data_summary5 <- modelsummary::datasummary_skim(dr2 %>%
                                                 output="gt") %>% 
   as.data.frame() 
 
-#obs2019 <- dr2 %>%
- # dplyr::summarize(
- #   dplyr::across(9:10,
-  #                list(
-  #                  Observations = ~ length(.),
-   #                 non_na_observations = ~ sum(!is.na(.)),
-   #                 `Missing (n)` = ~ sum(is.na(.))
-   #               ),
-   #               .names = "{.col}_{.fn}"
-   # )
- # ) %>%
- # pivot_longer(
-  #  cols = everything(),
-  #  names_to = c("Metric", ".value"),
-  #  names_pattern = "(.*)_(.*)"
- # ) %>%
-  #slice(3 ,1) %>% 
- # mutate(Metric = dplyr::recode(Metric,
-  #                              "dm_coverage" = "DGCC",
-   #                             "drs_coverage" = "DRSC")) 
 
-#data_summary5 <- cbind(data_summary5, obs2019)
 
 # Combine summaries
 data_summary6 <- rbind(data_summary5, data_summary4)
@@ -876,7 +833,7 @@ rows = c(4:6)
 #| tbl-cap: "Latent class trajectory mixture models for diabetic glycemic control and diabetic retinopathy screening coverage across 300 (2011-2023) and 292 (2011-2019) municipalities"
 #| fig-align: center
 
-mfc1 <- read.csv("model_fit_criteria_2011_2023_noq1.csv", sep=",") 
+mfc1 <- read.csv("model_fit_criteria_dm_2011_2023_noq1.csv", sep=",") 
 
 mfc1 <- mfc1 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -884,11 +841,10 @@ mfc1 <- mfc1 %>%
                 "Nº of parameters"=npm,
                 "Sample size"= sample_size)
 
-dc1 <- read.csv("diagnostic_criteria_2011_2023_noq1.csv", sep=",") 
+dc1 <- read.csv("diagnostic_criteria_dm_2011_2023_noq1.csv", sep=",") 
 
 dc1 <- dc1 %>% 
   dplyr::rename("LCMM class" = G, 
-                Entropy= entropy,
                 "Smallest class count (n)"= smallest_class_count,
                 "Smallest class size (%)"= smallest_class_size_perc)
 
@@ -896,7 +852,7 @@ model_criteria <- left_join(mfc1, dc1)
 
 #DGCC 2011-2019
 
-mfc2 <- read.csv("model_fit_criteria_2011_2019_noq1.csv", sep=",") 
+mfc2 <- read.csv("model_fit_criteria_dm_2011_2019_noq1.csv", sep=",") 
 
 mfc2 <- mfc2 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -904,11 +860,10 @@ mfc2 <- mfc2 %>%
                 "Nº of parameters"=npm,
                 "Sample size"= sample_size)
 
-dc2 <- read.csv("diagnostic_criteria_2011_2019_noq1.csv", sep=",") 
+dc2 <- read.csv("diagnostic_criteria_dm_2011_2019_noq1.csv", sep=",") 
 
 dc2 <- dc2 %>% 
   dplyr::rename("LCMM class" = G, 
-                Entropy= entropy,
                 "Smallest class count (n)"= smallest_class_count,
                 "Smallest class size (%)"= smallest_class_size_perc)
 
@@ -929,7 +884,6 @@ dc3 <- read.csv("diagnostic_criteria_drs_2011_2023_noq1.csv", sep=",")
 
 dc3 <- dc3 %>% 
   dplyr::rename("LCMM class" = G, 
-                Entropy= entropy,
                 "Smallest class count (n)"= smallest_class_count,
                 "Smallest class size (%)"= smallest_class_size_perc)
 
@@ -949,7 +903,6 @@ dc4 <- read.csv("diagnostic_criteria_drs_2011_2019_noq1.csv", sep=",")
 
 dc4 <- dc4 %>% 
   dplyr::rename("LCMM class" = G, 
-                Entropy= entropy,
                 "Smallest class count (n)"= smallest_class_count,
                 "Smallest class size (%)"= smallest_class_size_perc)
 
@@ -960,16 +913,18 @@ table_drsc <- rbind(model_criteria3, model_criteria4)
 class_solutions <- rbind(table_dgcc, table_drsc)
 
 class_solutions <- class_solutions %>% 
-       dplyr::mutate(across(c(2,4:6,8:13,16,18), round, 2)) %>% 
+       dplyr::mutate(across(c(2,4:6,8:13,16:18), round, 2)) %>% 
       dplyr::rename("SCC (n)"= "Smallest class count (n)",
                     "SCS (%)"= "Smallest class size (%)",
                     "SS" = "Sample size",
-                    "Lowest APPA" = "ALCPP",
-                    "VL-LRT"= "VLMRLRT",
                     "MLL"= "Maximum log-likelihood",
                     "Parameters (n)" = "Nº of parameters",
-                    "Lowest OCC" = "Lowest.OCC") %>% 
-  select(1,3,2,4:6,-7,8:18)
+                    "Lowest APPA"= Lowest.APPA,
+                    "Highest MMV"=Highest.MMV,
+                    "Lowest OCC"= Lowest.OCC,
+                    "Relative Entropy" = entropy,
+                    ) %>% 
+  select(1,3,2,4:6,-7,8:19)
   
 
 #knitr::kable(mfc1, row.names = F, digits= 2)
@@ -1014,7 +969,7 @@ table_body.hlines.color = "white")%>%
 ",
     rows = 7:12
   ) %>% 
-   tab_source_note(source_note = md(" **Abbreviations:** LCMM - Latent Class Mixture Model; M-Loglik – Maximum Log-likelihood; AIC- Akaike Information Criteria; BIC - Bayesian Information Criteria; SABIC - Sample-Adjusted Bayesian Information Criteria; SS - Sample size; CAIC -  Consistent Akaike Information Criterion; AWE- Approximate Weight of Evidence Criterion; SIC - Schwarz Information Criterion; BF - Bayes Factor; cmP- correct model probability; SCC - Smallest Class Count; SCS - Smallest Class Size; Lowest APPA: Lowest Average Class Posterior Probability; VL-LRT: Vuong–Lo–Mendell–Rubin Likelihood Radio Test."))
+   tab_source_note(source_note = md(" **Abbreviations:** LCMM - Latent Class Mixture Model; MLL – Maximum Log-likelihood; AIC- Akaike Information Criteria; BIC - Bayesian Information Criteria; SABIC - Sample-Adjusted Bayesian Information Criteria; CAIC -  Consistent Akaike Information Criterion; AWE- Approximate Weight of Evidence Criterion; SIC - Schwarz Information Criterion; BF - Bayes Factor; cmP- correct model probability; SCC - Smallest Class Count; SCS - Smallest Class Size; APPA: Average Class Posterior Probability; MMV: Mistmatch Value; OCC: Odds od Correct Classification; VLMRLRT: Vuong–Lo–Mendell–Rubin Likelihood Radio Test"))
  
 
 ```
@@ -1155,47 +1110,27 @@ gt::gt(df) %>%
 #| tbl-cap: "Diabetic glycemic control coverage trajectory class characteristics 2011-2023" 
 #| fig-align: center
 
- m1dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage1)
 
+df_dm_2011_2023 <- read.csv("df_dm_2011_2023.csv", sep=",") 
 
-# Create a data frame with all coefficients, standard errors, and p-values
-df2 <- data.frame(
-  Metric = rep(c('Intercept', 'Slope'), 6),
-  Model_1_B = c(m1dm_noq1$best[1], m1dm_noq1$best[2], NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_SE = c(0.00532, 0.00057, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_P = c('<0.001', '<0.001', NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_B = c(0.47095, -0.01182, 0.47395, -0.01169, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_SE = c(0.20805, 0.02449, 0.20813, 0.02450, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_P = c(0.0236, 0.6294, 0.0228, 0.6333, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_3_B = c(0.47650, -0.01180, 0.39145, -0.01176, 0.58693, -0.01098, NA, NA, NA, NA, NA, NA),
-  Model_3_SE = c(0.00638, 0.00066, 0.02467, 0.00252, 0.04545, 0.00486, NA, NA, NA, NA, NA, NA),
-  Model_3_P = c('<0.001', '<0.001', '<0.001', '<0.001', 0.0237, 0.0237, NA, NA, NA, NA, NA, NA),
-  Model_4_B = c(0.48596, 0.00030, 0.47596, -0.01183, 0.38895, -0.01155, 0.67399, -0.02220, NA, NA, NA, NA),
-  Model_4_SE = c(0.06071, 0.00794, 0.00642, 0.00066, 0.02386, 0.00245, 0.05713, 0.00725, NA, NA, NA, NA),
-  Model_4_P = c('<0.001', 0.9695, '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', 0.0022, NA, NA, NA, NA),
-  Model_5_B = c(0.25251, 0.00293, 0.40936, -0.01376, 0.47507, -0.01172, 0.67407, -0.02246, 0.48433, 0.00043, NA, NA),
-  Model_5_SE = c(0.07318, 0.00805, 0.02787, 0.00321, 0.00667, 0.00067, 0.05563, 0.00755, 0.06012, 0.00770, NA, NA),
-  Model_5_P = c('<0.001', 0.7157, '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', 0.9552, NA, NA),
-  Model_6_B = c(0.60359, -0.02719, 0.45123, 0.00383, 0.45745, -0.00943, 0.25000, 0.00402, 0.43168, -0.01617, 0.65527, -0.01895),
-  Model_6_SE = c(0.02957, 0.00298, 0.03443, 0.00445, 0.00763, 0.00102, 0.04324, 0.00412, 0.02181, 0.00227, 0.03161, 0.00362),
-  Model_6_P = c('<0.001', '<0.001', '<0.001', 0.3898, '<0.001', '<0.001', '<0.001', 0.3296, '<0.001', '<0.001', '<0.001', '<0.001')
-)
+df_dm_2011_2023 <- df_dm_2011_2023 %>% 
+  select(-1) 
 
 # Round numeric p-values
-df2 <- df2 %>%
+df_dm_2011_2023 <- df_dm_2011_2023 %>%
   mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
 
 # Multiply columns containing "B" by 100 and round to two decimals
-df2 <- df2 %>%
+df_dm_2011_2023 <- df_dm_2011_2023 %>%
   dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
   dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
   dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
 
 # Replace NAs with empty spaces
-df2[is.na(df2)] <- ""
+df_dm_2011_2023[is.na(df_dm_2011_2023)] <- ""
 
 # Rename columns for display
-colnames(df2) <- c(
+colnames(df_dm_2011_2023) <- c(
   "Metric",
   "B1", "SE1", "p-value1",
   "B2", "SE2", "p-value2",
@@ -1205,8 +1140,10 @@ colnames(df2) <- c(
   "B6", "SE6", "p-value6"
 )
 
+
+
 # Create the gt table with tab_spanner
-gt::gt(df2) %>%
+gt::gt(df_dm_2011_2023) %>%
   cols_label(
     B1 = "B", SE1 = "SE", `p-value1` = "p-value",
     B2 = "B", SE2 = "SE", `p-value2` = "p-value",
@@ -1276,7 +1213,11 @@ gt::gt(df2) %>%
     group = "Class 1",
     rows = 1:2
   ) %>% 
-   tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+  tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+
+
+
+
 
 
 
@@ -1288,45 +1229,26 @@ gt::gt(df2) %>%
 #| fig-align: center
 
 
-# Create a data frame with all coefficients, standard errors, and p-values
-df3 <- data.frame(
-  Metric = rep(c('Intercept', 'Slope'), 6),
-  Model_1_B = c(0.28452, 0.01592, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_SE = c(0.01158, 0.00171, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_P = c('<0.001', '<0.001', NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_B = c(0.23049, 0.01379, 0.43580, 0.02157, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_SE = c(0.01648, 0.00304, 0.04315, 0.00690, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_P = c('<0.001', '<0.001', '<0.001', 0.00177, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_3_B = c(0.30780, 0.02962, 0.23102, 0.01105, 0.50780, 0.01670, NA, NA, NA, NA, NA, NA),
-  Model_3_SE = c(0.11649, 0.01374, 0.02229, 0.00479, 0.13040, 0.01742, NA, NA, NA, NA, NA, NA),
-  Model_3_P = c(0.00823, 0.03117, '<0.001', 0.02099, '<0.001', 0.33763, NA, NA, NA, NA, NA, NA),
-  Model_4_B = c(0.39021, 0.02452, 0.15585, 0.00859, 0.26987, 0.01553, 0.57245, 0.01985, NA, NA, NA, NA),
-  Model_4_SE = c(0.02692, 0.00450, 0.02142, 0.00383, 0.01656, 0.00283, 0.05103, 0.00836, NA, NA, NA, NA),
-  Model_4_P = c('<0.001', '<0.001', '<0.001', 0.02507, '<0.001', '<0.001', '<0.001', 0.01755, NA, NA, NA, NA),
-  Model_5_B = c(0.37025, -0.01473, 0.19829, 0.01988, 0.71851, -0.08157, 0.30240, 0.04135, 0.59626, -0.00388, NA, NA),
-  Model_5_SE = c(0.09450, 0.00796, 0.03533, 0.00374, 0.11366, 0.01527, 0.07324, 0.00735, 0.10121, 0.02139, NA, NA),
-  Model_5_P = c(0.00009, 0.06424, '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', 0.85606, NA, NA),
-  Model_6_B = c(0.13301, 0.00668, 0.16239, 0.01024, 0.26584, 0.01671, 0.83830, -0.08345, 0.39427, 0.02398, 0.57798, 0.01895),
-  Model_6_SE = c(0.07913, 0.01323, 0.03200, 0.00538, 0.01690, 0.00285, 0.17573, 0.03310, 0.02497, 0.00422, 0.04764, 0.00785),
-  Model_6_P = c(0.09278, 0.61338, '<0.001', 0.05713, '<0.001', '<0.001', '<0.001', 0.01169, '<0.001', '<0.001', '<0.001', 0.01579)
-)
+df_drs_2011_2019 <- read.csv("df_drs_2011_2019.csv", sep=",") 
 
+df_drs_2011_2019 <- df_drs_2011_2019 %>% 
+  select(-1) 
 
 # Round numeric p-values
-df3 <- df3 %>%
+df_drs_2011_2019 <- df_drs_2011_2019 %>%
   mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
 
 # Multiply columns containing "B" by 100 and round to two decimals
-df3 <- df3 %>%
+df_drs_2011_2019 <- df_drs_2011_2019 %>%
   dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
   dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
   dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
 
 # Replace NAs with empty spaces
-df3[is.na(df3)] <- ""
+df_drs_2011_2019[is.na(df_drs_2011_2019)] <- ""
 
 # Rename columns for display
-colnames(df3) <- c(
+colnames(df_drs_2011_2019) <- c(
   "Metric",
   "B1", "SE1", "p-value1",
   "B2", "SE2", "p-value2",
@@ -1336,8 +1258,10 @@ colnames(df3) <- c(
   "B6", "SE6", "p-value6"
 )
 
+
+
 # Create the gt table with tab_spanner
-gt::gt(df3) %>%
+gt::gt(df_drs_2011_2019) %>%
   cols_label(
     B1 = "B", SE1 = "SE", `p-value1` = "p-value",
     B2 = "B", SE2 = "SE", `p-value2` = "p-value",
@@ -1407,7 +1331,8 @@ gt::gt(df3) %>%
     group = "Class 1",
     rows = 1:2
   ) %>% 
-   tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+  tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+
 
 ```
 
@@ -1418,44 +1343,26 @@ gt::gt(df3) %>%
 
 
 
-# Create a data frame with all coefficients, standard errors, and p-values
-df4 <- data.frame(
-  Metric = rep(c('Intercept', 'Slope'), 6),
-  Model_1_B = c(0.32351, 0.00295, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_SE = c(0.01191, 0.00137, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_1_P = c('<0.001', '0.03098', NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_B = c(0.27850, -0.00044, 0.42144, 0.01009, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_SE = c(0.02506, 0.00255, 0.04093, 0.00573, NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_2_P = c('<0.001', '0.86297', '<0.001', '0.07824', NA, NA, NA, NA, NA, NA, NA, NA),
-  Model_3_B = c(0.27850, -0.00044, 0.27850, -0.00044, 0.42145, 0.01009, NA, NA, NA, NA, NA, NA),
-  Model_3_SE = c(0.07834, 0.00467, 0.07825, 0.00467, 0.04091, 0.00573, NA, NA, NA, NA, NA, NA),
-  Model_3_P = c('<0.001', '0.92484', '<0.001', '0.92474', '<0.001', '0.07827', NA, NA, NA, NA, NA, NA),
-  Model_4_B = c(0.24920, -0.00192, 0.34107, 0.00338, 0.81102, -0.03659, 0.35070, 0.02404, NA, NA, NA, NA),
-  Model_4_SE = c(0.02865, 0.00363, 0.04788, 0.00427, 0.12427, 0.01352, 0.03889, 0.00434, NA, NA, NA, NA),
-  Model_4_P = c('<0.001', '0.59688', '<0.001', '0.42876', '<0.001', '0.00682', '<0.001', '<0.001', NA, NA, NA, NA),
-  Model_5_B = c(0.55548, -0.01261, 0.34034, -0.01563, 0.24908, 0.00634, 0.98083, -0.05630, 0.31158, 0.02728, NA, NA),
-  Model_5_SE = c(0.11801, 0.01221, 0.09703, 0.01063, 0.03346, 0.00269, 0.19292, 0.01994, 0.03651, 0.00361, NA, NA),
-  Model_5_P = c('<0.001', '0.30166', '<0.001', '0.14150', '<0.001', '0.01834', '<0.001', '0.00475', '<0.001', '<0.001', NA, NA),
-  Model_6_B = c(0.23471, -0.00251, 0.45760, -0.02630, 0.56029, -0.01189, 0.24592, 0.00758, 0.98162, -0.05622, 0.30263, 0.02836),
-  Model_6_SE = c(0.05618, 0.00928, 0.07062, 0.00638, 0.08485, 0.00923, 0.03318, 0.00309, 0.15698, 0.01689, 0.03549, 0.00362),
-  Model_6_P = c('<0.001', '0.78693', '<0.001', '0.00004', '<0.001', '0.19764', '<0.001', '0.01412', '<0.001', '0.00087', '<0.001', '<0.001')
-)
+df_drs_2011_2023 <- read.csv("df_drs_2011_2019.csv", sep=",") 
+
+df_drs_2011_2023 <- df_drs_2011_2023 %>% 
+  select(-1) 
 
 # Round numeric p-values
-df4 <- df4 %>%
+df_drs_2011_2023 <- df_drs_2011_2023 %>%
   mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
 
 # Multiply columns containing "B" by 100 and round to two decimals
-df4 <- df4 %>%
+df_drs_2011_2023 <- df_drs_2011_2023 %>%
   dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
   dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
   dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
 
 # Replace NAs with empty spaces
-df4[is.na(df4)] <- ""
+df_drs_2011_2023[is.na(df_drs_2011_2023)] <- ""
 
 # Rename columns for display
-colnames(df4) <- c(
+colnames(df_drs_2011_2023) <- c(
   "Metric",
   "B1", "SE1", "p-value1",
   "B2", "SE2", "p-value2",
@@ -1465,8 +1372,10 @@ colnames(df4) <- c(
   "B6", "SE6", "p-value6"
 )
 
+
+
 # Create the gt table with tab_spanner
-gt::gt(df4) %>%
+gt::gt(df_drs_2011_2023) %>%
   cols_label(
     B1 = "B", SE1 = "SE", `p-value1` = "p-value",
     B2 = "B", SE2 = "SE", `p-value2` = "p-value",
@@ -1536,7 +1445,8 @@ gt::gt(df4) %>%
     group = "Class 1",
     rows = 1:2
   ) %>% 
-   tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+  tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+
 
 ```
 

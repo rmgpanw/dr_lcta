@@ -170,6 +170,175 @@ m5dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm_noq1, m= hlme(dm_c
 #m5dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 m6dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2023_noq1, B=m1dm_noq1)
 
+# For c1
+# Extract values for c1
+model_dm1_c1 <- summary(m1dm_noq1)[1:2,1]
+
+# Standard errors for c1
+model_dm1_se_c1 <- summary(m1dm_noq1)[1:2,2]
+
+# p-values for c1
+model_dm1_p_c1 <- summary(m1dm_noq1)[1:2,4]
+model_dm1_p_c1 <- ifelse(model_dm1_p_c1 < 0.001, "<0.001", model_dm1_p_c1)
+
+# For c3
+# Extract values for c2
+model_dm1_c2.1 <- summary(m2dm_noq1)[c(1,3),1]
+model_dm1_c2.2 <- summary(m2dm_noq1)[c(2,4),1]
+model_dm1_c2 <- c(model_dm1_c2.1, model_dm1_c2.2)
+
+# Standard errors for c2
+model_dm1_se_c2.1 <- summary(m2dm_noq1)[c(1,3),2]
+model_dm1_se_c2.2 <- summary(m2dm_noq1)[c(2,4),2]
+model_dm1_se_c2 <- c(model_dm1_se_c2.1, model_dm1_se_c2.2)
+
+# p-values for c2
+model_dm1_p_c2.1 <- summary(m2dm_noq1)[c(1,3),4]
+model_dm1_p_c2.1 <- ifelse(model_dm1_p_c2.1 < 0.001, "<0.001", model_dm1_p_c2.1)
+model_dm1_p_c2.2 <- summary(m2dm_noq1)[c(2,4),4]
+model_dm1_p_c2.2 <- ifelse(model_dm1_p_c2.2 < 0.001, "<0.001", model_dm1_p_c2.2)
+model_dm1_p_c2 <- c(model_dm1_p_c2.1, model_dm1_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_dm1_c3.1 <- summary(m3dm_noq1)[c(1,4),1]
+model_dm1_c3.2 <- summary(m3dm_noq1)[c(2,5),1]
+model_dm1_c3.3 <- summary(m3dm_noq1)[c(3,6),1]
+model_dm1_c3 <- c(model_dm1_c3.1,model_dm1_c3.2,model_dm1_c3.3)
+
+# Standard errors for c3
+model_dm1_se_c3.1 <- summary(m3dm_noq1)[c(1,4),2]
+model_dm1_se_c3.2 <- summary(m3dm_noq1)[c(2,5),2]
+model_dm1_se_c3.3 <- summary(m3dm_noq1)[c(3,6),2]
+model_dm1_se_c3 <- c(model_dm1_se_c3.1, model_dm1_se_c3.2, model_dm1_se_c3.3)
+
+# p-values for c3
+model_dm1_p_c3.1 <- summary(m3dm_noq1)[c(1,4),4]
+model_dm1_p_c3.1 <- ifelse(model_dm1_p_c3.1 < 0.001, "<0.001", model_dm1_p_c3.1)
+model_dm1_p_c3.2 <- summary(m3dm_noq1)[c(2,5),4]
+model_dm1_p_c3.2 <- ifelse(model_dm1_p_c3.2 < 0.001, "<0.001", model_dm1_p_c3.2)
+model_dm1_p_c3.3 <- summary(m3dm_noq1)[c(3,6),4]
+model_dm1_p_c3.3 <- ifelse(model_dm1_p_c3.3 < 0.001, "<0.001", model_dm1_p_c3.3)
+model_dm1_p_c3 <- c(model_dm1_p_c3.1, model_dm1_p_c3.2, model_dm1_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_dm1_c4.1 <- summary(m4dm_noq1)[c(1,5),1]
+model_dm1_c4.2 <- summary(m4dm_noq1)[c(2,6),1]
+model_dm1_c4.3 <- summary(m4dm_noq1)[c(3,7),1]
+model_dm1_c4.4 <- summary(m4dm_noq1)[c(4,8),1]
+model_dm1_c4 <- c(model_dm1_c4.1, model_dm1_c4.2, model_dm1_c4.3, model_dm1_c4.4)
+
+# Standard errors for c4
+model_dm1_se_c4.1 <- summary(m4dm_noq1)[c(1,5),2]
+model_dm1_se_c4.2 <- summary(m4dm_noq1)[c(2,6),2]
+model_dm1_se_c4.3 <- summary(m4dm_noq1)[c(3,7),2]
+model_dm1_se_c4.4 <- summary(m4dm_noq1)[c(4,8),2]
+model_dm1_se_c4 <- c(model_dm1_se_c4.1, model_dm1_se_c4.2, model_dm1_se_c4.3, model_dm1_se_c4.4)
+
+# p-values for c4
+model_dm1_p_c4.1 <- summary(m4dm_noq1)[c(1,5),4]
+model_dm1_p_c4.1 <- ifelse(model_dm1_p_c4.1 < 0.001, "<0.001", model_dm1_p_c4.1)
+model_dm1_p_c4.2 <- summary(m4dm_noq1)[c(2,6),4]
+model_dm1_p_c4.2 <- ifelse(model_dm1_p_c4.2 < 0.001, "<0.001", model_dm1_p_c4.2)
+model_dm1_p_c4.3 <- summary(m4dm_noq1)[c(3,7),4]
+model_dm1_p_c4.3 <- ifelse(model_dm1_p_c4.3 < 0.001, "<0.001", model_dm1_p_c4.3)
+model_dm1_p_c4.4 <- summary(m4dm_noq1)[c(4,8),4]
+model_dm1_p_c4.4 <- ifelse(model_dm1_p_c4.4 < 0.001, "<0.001", model_dm1_p_c4.4)
+model_dm1_p_c4 <- c(model_dm1_p_c4.1, model_dm1_p_c4.2, model_dm1_p_c4.3, model_dm1_p_c4.4)
+
+# Extract values for c5
+model_dm1_c5.1 <- summary(m5dm_noq1)[c(1,6),1]
+model_dm1_c5.2 <- summary(m5dm_noq1)[c(2,7),1]
+model_dm1_c5.3 <- summary(m5dm_noq1)[c(3,8),1]
+model_dm1_c5.4 <- summary(m5dm_noq1)[c(4,9),1]
+model_dm1_c5.5 <- summary(m5dm_noq1)[c(5,10),1]
+model_dm1_c5 <- c(model_dm1_c5.1, model_dm1_c5.2, model_dm1_c5.3, model_dm1_c5.4, model_dm1_c5.5)
+
+# Standard errors for c5
+model_dm1_se_c5.1 <- summary(m5dm_noq1)[c(1,6),2]
+model_dm1_se_c5.2 <- summary(m5dm_noq1)[c(2,7),2]
+model_dm1_se_c5.3 <- summary(m5dm_noq1)[c(3,8),2]
+model_dm1_se_c5.4 <- summary(m5dm_noq1)[c(4,9),2]
+model_dm1_se_c5.5 <- summary(m5dm_noq1)[c(5,10),2]
+model_dm1_se_c5 <- c(model_dm1_se_c5.1, model_dm1_se_c5.2, model_dm1_se_c5.3, model_dm1_se_c5.4, model_dm1_se_c5.5)
+
+# p-values for c5
+model_dm1_p_c5.1 <- summary(m5dm_noq1)[c(1,6),4]
+model_dm1_p_c5.1 <- ifelse(model_dm1_p_c5.1 < 0.001, "<0.001", model_dm1_p_c5.1)
+model_dm1_p_c5.2 <- summary(m5dm_noq1)[c(2,7),4]
+model_dm1_p_c5.2 <- ifelse(model_dm1_p_c5.2 < 0.001, "<0.001", model_dm1_p_c5.2)
+model_dm1_p_c5.3 <- summary(m5dm_noq1)[c(3,8),4]
+model_dm1_p_c5.3 <- ifelse(model_dm1_p_c5.3 < 0.001, "<0.001", model_dm1_p_c5.3)
+model_dm1_p_c5.4 <- summary(m5dm_noq1)[c(4,9),4]
+model_dm1_p_c5.4 <- ifelse(model_dm1_p_c5.4 < 0.001, "<0.001", model_dm1_p_c5.4)
+model_dm1_p_c5.5 <- summary(m5dm_noq1)[c(5,10),4]
+model_dm1_p_c5.5 <- ifelse(model_dm1_p_c5.5 < 0.001, "<0.001", model_dm1_p_c5.5)
+model_dm1_p_c5 <- c(model_dm1_p_c5.1, model_dm1_p_c5.2, model_dm1_p_c5.3, model_dm1_p_c5.4, model_dm1_p_c5.5)
+
+# Extract values for c6
+model_dm1_c6.1 <- summary(m6dm_noq1)[c(1,7),1]
+model_dm1_c6.2 <- summary(m6dm_noq1)[c(2,8),1]
+model_dm1_c6.3 <- summary(m6dm_noq1)[c(3,9),1]
+model_dm1_c6.4 <- summary(m6dm_noq1)[c(4,10),1]
+model_dm1_c6.5 <- summary(m6dm_noq1)[c(5,11),1]
+model_dm1_c6.6 <- summary(m6dm_noq1)[c(6,12),1]
+model_dm1_c6 <- c(model_dm1_c6.1, model_dm1_c6.2, model_dm1_c6.3, model_dm1_c6.4, model_dm1_c6.5, model_dm1_c6.6)
+
+# Standard errors for c6
+model_dm1_se_c6.1 <- summary(m6dm_noq1)[c(1,7),2]
+model_dm1_se_c6.2 <- summary(m6dm_noq1)[c(2,8),2]
+model_dm1_se_c6.3 <- summary(m6dm_noq1)[c(3,9),2]
+model_dm1_se_c6.4 <- summary(m6dm_noq1)[c(4,10),2]
+model_dm1_se_c6.5 <- summary(m6dm_noq1)[c(5,11),2]
+model_dm1_se_c6.6 <- summary(m6dm_noq1)[c(6,12),2]
+model_dm1_se_c6 <- c(model_dm1_se_c6.1, model_dm1_se_c6.2, model_dm1_se_c6.3, model_dm1_se_c6.4, model_dm1_se_c6.5, model_dm1_se_c6.6)
+
+# p-values for c6
+model_dm1_p_c6.1 <- summary(m6dm_noq1)[c(1,7),4]
+model_dm1_p_c6.1 <- ifelse(model_dm1_p_c6.1 < 0.001, "<0.001", model_dm1_p_c6.1)
+model_dm1_p_c6.2 <- summary(m6dm_noq1)[c(2,8),4]
+model_dm1_p_c6.2 <- ifelse(model_dm1_p_c6.2 < 0.001, "<0.001", model_dm1_p_c6.2)
+model_dm1_p_c6.3 <- summary(m6dm_noq1)[c(3,9),4]
+model_dm1_p_c6.3 <- ifelse(model_dm1_p_c6.3 < 0.001, "<0.001", model_dm1_p_c6.3)
+model_dm1_p_c6.4 <- summary(m6dm_noq1)[c(4,10),4]
+model_dm1_p_c6.4 <- ifelse(model_dm1_p_c6.4 < 0.001, "<0.001", model_dm1_p_c6.4)
+model_dm1_p_c6.5 <- summary(m6dm_noq1)[c(5,11),4]
+model_dm1_p_c6.5 <- ifelse(model_dm1_p_c6.5 < 0.001, "<0.001", model_dm1_p_c6.5)
+model_dm1_p_c6.6 <- summary(m6dm_noq1)[c(6,12),4]
+model_dm1_p_c6.6 <- ifelse(model_dm1_p_c6.6 < 0.001, "<0.001", model_dm1_p_c6.6)
+model_dm1_p_c6 <- c(model_dm1_p_c6.1, model_dm1_p_c6.2, model_dm1_p_c6.3, model_dm1_p_c6.4, model_dm1_p_c6.5, model_dm1_p_c6.6)
+
+
+df_dm_2011_2023 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_dm1_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_dm1_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_dm1_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_dm1_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_dm1_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_dm1_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_dm1_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_dm1_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_dm1_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_dm1_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_dm1_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_dm1_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_dm1_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_dm1_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_dm1_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_dm1_c6,
+  Model_6_SE = model_dm1_se_c6,
+  Model_6_P = model_dm1_p_c6
+)
+
+write.csv(df_dm_2011_2023, "df_dm_2011_2023.csv")
+
 
 
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
@@ -359,9 +528,8 @@ print(values_vllrt)
 
 diagnostic_criteria_dm_2011_2023_noq1 <- tab_dm_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]]), min(posterior_probsm3dm_noq1[[1]]), min(posterior_probsm4dm_noq1[[1]]), min(posterior_probsm5dm_noq1[[1]]), min(posterior_probsm6dm_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm2dm_noq1[[1]])/m2dm_noq1$ns, min(posterior_probsm3dm_noq1[[1]])/m3dm_noq1$ns, min(posterior_probsm4dm_noq1[[1]])/m4dm_noq1$ns, min(posterior_probsm5dm_noq1[[1]])/m5dm_noq1$ns, min(posterior_probsm6dm_noq1[[1]])/m6dm_noq1$ns),
-         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
+  mutate(smallest_class_count = c(m1dm_noq1$ns, min(posterior_probsm2dm_noq1[[1]][1,]), min(posterior_probsm3dm_noq1[[1]][1,]), min(posterior_probsm4dm_noq1[[1]][1,]), min(posterior_probsm5dm_noq1[[1]][1,]), min(posterior_probsm6dm_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm2dm_noq1[[1]][2,]), min(posterior_probsm3dm_noq1[[1]][2,]), min(posterior_probsm4dm_noq1[[1]][2,]), min(posterior_probsm5dm_noq1[[1]][2,]), min(posterior_probsm6dm_noq1[[1]][2,])),
          "Lowest APPA" = c(NA, lower_appa_values),
          "Highest MMV" =c(NA, highest_mismatch_values),
          "Lowest OCC" = c(NA, lower_occ_values),
@@ -406,8 +574,175 @@ m4drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, s
 m5drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2023_noq1, B=m1drs_noq1)
 m6drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2023_noq1, B=m1drs_noq1)
 
-##m6dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm, m= hlme(dm_coverage2 ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage2, B=m1dm))
-summary(m2drs_noq1)
+# For c1
+# Extract values for c1
+model_drs1_c1 <- summary(m1drs_noq1)[1:2,1]
+
+# Standard errors for c1
+model_drs1_se_c1 <- summary(m1drs_noq1)[1:2,2]
+
+# p-values for c1
+model_drs1_p_c1 <- summary(m1drs_noq1)[1:2,4]
+model_drs1_p_c1 <- ifelse(model_drs1_p_c1 < 0.001, "<0.001", model_drs1_p_c1)
+
+# For c3
+# Extract values for c2
+model_drs1_c2.1 <- summary(m2drs_noq1)[c(1,3),1]
+model_drs1_c2.2 <- summary(m2drs_noq1)[c(2,4),1]
+model_drs1_c2 <- c(model_drs1_c2.1, model_drs1_c2.2)
+
+# Standard errors for c2
+model_drs1_se_c2.1 <- summary(m2drs_noq1)[c(1,3),2]
+model_drs1_se_c2.2 <- summary(m2drs_noq1)[c(2,4),2]
+model_drs1_se_c2 <- c(model_drs1_se_c2.1, model_drs1_se_c2.2)
+
+# p-values for c2
+model_drs1_p_c2.1 <- summary(m2drs_noq1)[c(1,3),4]
+model_drs1_p_c2.1 <- ifelse(model_drs1_p_c2.1 < 0.001, "<0.001", model_drs1_p_c2.1)
+model_drs1_p_c2.2 <- summary(m2drs_noq1)[c(2,4),4]
+model_drs1_p_c2.2 <- ifelse(model_drs1_p_c2.2 < 0.001, "<0.001", model_drs1_p_c2.2)
+model_drs1_p_c2 <- c(model_drs1_p_c2.1, model_drs1_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_drs1_c3.1 <- summary(m3drs_noq1)[c(1,4),1]
+model_drs1_c3.2 <- summary(m3drs_noq1)[c(2,5),1]
+model_drs1_c3.3 <- summary(m3drs_noq1)[c(3,6),1]
+model_drs1_c3 <- c(model_drs1_c3.1,model_drs1_c3.2,model_drs1_c3.3)
+
+# Standard errors for c3
+model_drs1_se_c3.1 <- summary(m3drs_noq1)[c(1,4),2]
+model_drs1_se_c3.2 <- summary(m3drs_noq1)[c(2,5),2]
+model_drs1_se_c3.3 <- summary(m3drs_noq1)[c(3,6),2]
+model_drs1_se_c3 <- c(model_drs1_se_c3.1, model_drs1_se_c3.2, model_drs1_se_c3.3)
+
+# p-values for c3
+model_drs1_p_c3.1 <- summary(m3drs_noq1)[c(1,4),4]
+model_drs1_p_c3.1 <- ifelse(model_drs1_p_c3.1 < 0.001, "<0.001", model_drs1_p_c3.1)
+model_drs1_p_c3.2 <- summary(m3drs_noq1)[c(2,5),4]
+model_drs1_p_c3.2 <- ifelse(model_drs1_p_c3.2 < 0.001, "<0.001", model_drs1_p_c3.2)
+model_drs1_p_c3.3 <- summary(m3drs_noq1)[c(3,6),4]
+model_drs1_p_c3.3 <- ifelse(model_drs1_p_c3.3 < 0.001, "<0.001", model_drs1_p_c3.3)
+model_drs1_p_c3 <- c(model_drs1_p_c3.1, model_drs1_p_c3.2, model_drs1_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_drs1_c4.1 <- summary(m4drs_noq1)[c(1,5),1]
+model_drs1_c4.2 <- summary(m4drs_noq1)[c(2,6),1]
+model_drs1_c4.3 <- summary(m4drs_noq1)[c(3,7),1]
+model_drs1_c4.4 <- summary(m4drs_noq1)[c(4,8),1]
+model_drs1_c4 <- c(model_drs1_c4.1, model_drs1_c4.2, model_drs1_c4.3, model_drs1_c4.4)
+
+# Standard errors for c4
+model_drs1_se_c4.1 <- summary(m4drs_noq1)[c(1,5),2]
+model_drs1_se_c4.2 <- summary(m4drs_noq1)[c(2,6),2]
+model_drs1_se_c4.3 <- summary(m4drs_noq1)[c(3,7),2]
+model_drs1_se_c4.4 <- summary(m4drs_noq1)[c(4,8),2]
+model_drs1_se_c4 <- c(model_drs1_se_c4.1, model_drs1_se_c4.2, model_drs1_se_c4.3, model_drs1_se_c4.4)
+
+# p-values for c4
+model_drs1_p_c4.1 <- summary(m4drs_noq1)[c(1,5),4]
+model_drs1_p_c4.1 <- ifelse(model_drs1_p_c4.1 < 0.001, "<0.001", model_drs1_p_c4.1)
+model_drs1_p_c4.2 <- summary(m4drs_noq1)[c(2,6),4]
+model_drs1_p_c4.2 <- ifelse(model_drs1_p_c4.2 < 0.001, "<0.001", model_drs1_p_c4.2)
+model_drs1_p_c4.3 <- summary(m4drs_noq1)[c(3,7),4]
+model_drs1_p_c4.3 <- ifelse(model_drs1_p_c4.3 < 0.001, "<0.001", model_drs1_p_c4.3)
+model_drs1_p_c4.4 <- summary(m4drs_noq1)[c(4,8),4]
+model_drs1_p_c4.4 <- ifelse(model_drs1_p_c4.4 < 0.001, "<0.001", model_drs1_p_c4.4)
+model_drs1_p_c4 <- c(model_drs1_p_c4.1, model_drs1_p_c4.2, model_drs1_p_c4.3, model_drs1_p_c4.4)
+
+# Extract values for c5
+model_drs1_c5.1 <- summary(m5drs_noq1)[c(1,6),1]
+model_drs1_c5.2 <- summary(m5drs_noq1)[c(2,7),1]
+model_drs1_c5.3 <- summary(m5drs_noq1)[c(3,8),1]
+model_drs1_c5.4 <- summary(m5drs_noq1)[c(4,9),1]
+model_drs1_c5.5 <- summary(m5drs_noq1)[c(5,10),1]
+model_drs1_c5 <- c(model_drs1_c5.1, model_drs1_c5.2, model_drs1_c5.3, model_drs1_c5.4, model_drs1_c5.5)
+
+# Standard errors for c5
+model_drs1_se_c5.1 <- summary(m5drs_noq1)[c(1,6),2]
+model_drs1_se_c5.2 <- summary(m5drs_noq1)[c(2,7),2]
+model_drs1_se_c5.3 <- summary(m5drs_noq1)[c(3,8),2]
+model_drs1_se_c5.4 <- summary(m5drs_noq1)[c(4,9),2]
+model_drs1_se_c5.5 <- summary(m5drs_noq1)[c(5,10),2]
+model_drs1_se_c5 <- c(model_drs1_se_c5.1, model_drs1_se_c5.2, model_drs1_se_c5.3, model_drs1_se_c5.4, model_drs1_se_c5.5)
+
+# p-values for c5
+model_drs1_p_c5.1 <- summary(m5drs_noq1)[c(1,6),4]
+model_drs1_p_c5.1 <- ifelse(model_drs1_p_c5.1 < 0.001, "<0.001", model_drs1_p_c5.1)
+model_drs1_p_c5.2 <- summary(m5drs_noq1)[c(2,7),4]
+model_drs1_p_c5.2 <- ifelse(model_drs1_p_c5.2 < 0.001, "<0.001", model_drs1_p_c5.2)
+model_drs1_p_c5.3 <- summary(m5drs_noq1)[c(3,8),4]
+model_drs1_p_c5.3 <- ifelse(model_drs1_p_c5.3 < 0.001, "<0.001", model_drs1_p_c5.3)
+model_drs1_p_c5.4 <- summary(m5drs_noq1)[c(4,9),4]
+model_drs1_p_c5.4 <- ifelse(model_drs1_p_c5.4 < 0.001, "<0.001", model_drs1_p_c5.4)
+model_drs1_p_c5.5 <- summary(m5drs_noq1)[c(5,10),4]
+model_drs1_p_c5.5 <- ifelse(model_drs1_p_c5.5 < 0.001, "<0.001", model_drs1_p_c5.5)
+model_drs1_p_c5 <- c(model_drs1_p_c5.1, model_drs1_p_c5.2, model_drs1_p_c5.3, model_drs1_p_c5.4, model_drs1_p_c5.5)
+
+# Extract values for c6
+model_drs1_c6.1 <- summary(m6drs_noq1)[c(1,7),1]
+model_drs1_c6.2 <- summary(m6drs_noq1)[c(2,8),1]
+model_drs1_c6.3 <- summary(m6drs_noq1)[c(3,9),1]
+model_drs1_c6.4 <- summary(m6drs_noq1)[c(4,10),1]
+model_drs1_c6.5 <- summary(m6drs_noq1)[c(5,11),1]
+model_drs1_c6.6 <- summary(m6drs_noq1)[c(6,12),1]
+model_drs1_c6 <- c(model_drs1_c6.1, model_drs1_c6.2, model_drs1_c6.3, model_drs1_c6.4, model_drs1_c6.5, model_drs1_c6.6)
+
+# Standard errors for c6
+model_drs1_se_c6.1 <- summary(m6drs_noq1)[c(1,7),2]
+model_drs1_se_c6.2 <- summary(m6drs_noq1)[c(2,8),2]
+model_drs1_se_c6.3 <- summary(m6drs_noq1)[c(3,9),2]
+model_drs1_se_c6.4 <- summary(m6drs_noq1)[c(4,10),2]
+model_drs1_se_c6.5 <- summary(m6drs_noq1)[c(5,11),2]
+model_drs1_se_c6.6 <- summary(m6drs_noq1)[c(6,12),2]
+model_drs1_se_c6 <- c(model_drs1_se_c6.1, model_drs1_se_c6.2, model_drs1_se_c6.3, model_drs1_se_c6.4, model_drs1_se_c6.5, model_drs1_se_c6.6)
+
+# p-values for c6
+model_drs1_p_c6.1 <- summary(m6drs_noq1)[c(1,7),4]
+model_drs1_p_c6.1 <- ifelse(model_drs1_p_c6.1 < 0.001, "<0.001", model_drs1_p_c6.1)
+model_drs1_p_c6.2 <- summary(m6drs_noq1)[c(2,8),4]
+model_drs1_p_c6.2 <- ifelse(model_drs1_p_c6.2 < 0.001, "<0.001", model_drs1_p_c6.2)
+model_drs1_p_c6.3 <- summary(m6drs_noq1)[c(3,9),4]
+model_drs1_p_c6.3 <- ifelse(model_drs1_p_c6.3 < 0.001, "<0.001", model_drs1_p_c6.3)
+model_drs1_p_c6.4 <- summary(m6drs_noq1)[c(4,10),4]
+model_drs1_p_c6.4 <- ifelse(model_drs1_p_c6.4 < 0.001, "<0.001", model_drs1_p_c6.4)
+model_drs1_p_c6.5 <- summary(m6drs_noq1)[c(5,11),4]
+model_drs1_p_c6.5 <- ifelse(model_drs1_p_c6.5 < 0.001, "<0.001", model_drs1_p_c6.5)
+model_drs1_p_c6.6 <- summary(m6drs_noq1)[c(6,12),4]
+model_drs1_p_c6.6 <- ifelse(model_drs1_p_c6.6 < 0.001, "<0.001", model_drs1_p_c6.6)
+model_drs1_p_c6 <- c(model_drs1_p_c6.1, model_drs1_p_c6.2, model_drs1_p_c6.3, model_drs1_p_c6.4, model_drs1_p_c6.5, model_drs1_p_c6.6)
+
+
+df_drs_2011_2023 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_drs1_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_drs1_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_drs1_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_drs1_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_drs1_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_drs1_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_drs1_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_drs1_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_drs1_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_drs1_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_drs1_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_drs1_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_drs1_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_drs1_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_drs1_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_drs1_c6,
+  Model_6_SE = model_drs1_se_c6,
+  Model_6_P = model_drs1_p_c6
+)
+
+write.csv(df_drs_2011_2023, "df_drs_2011_2023.csv")
+
 
 
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
@@ -621,9 +956,8 @@ print(values_vllrt2)
 
 diagnostic_criteria_drs_2011_2023_noq1 <- tab_drs_2011_2023_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]]), min(posterior_probsm3drs_noq1[[1]]), min(posterior_probsm4drs_noq1[[1]]), min(posterior_probsm5drs_noq1[[1]]), min(posterior_probsm6drs_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm2drs_noq1[[1]])/m2drs_noq1$ns, min(posterior_probsm3drs_noq1[[1]])/m3drs_noq1$ns, min(posterior_probsm4drs_noq1[[1]])/m4drs_noq1$ns, min(posterior_probsm5drs_noq1[[1]])/m5drs_noq1$ns, min(posterior_probsm6drs_noq1[[1]])/m6drs_noq1$ns),
-         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
+  mutate(smallest_class_count = c(m1drs_noq1$ns, min(posterior_probsm2drs_noq1[[1]][1,]), min(posterior_probsm3drs_noq1[[1]][1,]), min(posterior_probsm4drs_noq1[[1]][1,]), min(posterior_probsm5drs_noq1[[1]][1,]), min(posterior_probsm6drs_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm2drs_noq1[[1]][2,]), min(posterior_probsm3drs_noq1[[1]][2,]), min(posterior_probsm4drs_noq1[[1]][2,]), min(posterior_probsm5drs_noq1[[1]][2,]), min(posterior_probsm6drs_noq1[[1]][2,])),
          "Lowest APPA" = c(NA, lower_appa_values2),
          "Highest MMV" =c(NA, highest_mismatch_values2),
          "Lowest OCC" = c(NA, lower_occ_values2),
@@ -782,6 +1116,179 @@ m10dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, su
 #m5dm_noq1 <- gridsearch(rep = 200, maxiter = 10, minit = m1dm_noq1, m= hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2019_noq1, B=m1dm_noq1))
 m11dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2019_noq1, B=m7dm_noq1)
 m12dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2019_noq1, B=m7dm_noq1)
+
+
+# For c1
+# Extract values for c1
+model_dm2_c1 <- summary(m7dm_noq1)[1:2,1]
+
+# Standard errors for c1
+model_dm2_se_c1 <- summary(m7dm_noq1)[1:2,2]
+
+# p-values for c1
+model_dm2_p_c1 <- summary(m7dm_noq1)[1:2,4]
+model_dm2_p_c1 <- ifelse(model_dm2_p_c1 < 0.001, "<0.001", model_dm2_p_c1)
+
+# For c3
+# Extract values for c2
+model_dm2_c2.1 <- summary(m8dm_noq1)[c(1,3),1]
+model_dm2_c2.2 <- summary(m8dm_noq1)[c(2,4),1]
+model_dm2_c2 <- c(model_dm2_c2.1, model_dm2_c2.2)
+
+# Standard errors for c2
+model_dm2_se_c2.1 <- summary(m8dm_noq1)[c(1,3),2]
+model_dm2_se_c2.2 <- summary(m8dm_noq1)[c(2,4),2]
+model_dm2_se_c2 <- c(model_dm2_se_c2.1, model_dm2_se_c2.2)
+
+# p-values for c2
+model_dm2_p_c2.1 <- summary(m8dm_noq1)[c(1,3),4]
+model_dm2_p_c2.1 <- ifelse(model_dm2_p_c2.1 < 0.001, "<0.001", model_dm2_p_c2.1)
+model_dm2_p_c2.2 <- summary(m8dm_noq1)[c(2,4),4]
+model_dm2_p_c2.2 <- ifelse(model_dm2_p_c2.2 < 0.001, "<0.001", model_dm2_p_c2.2)
+model_dm2_p_c2 <- c(model_dm2_p_c2.1, model_dm2_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_dm2_c3.1 <- summary(m9dm_noq1)[c(1,4),1]
+model_dm2_c3.2 <- summary(m9dm_noq1)[c(2,5),1]
+model_dm2_c3.3 <- summary(m9dm_noq1)[c(3,6),1]
+model_dm2_c3 <- c(model_dm2_c3.1,model_dm2_c3.2,model_dm2_c3.3)
+
+# Standard errors for c3
+model_dm2_se_c3.1 <- summary(m9dm_noq1)[c(1,4),2]
+model_dm2_se_c3.2 <- summary(m9dm_noq1)[c(2,5),2]
+model_dm2_se_c3.3 <- summary(m9dm_noq1)[c(3,6),2]
+model_dm2_se_c3 <- c(model_dm2_se_c3.1, model_dm2_se_c3.2, model_dm2_se_c3.3)
+
+# p-values for c3
+model_dm2_p_c3.1 <- summary(m9dm_noq1)[c(1,4),4]
+model_dm2_p_c3.1 <- ifelse(model_dm2_p_c3.1 < 0.001, "<0.001", model_dm2_p_c3.1)
+model_dm2_p_c3.2 <- summary(m9dm_noq1)[c(2,5),4]
+model_dm2_p_c3.2 <- ifelse(model_dm2_p_c3.2 < 0.001, "<0.001", model_dm2_p_c3.2)
+model_dm2_p_c3.3 <- summary(m9dm_noq1)[c(3,6),4]
+model_dm2_p_c3.3 <- ifelse(model_dm2_p_c3.3 < 0.001, "<0.001", model_dm2_p_c3.3)
+model_dm2_p_c3 <- c(model_dm2_p_c3.1, model_dm2_p_c3.2, model_dm2_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_dm2_c4.1 <- summary(m10dm_noq1)[c(1,5),1]
+model_dm2_c4.2 <- summary(m10dm_noq1)[c(2,6),1]
+model_dm2_c4.3 <- summary(m10dm_noq1)[c(3,7),1]
+model_dm2_c4.4 <- summary(m10dm_noq1)[c(4,8),1]
+model_dm2_c4 <- c(model_dm2_c4.1, model_dm2_c4.2, model_dm2_c4.3, model_dm2_c4.4)
+
+# Standard errors for c4
+model_dm2_se_c4.1 <- summary(m10dm_noq1)[c(1,5),2]
+model_dm2_se_c4.2 <- summary(m10dm_noq1)[c(2,6),2]
+model_dm2_se_c4.3 <- summary(m10dm_noq1)[c(3,7),2]
+model_dm2_se_c4.4 <- summary(m10dm_noq1)[c(4,8),2]
+model_dm2_se_c4 <- c(model_dm2_se_c4.1, model_dm2_se_c4.2, model_dm2_se_c4.3, model_dm2_se_c4.4)
+
+# p-values for c4
+model_dm2_p_c4.1 <- summary(m10dm_noq1)[c(1,5),4]
+model_dm2_p_c4.1 <- ifelse(model_dm2_p_c4.1 < 0.001, "<0.001", model_dm2_p_c4.1)
+model_dm2_p_c4.2 <- summary(m10dm_noq1)[c(2,6),4]
+model_dm2_p_c4.2 <- ifelse(model_dm2_p_c4.2 < 0.001, "<0.001", model_dm2_p_c4.2)
+model_dm2_p_c4.3 <- summary(m10dm_noq1)[c(3,7),4]
+model_dm2_p_c4.3 <- ifelse(model_dm2_p_c4.3 < 0.001, "<0.001", model_dm2_p_c4.3)
+model_dm2_p_c4.4 <- summary(m10dm_noq1)[c(4,8),4]
+model_dm2_p_c4.4 <- ifelse(model_dm2_p_c4.4 < 0.001, "<0.001", model_dm2_p_c4.4)
+model_dm2_p_c4 <- c(model_dm2_p_c4.1, model_dm2_p_c4.2, model_dm2_p_c4.3, model_dm2_p_c4.4)
+
+# Extract values for c5
+model_dm2_c5.1 <- summary(m11dm_noq1)[c(1,6),1]
+model_dm2_c5.2 <- summary(m11dm_noq1)[c(2,7),1]
+model_dm2_c5.3 <- summary(m11dm_noq1)[c(3,8),1]
+model_dm2_c5.4 <- summary(m11dm_noq1)[c(4,9),1]
+model_dm2_c5.5 <- summary(m11dm_noq1)[c(5,10),1]
+model_dm2_c5 <- c(model_dm2_c5.1, model_dm2_c5.2, model_dm2_c5.3, model_dm2_c5.4, model_dm2_c5.5)
+
+# Standard errors for c5
+model_dm2_se_c5.1 <- summary(m11dm_noq1)[c(1,6),2]
+model_dm2_se_c5.2 <- summary(m11dm_noq1)[c(2,7),2]
+model_dm2_se_c5.3 <- summary(m11dm_noq1)[c(3,8),2]
+model_dm2_se_c5.4 <- summary(m11dm_noq1)[c(4,9),2]
+model_dm2_se_c5.5 <- summary(m11dm_noq1)[c(5,10),2]
+model_dm2_se_c5 <- c(model_dm2_se_c5.1, model_dm2_se_c5.2, model_dm2_se_c5.3, model_dm2_se_c5.4, model_dm2_se_c5.5)
+
+# p-values for c5
+model_dm2_p_c5.1 <- summary(m11dm_noq1)[c(1,6),4]
+model_dm2_p_c5.1 <- ifelse(model_dm2_p_c5.1 < 0.001, "<0.001", model_dm2_p_c5.1)
+model_dm2_p_c5.2 <- summary(m11dm_noq1)[c(2,7),4]
+model_dm2_p_c5.2 <- ifelse(model_dm2_p_c5.2 < 0.001, "<0.001", model_dm2_p_c5.2)
+model_dm2_p_c5.3 <- summary(m11dm_noq1)[c(3,8),4]
+model_dm2_p_c5.3 <- ifelse(model_dm2_p_c5.3 < 0.001, "<0.001", model_dm2_p_c5.3)
+model_dm2_p_c5.4 <- summary(m11dm_noq1)[c(4,9),4]
+model_dm2_p_c5.4 <- ifelse(model_dm2_p_c5.4 < 0.001, "<0.001", model_dm2_p_c5.4)
+model_dm2_p_c5.5 <- summary(m11dm_noq1)[c(5,10),4]
+model_dm2_p_c5.5 <- ifelse(model_dm2_p_c5.5 < 0.001, "<0.001", model_dm2_p_c5.5)
+model_dm2_p_c5 <- c(model_dm2_p_c5.1, model_dm2_p_c5.2, model_dm2_p_c5.3, model_dm2_p_c5.4, model_dm2_p_c5.5)
+
+# Extract values for c6
+model_dm2_c6.1 <- summary(m12dm_noq1)[c(1,7),1]
+model_dm2_c6.2 <- summary(m12dm_noq1)[c(2,8),1]
+model_dm2_c6.3 <- summary(m12dm_noq1)[c(3,9),1]
+model_dm2_c6.4 <- summary(m12dm_noq1)[c(4,10),1]
+model_dm2_c6.5 <- summary(m12dm_noq1)[c(5,11),1]
+model_dm2_c6.6 <- summary(m12dm_noq1)[c(6,12),1]
+model_dm2_c6 <- c(model_dm2_c6.1, model_dm2_c6.2, model_dm2_c6.3, model_dm2_c6.4, model_dm2_c6.5, model_dm2_c6.6)
+
+# Standard errors for c6
+model_dm2_se_c6.1 <- summary(m12dm_noq1)[c(1,7),2]
+model_dm2_se_c6.2 <- summary(m12dm_noq1)[c(2,8),2]
+model_dm2_se_c6.3 <- summary(m12dm_noq1)[c(3,9),2]
+model_dm2_se_c6.4 <- summary(m12dm_noq1)[c(4,10),2]
+model_dm2_se_c6.5 <- summary(m12dm_noq1)[c(5,11),2]
+model_dm2_se_c6.6 <- summary(m12dm_noq1)[c(6,12),2]
+model_dm2_se_c6 <- c(model_dm2_se_c6.1, model_dm2_se_c6.2, model_dm2_se_c6.3, model_dm2_se_c6.4, model_dm2_se_c6.5, model_dm2_se_c6.6)
+
+# p-values for c6
+model_dm2_p_c6.1 <- summary(m12dm_noq1)[c(1,7),4]
+model_dm2_p_c6.1 <- ifelse(model_dm2_p_c6.1 < 0.001, "<0.001", model_dm2_p_c6.1)
+model_dm2_p_c6.2 <- summary(m12dm_noq1)[c(2,8),4]
+model_dm2_p_c6.2 <- ifelse(model_dm2_p_c6.2 < 0.001, "<0.001", model_dm2_p_c6.2)
+model_dm2_p_c6.3 <- summary(m12dm_noq1)[c(3,9),4]
+model_dm2_p_c6.3 <- ifelse(model_dm2_p_c6.3 < 0.001, "<0.001", model_dm2_p_c6.3)
+model_dm2_p_c6.4 <- summary(m12dm_noq1)[c(4,10),4]
+model_dm2_p_c6.4 <- ifelse(model_dm2_p_c6.4 < 0.001, "<0.001", model_dm2_p_c6.4)
+model_dm2_p_c6.5 <- summary(m12dm_noq1)[c(5,11),4]
+model_dm2_p_c6.5 <- ifelse(model_dm2_p_c6.5 < 0.001, "<0.001", model_dm2_p_c6.5)
+model_dm2_p_c6.6 <- summary(m12dm_noq1)[c(6,12),4]
+model_dm2_p_c6.6 <- ifelse(model_dm2_p_c6.6 < 0.001, "<0.001", model_dm2_p_c6.6)
+model_dm2_p_c6 <- c(model_dm2_p_c6.1, model_dm2_p_c6.2, model_dm2_p_c6.3, model_dm2_p_c6.4, model_dm2_p_c6.5, model_dm2_p_c6.6)
+
+
+df_dm_2011_2019 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_dm2_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_dm2_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_dm2_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_dm2_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_dm2_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_dm2_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_dm2_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_dm2_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_dm2_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_dm2_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_dm2_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_dm2_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_dm2_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_dm2_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_dm2_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_dm2_c6,
+  Model_6_SE = model_dm2_se_c6,
+  Model_6_P = model_dm2_p_c6
+)
+
+write.csv(df_dm_2011_2019, "df_dm_2011_2019.csv")
+
+
+
 
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
 
@@ -954,9 +1461,8 @@ print(values_vllrt3)
 
 diagnostic_criteria_dm_2011_2019_noq1 <- tab_dm_2011_2019_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m7dm_noq1$ns, min(posterior_probsm8dm_noq1[[1]]), min(posterior_probsm9dm_noq1[[1]]), min(posterior_probsm10dm_noq1[[1]]), min(posterior_probsm11dm_noq1[[1]]), min(posterior_probsm12dm_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm8dm_noq1[[1]])/m8dm_noq1$ns, min(posterior_probsm9dm_noq1[[1]])/m9dm_noq1$ns, min(posterior_probsm10dm_noq1[[1]])/m10dm_noq1$ns, min(posterior_probsm11dm_noq1[[1]])/m11dm_noq1$ns, min(posterior_probsm12dm_noq1[[1]])/m12dm_noq1$ns),
-         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
+  mutate(smallest_class_count = c(m7dm_noq1$ns, min(posterior_probsm8dm_noq1[[1]][1,]), min(posterior_probsm9dm_noq1[[1]][1,]), min(posterior_probsm10dm_noq1[[1]][1,]), min(posterior_probsm11dm_noq1[[1]][1,]), min(posterior_probsm12dm_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm8dm_noq1[[1]][2,]), min(posterior_probsm9dm_noq1[[1]][2,]), min(posterior_probsm10dm_noq1[[1]][2,]), min(posterior_probsm11dm_noq1[[1]][2,]), min(posterior_probsm12dm_noq1[[1]][2,])),
          "Lowest APPA" = c(NA, lower_appa_values3),
          "Highest MMV" =c(NA, highest_mismatch_values3),
          "Lowest OCC" = c(NA, lower_occ_values3),
@@ -999,8 +1505,177 @@ m10drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, 
 m11drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2011_2019_noq1, B=m7drs_noq1)
 m12drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2011_2019_noq1, B=m7drs_noq1)
 
-##m6dm_noq1 <- gridsearch(rep = 500, maxiter = 10, minit = m1dm, m= hlme(dm_coverage2 ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage2, B=m1dm))
-summary(m8drs_noq1)
+
+
+# For c1
+# Extract values for c1
+model_drs2_c1 <- summary(m7drs_noq1)[1:2,1]
+
+# Standard errors for c1
+model_drs2_se_c1 <- summary(m7drs_noq1)[1:2,2]
+
+# p-values for c1
+model_drs2_p_c1 <- summary(m7drs_noq1)[1:2,4]
+model_drs2_p_c1 <- ifelse(model_drs2_p_c1 < 0.001, "<0.001", model_drs2_p_c1)
+
+# For c3
+# Extract values for c2
+model_drs2_c2.1 <- summary(m8drs_noq1)[c(1,3),1]
+model_drs2_c2.2 <- summary(m8drs_noq1)[c(2,4),1]
+model_drs2_c2 <- c(model_drs2_c2.1, model_drs2_c2.2)
+
+# Standard errors for c2
+model_drs2_se_c2.1 <- summary(m8drs_noq1)[c(1,3),2]
+model_drs2_se_c2.2 <- summary(m8drs_noq1)[c(2,4),2]
+model_drs2_se_c2 <- c(model_drs2_se_c2.1, model_drs2_se_c2.2)
+
+# p-values for c2
+model_drs2_p_c2.1 <- summary(m8drs_noq1)[c(1,3),4]
+model_drs2_p_c2.1 <- ifelse(model_drs2_p_c2.1 < 0.001, "<0.001", model_drs2_p_c2.1)
+model_drs2_p_c2.2 <- summary(m8drs_noq1)[c(2,4),4]
+model_drs2_p_c2.2 <- ifelse(model_drs2_p_c2.2 < 0.001, "<0.001", model_drs2_p_c2.2)
+model_drs2_p_c2 <- c(model_drs2_p_c2.1, model_drs2_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_drs2_c3.1 <- summary(m9drs_noq1)[c(1,4),1]
+model_drs2_c3.2 <- summary(m9drs_noq1)[c(2,5),1]
+model_drs2_c3.3 <- summary(m9drs_noq1)[c(3,6),1]
+model_drs2_c3 <- c(model_drs2_c3.1,model_drs2_c3.2,model_drs2_c3.3)
+
+# Standard errors for c3
+model_drs2_se_c3.1 <- summary(m9drs_noq1)[c(1,4),2]
+model_drs2_se_c3.2 <- summary(m9drs_noq1)[c(2,5),2]
+model_drs2_se_c3.3 <- summary(m9drs_noq1)[c(3,6),2]
+model_drs2_se_c3 <- c(model_drs2_se_c3.1, model_drs2_se_c3.2, model_drs2_se_c3.3)
+
+# p-values for c3
+model_drs2_p_c3.1 <- summary(m9drs_noq1)[c(1,4),4]
+model_drs2_p_c3.1 <- ifelse(model_drs2_p_c3.1 < 0.001, "<0.001", model_drs2_p_c3.1)
+model_drs2_p_c3.2 <- summary(m9drs_noq1)[c(2,5),4]
+model_drs2_p_c3.2 <- ifelse(model_drs2_p_c3.2 < 0.001, "<0.001", model_drs2_p_c3.2)
+model_drs2_p_c3.3 <- summary(m9drs_noq1)[c(3,6),4]
+model_drs2_p_c3.3 <- ifelse(model_drs2_p_c3.3 < 0.001, "<0.001", model_drs2_p_c3.3)
+model_drs2_p_c3 <- c(model_drs2_p_c3.1, model_drs2_p_c3.2, model_drs2_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_drs2_c4.1 <- summary(m10drs_noq1)[c(1,5),1]
+model_drs2_c4.2 <- summary(m10drs_noq1)[c(2,6),1]
+model_drs2_c4.3 <- summary(m10drs_noq1)[c(3,7),1]
+model_drs2_c4.4 <- summary(m10drs_noq1)[c(4,8),1]
+model_drs2_c4 <- c(model_drs2_c4.1, model_drs2_c4.2, model_drs2_c4.3, model_drs2_c4.4)
+
+# Standard errors for c4
+model_drs2_se_c4.1 <- summary(m10drs_noq1)[c(1,5),2]
+model_drs2_se_c4.2 <- summary(m10drs_noq1)[c(2,6),2]
+model_drs2_se_c4.3 <- summary(m10drs_noq1)[c(3,7),2]
+model_drs2_se_c4.4 <- summary(m10drs_noq1)[c(4,8),2]
+model_drs2_se_c4 <- c(model_drs2_se_c4.1, model_drs2_se_c4.2, model_drs2_se_c4.3, model_drs2_se_c4.4)
+
+# p-values for c4
+model_drs2_p_c4.1 <- summary(m10drs_noq1)[c(1,5),4]
+model_drs2_p_c4.1 <- ifelse(model_drs2_p_c4.1 < 0.001, "<0.001", model_drs2_p_c4.1)
+model_drs2_p_c4.2 <- summary(m10drs_noq1)[c(2,6),4]
+model_drs2_p_c4.2 <- ifelse(model_drs2_p_c4.2 < 0.001, "<0.001", model_drs2_p_c4.2)
+model_drs2_p_c4.3 <- summary(m10drs_noq1)[c(3,7),4]
+model_drs2_p_c4.3 <- ifelse(model_drs2_p_c4.3 < 0.001, "<0.001", model_drs2_p_c4.3)
+model_drs2_p_c4.4 <- summary(m10drs_noq1)[c(4,8),4]
+model_drs2_p_c4.4 <- ifelse(model_drs2_p_c4.4 < 0.001, "<0.001", model_drs2_p_c4.4)
+model_drs2_p_c4 <- c(model_drs2_p_c4.1, model_drs2_p_c4.2, model_drs2_p_c4.3, model_drs2_p_c4.4)
+
+# Extract values for c5
+model_drs2_c5.1 <- summary(m11drs_noq1)[c(1,6),1]
+model_drs2_c5.2 <- summary(m11drs_noq1)[c(2,7),1]
+model_drs2_c5.3 <- summary(m11drs_noq1)[c(3,8),1]
+model_drs2_c5.4 <- summary(m11drs_noq1)[c(4,9),1]
+model_drs2_c5.5 <- summary(m11drs_noq1)[c(5,10),1]
+model_drs2_c5 <- c(model_drs2_c5.1, model_drs2_c5.2, model_drs2_c5.3, model_drs2_c5.4, model_drs2_c5.5)
+
+# Standard errors for c5
+model_drs2_se_c5.1 <- summary(m11drs_noq1)[c(1,6),2]
+model_drs2_se_c5.2 <- summary(m11drs_noq1)[c(2,7),2]
+model_drs2_se_c5.3 <- summary(m11drs_noq1)[c(3,8),2]
+model_drs2_se_c5.4 <- summary(m11drs_noq1)[c(4,9),2]
+model_drs2_se_c5.5 <- summary(m11drs_noq1)[c(5,10),2]
+model_drs2_se_c5 <- c(model_drs2_se_c5.1, model_drs2_se_c5.2, model_drs2_se_c5.3, model_drs2_se_c5.4, model_drs2_se_c5.5)
+
+# p-values for c5
+model_drs2_p_c5.1 <- summary(m11drs_noq1)[c(1,6),4]
+model_drs2_p_c5.1 <- ifelse(model_drs2_p_c5.1 < 0.001, "<0.001", model_drs2_p_c5.1)
+model_drs2_p_c5.2 <- summary(m11drs_noq1)[c(2,7),4]
+model_drs2_p_c5.2 <- ifelse(model_drs2_p_c5.2 < 0.001, "<0.001", model_drs2_p_c5.2)
+model_drs2_p_c5.3 <- summary(m11drs_noq1)[c(3,8),4]
+model_drs2_p_c5.3 <- ifelse(model_drs2_p_c5.3 < 0.001, "<0.001", model_drs2_p_c5.3)
+model_drs2_p_c5.4 <- summary(m11drs_noq1)[c(4,9),4]
+model_drs2_p_c5.4 <- ifelse(model_drs2_p_c5.4 < 0.001, "<0.001", model_drs2_p_c5.4)
+model_drs2_p_c5.5 <- summary(m11drs_noq1)[c(5,10),4]
+model_drs2_p_c5.5 <- ifelse(model_drs2_p_c5.5 < 0.001, "<0.001", model_drs2_p_c5.5)
+model_drs2_p_c5 <- c(model_drs2_p_c5.1, model_drs2_p_c5.2, model_drs2_p_c5.3, model_drs2_p_c5.4, model_drs2_p_c5.5)
+
+# Extract values for c6
+model_drs2_c6.1 <- summary(m12drs_noq1)[c(1,7),1]
+model_drs2_c6.2 <- summary(m12drs_noq1)[c(2,8),1]
+model_drs2_c6.3 <- summary(m12drs_noq1)[c(3,9),1]
+model_drs2_c6.4 <- summary(m12drs_noq1)[c(4,10),1]
+model_drs2_c6.5 <- summary(m12drs_noq1)[c(5,11),1]
+model_drs2_c6.6 <- summary(m12drs_noq1)[c(6,12),1]
+model_drs2_c6 <- c(model_drs2_c6.1, model_drs2_c6.2, model_drs2_c6.3, model_drs2_c6.4, model_drs2_c6.5, model_drs2_c6.6)
+
+# Standard errors for c6
+model_drs2_se_c6.1 <- summary(m12drs_noq1)[c(1,7),2]
+model_drs2_se_c6.2 <- summary(m12drs_noq1)[c(2,8),2]
+model_drs2_se_c6.3 <- summary(m12drs_noq1)[c(3,9),2]
+model_drs2_se_c6.4 <- summary(m12drs_noq1)[c(4,10),2]
+model_drs2_se_c6.5 <- summary(m12drs_noq1)[c(5,11),2]
+model_drs2_se_c6.6 <- summary(m12drs_noq1)[c(6,12),2]
+model_drs2_se_c6 <- c(model_drs2_se_c6.1, model_drs2_se_c6.2, model_drs2_se_c6.3, model_drs2_se_c6.4, model_drs2_se_c6.5, model_drs2_se_c6.6)
+
+# p-values for c6
+model_drs2_p_c6.1 <- summary(m12drs_noq1)[c(1,7),4]
+model_drs2_p_c6.1 <- ifelse(model_drs2_p_c6.1 < 0.001, "<0.001", model_drs2_p_c6.1)
+model_drs2_p_c6.2 <- summary(m12drs_noq1)[c(2,8),4]
+model_drs2_p_c6.2 <- ifelse(model_drs2_p_c6.2 < 0.001, "<0.001", model_drs2_p_c6.2)
+model_drs2_p_c6.3 <- summary(m12drs_noq1)[c(3,9),4]
+model_drs2_p_c6.3 <- ifelse(model_drs2_p_c6.3 < 0.001, "<0.001", model_drs2_p_c6.3)
+model_drs2_p_c6.4 <- summary(m12drs_noq1)[c(4,10),4]
+model_drs2_p_c6.4 <- ifelse(model_drs2_p_c6.4 < 0.001, "<0.001", model_drs2_p_c6.4)
+model_drs2_p_c6.5 <- summary(m12drs_noq1)[c(5,11),4]
+model_drs2_p_c6.5 <- ifelse(model_drs2_p_c6.5 < 0.001, "<0.001", model_drs2_p_c6.5)
+model_drs2_p_c6.6 <- summary(m12drs_noq1)[c(6,12),4]
+model_drs2_p_c6.6 <- ifelse(model_drs2_p_c6.6 < 0.001, "<0.001", model_drs2_p_c6.6)
+model_drs2_p_c6 <- c(model_drs2_p_c6.1, model_drs2_p_c6.2, model_drs2_p_c6.3, model_drs2_p_c6.4, model_drs2_p_c6.5, model_drs2_p_c6.6)
+
+
+df_drs_2011_2019 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_drs2_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_drs2_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_drs2_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_drs2_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_drs2_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_drs2_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_drs2_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_drs2_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_drs2_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_drs2_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_drs2_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_drs2_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_drs2_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_drs2_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_drs2_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_drs2_c6,
+  Model_6_SE = model_drs2_se_c6,
+  Model_6_P = model_drs2_p_c6
+)
+
+write.csv(df_drs_2011_2019, "df_drs_2011_2019.csv")
+
 ## Sensitivity analysis table for DGCC 2011-2023-----------------------------
 
 
@@ -1210,9 +1885,8 @@ print(values_vllrt4)
 
 diagnostic_criteria_drs_2011_2019_noq1 <- tab_drs_2011_2019_noq1 %>% 
   select(G, entropy) %>% 
-  mutate(smallest_class_count = c(m7drs_noq1$ns, min(posterior_probsm8drs_noq1[[1]]), min(posterior_probsm9drs_noq1[[1]]), min(posterior_probsm10drs_noq1[[1]]), min(posterior_probsm11drs_noq1[[1]]), min(posterior_probsm12drs_noq1[[1]])),
-         smallest_class_size_perc = c(1, min(posterior_probsm8drs_noq1[[1]])/m8drs_noq1$ns, min(posterior_probsm9drs_noq1[[1]])/m9drs_noq1$ns, min(posterior_probsm10drs_noq1[[1]])/m10drs_noq1$ns, min(posterior_probsm11drs_noq1[[1]])/m11drs_noq1$ns, min(posterior_probsm12drs_noq1[[1]])/m6drs_noq1$ns),
-         smallest_class_size_perc = percent(round(smallest_class_size_perc, 4)),
+  mutate(smallest_class_count = c(m7drs_noq1$ns, min(posterior_probsm8drs_noq1[[1]][1,]), min(posterior_probsm9drs_noq1[[1]][1,]), min(posterior_probsm10drs_noq1[[1]][1,]), min(posterior_probsm11drs_noq1[[1]][1,]), min(posterior_probsm12drs_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm8drs_noq1[[1]][2,]), min(posterior_probsm9drs_noq1[[1]][2,]), min(posterior_probsm10drs_noq1[[1]][2,]), min(posterior_probsm11drs_noq1[[1]][2,]), min(posterior_probsm12drs_noq1[[1]][2,])),
          "Lowest APPA" = c(NA, lower_appa_values4),
          "Highest MMV" =c(NA, highest_mismatch_values4),
          "Lowest OCC" = c(NA, lower_occ_values4),
@@ -1323,8 +1997,14 @@ write.csv(data_reglog2, "data_reglog2.csv")
 
 
 
-# Supplementary material --------------------------------------------------
 
+
+
+
+
+
+
+# Supplementary material --------------------------------------------------
 
 
 sm_drsc <- full_join(supplementary_data_DRSC_2011_2023, supplementary_data_DRSC_2011_2019, by= "comuna") %>% 
