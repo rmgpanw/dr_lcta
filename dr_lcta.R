@@ -2064,3 +2064,26 @@ writeData(wb, "DRSC", supplementary_data_DRSC)
 # Save the workbook to a file
 saveWorkbook(wb, "Supplementary_material.xlsx", overwrite = TRUE)
 
+
+
+
+
+## Regresion logística -----------------------------------------------------
+
+model1 <- glm(class_membership ~ index_standardized, ##0= baja, 1= Alta; index 1= the lower the most deprived
+              data=data_reglog,
+              family= "binomial") 
+
+summary(model1)
+tidy(model1, conf.int=T, exponentiate = T) 
+Logit(class_membership  ~ index_standardized, data=data_reglog) 
+Logit(class_membership  ~ index_standardized, data=data_reglog2) 
+
+
+Logit(class_membership  ~ classification, data=data_reglog) 
+Logit(class_membership  ~ classification, data=data_reglog2) 
+
+Logit(class_membership  ~ zona, data=data_reglog) 
+Logit(class_membership  ~ zona, data=data_reglog2) 
+
+
