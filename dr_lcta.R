@@ -160,7 +160,7 @@ write.csv(coverage_2011_2023_noq1, "coverage_2011_2023_noq1.csv")
   
 
   
-##  LCMM for DM coverage2 2011-2019 (excluding Q1) -----------------------------------------
+##  LCMM for DM coverage2 2011-2023 (excluding Q1) -----------------------------------------
   
 m1dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2011_2023_noq1)
 m2dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2011_2023_noq1, B=m1dm_noq1)
