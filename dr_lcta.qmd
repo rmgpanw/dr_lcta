@@ -10,7 +10,13 @@ author:
     orcid: 0000-0002-2144-7181
     email: kasim.allel1@lshtm.ac.uk
     affiliations:
-      - name: London School of Hygiene & Tropical Medicine, London, United Kingdom    
+      - name: University of Oxford, Nuffield Department of Population Health, Oxford, United Kingdom
+  - name: Paul Nderitu
+    orcid: 0000-0002-8571-0751
+    email: paul.nderitu@kcl.ac.uk
+    affiliations:
+      - name: King’s College London, Section of Ophthalmology, Faculty of Life Sciences and Medicine, London, United Kingdom
+      - name: King’s College London, Department of Ophthalmology, King’s Ophthalmology Research Unit (KORU), London, United Kingdom
   - name: Hassan Haghparast Bidgoli
     orcid: 0000-0001-6365-2944
     email: h.haghparast-bidgoli@ucl.ac.uk
@@ -234,11 +240,13 @@ We analyzed municipality-level data from 2011 to 2023, focusing on adults aged �
 
 We examined two primary outcome indicators:
 
--   Diabetic Glycemic Control Coverage (DGCC) : Proportion of T2DM patients achieving adequate glycemic control, defined as HbA1c \< 7%.
+-   **Diabetic Glycemic Control Coverage (DGCC):** The Proportion of T2DM patients achieving HbA1c \<7% among those diagnosed and monitored by the cardiovascular program.
 
--   Diabetic Retinopathy Screening Coverage (DRSC) : Proportion of patients receiving annual diabetic retinopathy screening (DRS).
+    **DRSC:** Proportion of T2DM patients receiving annual diabetic retinopathy screening within the diagnosed and monitored T2DM population under the cardiovascular program.
 
-For both indicators, the numerators were based on the number of patients with HbA1c \< 7% for DGCC and those who underwent the DRS for DRSC, with the denominator being the total T2DM population. To improve representativeness, we excluded municipalities in the lowest population-size quintile. These smaller municipalities often showed extreme coverage percentages (e.g., 0% or 100%) because of their small T2DM populations, which could have skewed the results.
+For the DGCC indicator, it was assumed that T2DM patients had at least one HbA1c test to determine if levels were above or below 7%. If the patients were not tested at the end of the 12-month period, a recovery protocol was initiated. After three failed attempts to contact them, the patients were removed from the program and dataset. Thus, untested patients were excluded and not assumed to have HbA1c levels \> 7%. Conversely, patients undergoing annual DRS remain in the cardiovascular healthcare program.
+
+To improve representativeness, we excluded municipalities in the lowest population-size quintile. These smaller municipalities often showed extreme coverage percentages (e.g., 0% or 100%) because of their small T2DM populations, which could have skewed the results.
 
 We examined the associations between class membership coverage and sociodemographic factors including deprivation, urbanicity, and geographical location. Data on potential predictive factors at the municipal level were collected as follows:
 
@@ -286,9 +294,9 @@ For DGCC, the one-class model was selected as the most parsimonious solution, ou
 
 Figure 3 presents the LCMM results for DRSC, where two classes are identified:
 
--   **Class 1** (lower DRSC coverage) showed a stable baseline coverage and minimal annual changes. For the 2011-2023 period, the baseline coverage was 24.8%, with an annual change of 0.4% (p = 0.068). In the 2011-2019 period, Class 1 had a baseline coverage of 23.05%, with an annual change of 1.38% (p \< 0.001).
+-   **Class 1** (lower DRSC coverage) showed a stable baseline coverage and minimal annual changes. For the 2011-2023 period, the baseline coverage was 24.8%, with an annual change of 0.42% (p = 0.068). In the 2011-2019 period, Class 1 had a baseline coverage of 23.05%, with an annual change of 1.38% (p \< 0.001), while in the 2020-2023 period, the baseline coverage was 15.8%, with an annual increase of 8.3% (p \< 0.001).
 
--   **Class 2** (higher DRSC coverage) exhibited higher baseline coverage and notable annual changes. In the 2011-2023 period, the baseline coverage was 43.7%, with an annual change of 0.69% (p = 0.073). In the 2011-2019 period, Class 2 had a baseline coverage of 43.58%, with an annual change of 2.16% (p = 0.002).
+-   **Class 2** (higher DRSC coverage) exhibited higher baseline coverage and notable annual changes. In the 2011-2023 period, the baseline coverage was 43.72%, with an annual change of 0.69% (p = 0.073). In the 2011-2019 period, Class 2 had a baseline coverage of 43.58%, with an annual change of 2.16% (p = 0.0017), while in the 2020-2023 period, the baseline coverage was 47.41%, with an annual increase of 3.82% (p \< 0.016).
 
 These trajectory classes reflect significant differences in both baseline coverage and annual changes over the study period.
 
@@ -302,27 +310,33 @@ Our analysis revealed significant associations between deprivation and DRSC clas
 
 -   **2011-2023 period**: OR = 0.66 (95% CI: 0.50, 0.85)
 
--   **2011-2019 period**: OR = 0.53 (95% CI: 0.39, 0.73)
+-   **2011-2019 period**: OR = 0.53 (95% CI: 0.39, 0.72)
+
+-   **2020-2023 period**: OR = 0.67 (95% CI: 0.49, 0.92)
 
 These findings indicate that municipalities with higher deprivation scores (less deprived) are less likely to belong to the higher-coverage DRSC class.
 
 ### Urbanicity
 
-Urbanicity has varying effects on DRSC coverage. Rural areas exhibited significantly higher odds of better coverage than mixed-urban areas.
+Urbanicity has a varied impact on DRSC coverage, with rural areas generally showing higher odds of improved coverage than mixed-urban zones.
 
--   **2011-2023 period**: Rural areas had an OR of 1.79 (95% CI: 0.99, 3.21), indicating higher odds of being in the higher coverage class compared to mixed urban areas (reference category). Urban areas had an OR of 0.39 (95% CI: 0.17, 0.84), suggesting lower odds compared to mixed urban areas.
+-   **2011-2023 period**: Rural areas had an OR of 1.79 (95% CI: 0.99, 3.21), indicating higher odds of being in the higher coverage class compared to mixed urban areas (reference category), although this was not statistically significant. Urban areas had an OR of 0.39 (95% CI: 0.17, 0.84), showing significantly lower odds of belonging to the higher DRSC class compared to mixed urban areas.
 
--   **2011-2019 period**: Rural areas had an OR of 2.73 (95% CI: 1.41, 5.30), while urban areas had an OR of 0.47 (95% CI: 0.19, 1.19).
+-   **2011-2019 period**: Rural areas had an OR of 2.73 (95% CI: 1.41, 5.30), indicating significantly higher odds of being in the higher coverage class compared to mixed zones. Urban areas had an OR of 0.45 (95% CI: 0.18, 1.19), suggesting lower odds of being in the higher coverage class relative to the reference group, although this was not significant.
 
-These results suggest that rural municipalities generally had higher DRSC coverage, whereas urban municipalities exhibited more mixed results.
+-   **2020-2023 period**: Rural areas had an OR of 2.26 (95% CI: 1.08, 4.74), whereas urban areas had an OR of 0.48 (95% CI: 0.17, 1.37) relative to mixed areas.
+
+Overall, rural municipalities tended to have higher DRSC coverage, whereas urban municipalities showed more variable results.
 
 ### Geographical Location
 
-Geographical location also played a significant role in DRSC class membership. In the **2011-2023 period**, municipalities in the southern region showed a higher likelihood of being in the higher-coverage DRSC class:
+Geographical location significantly influenced DRSC class membership, with the central region serving as the reference category because of its representative demographic profile and generally better access to healthcare service provision.[@núñez2021]
 
--   **2011-2023 period**: the Southern region had an OR of 1.02 (95% CI: 0.42, 2.51), compared to the central region (reference category).
+-   **2011-2023 period**: The southern region had an OR of 1.85 (95% CI: 1.10, 3.08), compared to the central region (reference category), while the northern region had a relatively neutral impact which had an OR of 1.02 (95% CI: 0.42, 2.51).
 
--   **2011-2019 period**: The southern region had a higher odds ratio of 1.84 (95% CI: 1.11, 3.08), suggesting a strong positive association with higher DRSC coverage, while the northern region had a relatively neutral impact.
+-   **2011-2019 period**: The southern region had a higher odds ratio of 1.92 (95% CI: 1.11, 3.34), suggesting a strong positive association with higher DRSC coverage, while the northern region had a relatively neutral impact which had an OR of 0.59 (95% CI: 0.19, 1.83))
+
+-   **2020-2023 period**: The southern region had a higher odds ratio of 1.32 (95% CI: 0.72, 2.43), suggesting positive association with higher DRSC coverage but not significative, while the northern region had a relatively neutral impact.
 
 These findings indicate that municipalities in the southern region are more likely to achieve higher DRSC coverage than other regions.
 
@@ -367,13 +381,13 @@ When adjusting for multiple variables, including classification and zona, the as
 
 We used unsupervised machine learning to identify different subpopulation trajectory patterns for DGCC and DRSC in Chilean municipalities over 12 years. For both the 2011-2023 and 2011-2019 periods, the trajectory patterns for DRSC revealed two distinct patterns. The first depicted municipalities with stable baseline coverage levels, hovering at 27.85% (SE: 2.51) in the 2011-2023 period and slightly lower at 23.05% (SE=1.65%) in the 2011-2019 period. The second trajectory consistently showed higher baseline coverage levels, at 42.14% in the 2011-2023 period and 43.58% in the 2011-2019 period, with significant annual increases in coverage ranging from 1-2%.
 
-Higher deprivation levels were consistently associated with lower DRSC. Rural areas generally showed better coverage than mixed urban environments, while urban areas displayed mixed results. Geographically, municipalities in the southern region consistently exhibited higher DRSC odds ratios compared to the central region. In the adjusted analysis, the influence of urbanicity emerged as the most salient predictor, with rural areas consistently demonstrating higher odds of better coverage.
+Higher deprivation levels (less deprived) were consistently associated with lower DRSC. Rural areas generally showed better coverage than mixed urban environments, while urban areas displayed mixed results. Geographically, municipalities in the southern region consistently exhibited higher DRSC odds ratios compared to the central region. In the adjusted analysis, the influence of urbanicity emerged as the most salient predictor, with rural areas consistently demonstrating higher odds of better coverage.
 
 ## What is already known on this topic
 
 Using the same dataset, we have identified significant variation in linear trends in DRSC between Chilean municipalities over the past decade. On the one hand, while deprivation is a predictor for poor uptake, the use of telemedicine has been shown to improve access to diabetic eye care in underserved communities, which often include deprived areas.[@rawlingschid2024] Deprivation affects not only the ability to afford healthcare but also the availability and utilization of services, as it is often associated with geographic isolation and limited healthcare infrastructure[@lewandohundt2012] **(Hundt et al., 2011; Lovett et al., 2004)**.
 
-In our study, we found that areas characterized by higher levels of deprivation surprisingly exhibited better DRSC. This unexpected finding challenges conventional assumptions and suggests that despite facing socioeconomic challenges, these areas may have prioritized healthcare resources towards DRS services. Possible explanations could include targeted healthcare interventions, focused on the importance of regular screening in deprived communities. Certainly, the use of telemedicine and the adoption of more than 150 primary eye-care units across the country may play a significant role. Deprivation may still be relevant in understanding DRS coverage, but its independent effect may be better explained by other factors included in the model as urbanicity. In fact, deprivation loose its significance after adjusting for urbanicity. While some studies indicate that rural areas may have lower screening coverage compared to urban areas,[@tóth2019] other initiatives have demonstrated the feasibility and effectiveness of targeted screening programs in rural settings, [@hall2022; @khou2021] suggesting that targeted interventions can overcome barriers to screening coverage.[@hall2022] In other words, while socioeconomic status alone may be associated with higher coverage membership, its effect is mediated or influenced by factors such as rural/urban level.
+In our study, we found that areas characterized by higher levels of deprivation surprisingly exhibited better DRSC. This unexpected finding challenges conventional assumptions and suggests that despite facing socioeconomic challenges, these areas may have prioritized healthcare resources towards DRS services. Possible explanations could include targeted healthcare interventions, focused on the importance of regular screening in deprived communities. Certainly, the use of telemedicine and the adoption of more than 150 primary eye-care units across the country may play a significant role. Deprivation may still be relevant in understanding DRS coverage, but its independent effect may be better explained by other factors included in the model as urbanicity. In fact, deprivation lost its significance after adjusting for urbanicity. While some studies indicate that rural areas may have lower screening coverage compared to urban areas,[@tóth2019] other initiatives have demonstrated the feasibility and effectiveness of targeted screening programs in rural settings, [@hall2022; @khou2021] suggesting that targeted interventions can overcome barriers to screening coverage.[@hall2022] In other words, while socioeconomic status alone may be associated with higher coverage membership, its effect is mediated or influenced by factors such as rural/urban level.
 
 This technique has increased interest in health services for obesity,[@viner2018] food addiction,[@aloi2024] loneliness in adolescence,[@verboon2022] risk patterns of myopia[@li2023], or treatment of substance addiction disorders.[@bórquez2024]
 
@@ -387,13 +401,15 @@ For example, individuals classified as Rural may have lower socioeconomic status
 
 Therefore, while the standardized index provides valuable insight into the socioeconomic determinants of higher coverage membership, its significance in predicting membership diminishes when other relevant factors are taken into consideration. This highlights the need for comprehensive multivariate analyses to better understand the complex interplay between socioeconomic status and other predictors of healthcare coverage.
 
-Interestingly, higher levels of deprivation did not lead to less favorable trajectories for municipalities. Instead, they were associated with an increased likelihood of a high DRSC coverage. This association is particularly pronounced between the period 2011-2019. Although it remained highly significant in the 2011-2023 timeframe, the OR exhibited a smoother association, robustly supporting our findings. On the other hand, unadjusted association with urbanicity and their three categories showed that the Urban population is the less favourable in achieving the highuer coverage trajectory, meanwhile Rural population the most favourable, though non statistically significant. It seems urbanisation could explain better the association with DRSC trajectories than deprivation as this loose their influence when we adjusted by urbanisation level. However towards remain in the lower and stable trendTherefore, understanding the factors that influence DRSC is crucial. Future research should explore these practical implications. Potentially, factors linked to targeted health policies addressing diabetes within Chile's 2005 health reform[@bastias2008] and financing primary healthcare based on factors such as deprivation through capitation[@cuadrado2022] could provide insights and explain, at least in part, our findings.
+Interestingly, higher levels of deprivation did not lead to less favorable trajectories for municipalities. Instead, they were associated with an increased likelihood of a high DRSC coverage. This association is particularly pronounced between the period 2011-2019. Although it remained highly significant in the 2011-2023 timeframe, the OR exhibited a smoother association, robustly supporting our findings. On the other hand, unadjusted association with urbanicity and their three categories showed that the Urban population is the less favourable in achieving the highuer coverage trajectory, meanwhile Rural population the most favourable, though non statistically significant. It seems urbanisation could explain better the association with DRSC trajectories than deprivation as this lost its significant effect when we adjusted by urbanisation level. Therefore, understanding the factors that influence DRSC is crucial. Future research should explore these practical implications. Potentially, factors linked to targeted health policies addressing diabetes within Chile's 2005 health reform[@bastias2008] and financing primary healthcare based on factors such as deprivation through capitation[@cuadrado2022] could provide insights and explain, at least in part, our findings.
 
 To date, there is no evidence of the use of LCMM techniques to investigate geographical differences in the DRSC in Chile or other regions. Similar evidence has explored obesity prevalence in childhood across local authorities in the UK, highlighting its significance in studying geographical data to inform policies.[@viner2018] Despite previous discussions, no studies at the municipal level have used mixed-effect models or LCMM techniques to identify unique trends in the DRSC. LCMM methods enable the identification of municipalities that demonstrate exceptional progress in longitudinal trends for sight-loss-related diabetes prevention, enhance the understanding of geographical inequalities, and inform targeted interventions to improve screening coverage.
 
 Utilizing PSCV data from more than a decade, we successfully identified distinct subpopulations of municipalities that exhibited varying trajectories in the DRSC. Most municipalities displayed a high probability of belonging to their designated classes, suggesting a strong alignment between these assigned classes and DRSC from 2011 to 2023. However, some municipalities exhibited notably lower probabilities of being assigned to the DRSC classes, indicating potential inaccuracies. Although our analyses were conducted at the ecological (municipality-level) rather than at the individual level (T2DM patient), this approach was considered appropriate as a key determinant of healthcare access for DRSC often operating at the primary healthcare level. Our primary objective was to identify the potential subpopulations among municipalities. Nevertheless, we could not establish causality for the relationships identified between socioeconomic deprivation and municipality trajectory classes.
 
-While the trajectory classes we identified are plausible, LCMM is an exploratory, data-driven technique, and chance relationships in our data may have influenced our findings regarding trajectory groups. However, we were cautious in identifying the most likely latent class groups and the trajectories we identified were reasonable. Our data on municipality deprivation took place in 2013, but we hypothesized that it is possible that the overall deprivation levels remained relatively stable over the thirteen-year (and nine-year) study period. Nonetheless, trajectory class membership may have been influenced by changes in deprivation levels during the study period.
+While the trajectory classes we identified are plausible, LCMM is an exploratory, data-driven technique, and chance relationships in our data may have influenced our findings regarding trajectory groups. However, we were cautious in identifying the most likely latent class groups and the trajectories we identified were reasonable. The southern regions exhibited a notable trend, with a higher likelihood of falling into the upper DRSC category, suggesting distinct regional patterns potentially influenced by socioeconomic conditions or healthcare accessibility in these areas. Further investigation into the impact of regional policies on DRSC access could be beneficial, encompassing factors such as the availability of eye care specialists, the implementation of mobile clinics for underserved populations, and targeted initiatives to enhance access in less advantaged regions. These area-specific efforts could play a crucial role in broadening screening coverage and mitigating regional healthcare inequalities.
+
+Our data on municipality deprivation took place in 2013, but we hypothesized that it is possible that the overall deprivation levels remained relatively stable over the thirteen-year (and nine-year) study period. Nonetheless, trajectory class membership may have been influenced by changes in deprivation levels during the study period.
 
 # Conclusions
 
@@ -413,7 +429,7 @@ None.
 
 ```{r}
 #| label: fig-1
-#| fig-cap: "Raw and adjusted data coverage trajectories 2011-2023"
+#| fig-cap: "Raw data coverage trajectories 2011-2023"
 #| fig-subcap: 
 #| - "Diabetic Glycemic Control Coverage"
 #| - "Diabetic Retinopathy Screening Coverage"
@@ -465,7 +481,7 @@ scale_x_continuous(breaks = c(0:12), labels=2011:2023)+
 ```{r}
 #| label: fig-2
 #| warning: false
-#| fig-cap: "Latent class trajectory mixture models solutions for diabetic glycemic control and diabetic retinopathy screening coverage across 300 (2011-2023) and 292 (2011-2019) municipalities"
+#| fig-cap: "Baseline one class trend data coverage trajectories 2011-2023"
 #| fig-subcap: 
 #| - "Diabetic Glycemic Control Coverage"
 #| - "Diabetic Retinopathy Screening Coverage"
@@ -488,9 +504,42 @@ ggplot(dm1, aes(x=ano2, y=dm_coverage, colour = as.factor(class), group = comuna
         panel.background = element_blank())+
   scale_color_lancet()
 
-dr1 <- read.csv("drs2_2011_2023_noq1.csv", sep=",") 
+dr1 <- read.csv("drs_2011_2023_noq1.csv", sep=",") 
 
 ggplot(dr1, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comuna2)) +
+  geom_point(size = .1) + 
+  geom_line(size = .05) +
+  geom_smooth(method='lm',formula=drs_coverage~ano2)+
+  scale_x_continuous(breaks = c(0:12), labels=2011:2023)+
+  xlab("Year") +
+  ylab("Proportion of T2DM with an annual eye screening")+
+  #theme_ipsum()+
+  #labs(colour= "class magnitude")+
+  geom_smooth(se = T, method = "loess", aes(group = class))+
+  guides(color = guide_legend(override.aes = list(fill = NA)),
+         linetype = guide_legend(override.aes = list(fill = NA))) +
+  theme(panel.grid.major = element_blank(), # optional - remove gridlines
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank())+
+  scale_color_lancet()
+  
+
+```
+
+```{r}
+#| label: fig-3
+#| warning: false
+#| fig-cap: "Latent class trajectory mixture models solutions for diabetic retinopathy screening coveragein three differente periods; 2011-2023; 2011-2019; and 2020-2023"
+#| fig-subcap: 
+#| - "2011-2023"
+#| - "2011-2019"
+#| - "2020-2023"
+#| layout-ncol: 1
+#| fig-align: center
+
+dr2 <- read.csv("drs2_2011_2023_noq1.csv", sep=",") 
+
+ggplot(dr2, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comuna2)) +
   geom_point(size = .1) + 
   geom_line(size = .05) +
   geom_smooth(method='lm',formula=drs_coverage~ano2)+
@@ -512,6 +561,56 @@ ggplot(dr1, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comun
   #scale_color_lancet()+
   scale_color_lancet(labels = c("202 trajectories (67.3%)", "98 trajectories (32.7%)")) 
 
+
+dr3 <- read.csv("drs2_2011_2019_noq1.csv", sep=",") 
+
+ggplot(dr3, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comuna2)) +
+  geom_point(size = .1) + 
+  geom_line(size = .05) +
+  geom_smooth(method='lm',formula=drs_coverage~ano2)+
+  scale_x_continuous(breaks = c(0:12), labels=2011:2023)+
+  xlab("Year") +
+  ylab("Proportion of T2DM with an annual eye screening")+
+  #theme_ipsum()+
+  #labs(colour= "class magnitude")+
+  geom_smooth(se = T, method = "loess", aes(group = class))+
+  guides(color = guide_legend(override.aes = list(fill = NA)),
+         linetype = guide_legend(override.aes = list(fill = NA))) +
+  theme(panel.grid.major = element_blank(), # optional - remove gridlines
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        #legend.box.background = element_rect(colour = "red"),
+        legend.key = element_rect(fill = "white", colour = "white"))+
+  #scale_color_lancet()+
+  scale_color_lancet(labels = c("217 trajectories (74.3%)", "75 trajectories (25.7%)")) 
+
+
+dr4 <- read.csv("drs2_2020_2023_noq1.csv", sep=",") 
+
+ggplot(dr4, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comuna2)) +
+  geom_point(size = .1) + 
+  geom_line(size = .05) +
+  geom_smooth(method='lm',formula=drs_coverage~ano2)+
+  scale_x_continuous(breaks = c(0:12), labels=2011:2023)+
+  xlab("Year") +
+  ylab("Proportion of T2DM with an annual eye screening")+
+  #theme_ipsum()+
+  #labs(colour= "class magnitude")+
+  geom_smooth(se = T, method = "loess", aes(group = class))+
+  guides(color = guide_legend(override.aes = list(fill = NA)),
+         linetype = guide_legend(override.aes = list(fill = NA))) +
+  theme(panel.grid.major = element_blank(), # optional - remove gridlines
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        #legend.box.background = element_rect(colour = "red"),
+        legend.key = element_rect(fill = "white", colour = "white"))+
+  #scale_color_lancet()+
+  scale_color_lancet(labels = c("245 trajectories (81.7%)", "55 trajectories (18.3%)")) 
+
 ```
 
 ```{r}
@@ -528,8 +627,7 @@ ggplot(dr1, aes(x=ano2, y=drs_coverage, colour = as.factor(class), group = comun
 # Read data
 d1 <- read.csv("data_reglog.csv", sep=",")
 d2 <- read.csv("data_reglog2.csv", sep=",")
-dr1 <- read.csv("drs2_2011_2023_noq1.csv", sep=",")
-dr2 <- read.csv("drs2_2011_2019_noq1.csv", sep=",")
+
 
 # Summarize data
 data_summary1 <- modelsummary::datasummary_skim(d1[1:300,] %>% 
@@ -609,8 +707,8 @@ data_summary3 %>%
   )%>% 
  tab_source_note(source_note = md(" **Abbreviations:** DGCC - Diabetic glycemic control coverage; DRSC - Diabetic retinopathy screening coverage, ; ISDE - Index of Socioeconomic Development"))
 
-# Summarize data for dr1
-data_summary4 <- modelsummary::datasummary_skim(dr1 %>% 
+# Summarize data for dr2
+data_summary4 <- modelsummary::datasummary_skim(dr2 %>% 
                                                   select("dm_coverage", 
                                                          "drs_coverage"),
                                                 type="numeric",
@@ -840,6 +938,7 @@ rows = c(4:6)
 #| tbl-cap: "Latent class trajectory mixture models for diabetic glycemic control and diabetic retinopathy screening coverage across 300 (2011-2023) and 292 (2011-2019) municipalities"
 #| fig-align: center
 
+#DGCC 2011-2023
 mfc1 <- read.csv("model_fit_criteria_dm_2011_2023_noq1.csv", sep=",") 
 
 mfc1 <- mfc1 %>% 
@@ -876,10 +975,9 @@ dc2 <- dc2 %>%
 
 model_criteria2 <- left_join(mfc2, dc2)
 
-table_dgcc <- rbind(model_criteria, model_criteria2)
+#DGCC 2020-2023
 
-#DRSC 2011-2023
-mfc3 <- read.csv("model_fit_criteria_drs_2011_2023_noq1.csv", sep=",") 
+mfc3 <- read.csv("model_fit_criteria_dm_2020_2023_noq1.csv", sep=",") 
 
 mfc3 <- mfc3 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -887,7 +985,7 @@ mfc3 <- mfc3 %>%
                 "Nº of parameters"=npm,
                 "Sample size"= sample_size)
 
-dc3 <- read.csv("diagnostic_criteria_drs_2011_2023_noq1.csv", sep=",") 
+dc3 <- read.csv("diagnostic_criteria_dm_2020_2023_noq1.csv", sep=",") 
 
 dc3 <- dc3 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -896,9 +994,13 @@ dc3 <- dc3 %>%
 
 model_criteria3 <- left_join(mfc3, dc3)
 
-#DRSC 2011-2019
+table_dgcc <- rbind(model_criteria, model_criteria2)
+table_dgcc <- rbind(table_dgcc, model_criteria3)
 
-mfc4 <- read.csv("model_fit_criteria_drs_2011_2019_noq1.csv", sep=",") 
+
+
+#DRSC 2011-2023
+mfc4 <- read.csv("model_fit_criteria_drs_2011_2023_noq1.csv", sep=",") 
 
 mfc4 <- mfc4 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -906,7 +1008,7 @@ mfc4 <- mfc4 %>%
                 "Nº of parameters"=npm,
                 "Sample size"= sample_size)
 
-dc4 <- read.csv("diagnostic_criteria_drs_2011_2019_noq1.csv", sep=",") 
+dc4 <- read.csv("diagnostic_criteria_drs_2011_2023_noq1.csv", sep=",") 
 
 dc4 <- dc4 %>% 
   dplyr::rename("LCMM class" = G, 
@@ -915,7 +1017,49 @@ dc4 <- dc4 %>%
 
 model_criteria4 <- left_join(mfc4, dc4)
 
-table_drsc <- rbind(model_criteria3, model_criteria4)
+#DRSC 2011-2019
+
+mfc5 <- read.csv("model_fit_criteria_drs_2011_2019_noq1.csv", sep=",") 
+
+mfc5 <- mfc5 %>% 
+  dplyr::rename("LCMM class" = G, 
+                "Maximum log-likelihood"= loglik,
+                "Nº of parameters"=npm,
+                "Sample size"= sample_size)
+
+dc5 <- read.csv("diagnostic_criteria_drs_2011_2019_noq1.csv", sep=",") 
+
+dc5 <- dc5 %>% 
+  dplyr::rename("LCMM class" = G, 
+                "Smallest class count (n)"= smallest_class_count,
+                "Smallest class size (%)"= smallest_class_size_perc)
+
+model_criteria5 <- left_join(mfc5, dc5)
+
+
+#DRSC 2020-2023
+
+mfc6 <- read.csv("model_fit_criteria_drs_2020_2023_noq1.csv", sep=",") 
+
+mfc6 <- mfc6 %>% 
+  dplyr::rename("LCMM class" = G, 
+                "Maximum log-likelihood"= loglik,
+                "Nº of parameters"=npm,
+                "Sample size"= sample_size)
+
+dc6 <- read.csv("diagnostic_criteria_drs_2020_2023_noq1.csv", sep=",") 
+
+dc6 <- dc6 %>% 
+  dplyr::rename("LCMM class" = G, 
+                "Smallest class count (n)"= smallest_class_count,
+                "Smallest class size (%)"= smallest_class_size_perc)
+
+model_criteria6 <- left_join(mfc6, dc6)
+
+table_drsc <- rbind(model_criteria4, model_criteria5)
+
+table_drsc <- rbind(table_drsc, model_criteria6)
+
 
 class_solutions <- rbind(table_dgcc, table_drsc)
 
@@ -952,30 +1096,36 @@ column_labels.border.top.color = "black",
 column_labels.border.bottom.color = "black",
 table_body.border.bottom.color = "black",
 table_body.hlines.color = "white")%>%
-   tab_row_group(
-    group = "Diabetic retinopathy screening coverage 2011-2023 
-(n= 300 municipalities)
-",
-    rows = 13:18
- ) %>%
-   tab_row_group(
-    group = "Diabetic retinopathy screening coverage 2011-2019 
-(n= 292 municipalities)
-",
-    rows = 19:24 
+  tab_row_group(
+    group = "Diabetic retinopathy screening coverage 2020-2023 
+(n= 300 municipalities)",
+    rows = 31:36 
 ) %>% 
   tab_row_group(
-    group = "Diabetic glycemic control coverage 2011-2023 
-(n= 300 municipalities)
-",
-    rows =1:6
+    group = "Diabetic retinopathy screening coverage 2011-2019 
+(n= 292 municipalities)",
+    rows =25:30
   ) %>% 
   tab_row_group(
-    group = "Diabetic glycemic control coverage 2011-2019 
-(n= 292 municipalities)
-",
-    rows = 7:12
+    group = "Diabetic retinopathy screening coverage 2011-2023 
+(n= 300 municipalities)",
+    rows =19:24
   ) %>% 
+   tab_row_group(
+    group = "Diabetic glycemic control coverage 2020-2023 
+(n= 300 municipalities)",
+    rows = 13:18
+  ) %>% 
+    tab_row_group(
+    group = "Diabetic glycemic control coverage 2011-2019 
+(n= 292 municipalities)",
+    rows = 7:12
+ ) %>% 
+   tab_row_group(
+    group = "Diabetic glycemic control coverage 2011-2023 
+(n= 300 municipalities)",
+    rows = 1:6
+ ) %>%
    tab_source_note(source_note = md(" **Abbreviations:** LCMM - Latent Class Mixture Model; MLL – Maximum Log-likelihood; AIC- Akaike Information Criteria; BIC - Bayesian Information Criteria; SABIC - Sample-Adjusted Bayesian Information Criteria; CAIC -  Consistent Akaike Information Criterion; AWE- Approximate Weight of Evidence Criterion; SIC - Schwarz Information Criterion; BF - Bayes Factor; cmP- correct model probability; SCC - Smallest Class Count; SCS - Smallest Class Size; APPA: Average Class Posterior Probability; MMV: Mistmatch Value; OCC: Odds od Correct Classification; VLMRLRT: Vuong–Lo–Mendell–Rubin Likelihood Radio Test"))
  
 
@@ -986,48 +1136,26 @@ table_body.hlines.color = "white")%>%
 #| tbl-cap: "Diabetic glycemic control coverage trajectory class characteristics 2011-2019" 
 #| fig-align: center
 
-# Create a data frame with all coefficients, standard errors, and p-values
+df_dm_2011_2023 <- read.csv("df_dm_2011_2023.csv", sep=",") 
 
-
-df <- data.frame(
-  Metric = rep(c('Intercept', 'Slope'), 6),
-  One_class_B = c(0.45095, -0.00421, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  One_class_SE = c(0.00527, 0.00069, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  One_class_P = c('<0.001', '<0.001', NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  Two_class_B = c(0.44942, -0.00435, 0.45248, -0.00407, NA, NA, NA, NA, NA, NA, NA, NA),
-  Two_class_SE = c(0.51422, 0.07490, 0.51419, 0.07489, NA, NA, NA, NA, NA, NA, NA, NA),
-  Two_class_P = c(0.38212, 0.95369, 0.37887, 0.95667, NA, NA, NA, NA, NA, NA, NA, NA),
-  Three_class_B = c(0.45003, -0.00522, 0.56855, -0.02193, 0.38152, 0.00954, NA, NA, NA, NA, NA, NA),
-  Three_class_SE = c(0.00852, 0.00121, 0.02527, 0.00234, 0.01317, 0.00175, NA, NA, NA, NA, NA, NA),
-  Three_class_P = c('<0.001', '<0.001', '<0.001', '<0.001', '<0.001', '<0.001', NA, NA, NA, NA, NA, NA),
-  Four_class_B = c(0.56053, -0.02193, 0.44879, -0.00511, 0.72512, -0.01827, 0.38329, 0.00962, NA, NA, NA, NA),
-  Four_class_SE = c(0.02330, 0.00245, 0.00859, 0.00124, 0.08783, 0.01093, 0.01335, 0.00178, NA, NA, NA, NA),
-  Four_class_P = c('<0.001', '<0.001', '<0.001', '<0.001', '<0.001', 0.09462, '<0.001', '<0.001', NA, NA, NA, NA),
-  Five_class_B = c(0.60380, -0.02628, 0.51989, -0.01732, 0.44585, -0.00448, 0.72480, -0.01817, 0.38202, 0.00992, NA, NA),
-  Five_class_SE = c(0.08017, 0.01023, 0.05630, 0.00623, 0.01103, 0.00167, 0.08859, 0.01097, 0.01376, 0.00185, NA, NA),
-  Five_class_P = c('<0.001', 0.01017, '<0.001', 0.00540, '<0.001', 0.00710, '<0.001', 0.09762, '<0.001', '<0.001', NA, NA),
-  Six_class_B = c(0.45611, -0.00561, 0.39654, -0.01133, 0.41979, 0.00229, 0.45591, 0.00749, 0.58296, -0.02771, 0.60937, 0.00692),
-  Six_class_SE = c(0.02248, 0.00356, 0.02962, 0.00299, 0.04546, 0.00778, 0.02836, 0.00291, 0.07170, 0.00811, 0.04967, 0.00595),
-  Six_class_P = c('<0.001', 0.11519, '<0.001', '<0.001', '<0.001', 0.76848, '<0.001', 0.01011, '<0.001', '<0.001', '<0.001', 0.24454)
-)
-
+df_dm_2011_2023 <- df_dm_2011_2023 %>% 
+  select(-1) 
 
 # Round numeric p-values
-df <- df %>%
+df_dm_2011_2023 <- df_dm_2011_2023 %>%
   mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
 
-
 # Multiply columns containing "B" by 100 and round to two decimals
-df <- df %>%
+df_dm_2011_2023 <- df_dm_2011_2023 %>%
   dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
   dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
   dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
 
 # Replace NAs with empty spaces
-df[is.na(df)] <- ""
+df_dm_2011_2023[is.na(df_dm_2011_2023)] <- ""
 
 # Rename columns for display
-colnames(df) <- c(
+colnames(df_dm_2011_2023) <- c(
   "Metric",
   "B1", "SE1", "p-value1",
   "B2", "SE2", "p-value2",
@@ -1037,8 +1165,10 @@ colnames(df) <- c(
   "B6", "SE6", "p-value6"
 )
 
+
+
 # Create the gt table with tab_spanner
-gt::gt(df) %>%
+gt::gt(df_dm_2011_2023) %>%
   cols_label(
     B1 = "B", SE1 = "SE", `p-value1` = "p-value",
     B2 = "B", SE2 = "SE", `p-value2` = "p-value",
@@ -1108,7 +1238,9 @@ gt::gt(df) %>%
     group = "Class 1",
     rows = 1:2
   ) %>% 
-   tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+  tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+
+
 
 ```
 
@@ -1118,26 +1250,26 @@ gt::gt(df) %>%
 #| fig-align: center
 
 
-df_dm_2011_2023 <- read.csv("df_dm_2011_2023.csv", sep=",") 
+df_dm_2011_2019 <- read.csv("df_dm_2011_2019.csv", sep=",") 
 
-df_dm_2011_2023 <- df_dm_2011_2023 %>% 
+df_dm_2011_2019 <- df_dm_2011_2019 %>% 
   select(-1) 
 
 # Round numeric p-values
-df_dm_2011_2023 <- df_dm_2011_2023 %>%
+df_dm_2011_2019 <- df_dm_2011_2019 %>%
   mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
 
 # Multiply columns containing "B" by 100 and round to two decimals
-df_dm_2011_2023 <- df_dm_2011_2023 %>%
+df_dm_2011_2019 <- df_dm_2011_2019 %>%
   dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
   dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
   dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
 
 # Replace NAs with empty spaces
-df_dm_2011_2023[is.na(df_dm_2011_2023)] <- ""
+df_dm_2011_2019[is.na(df_dm_2011_2019)] <- ""
 
 # Rename columns for display
-colnames(df_dm_2011_2023) <- c(
+colnames(df_dm_2011_2019) <- c(
   "Metric",
   "B1", "SE1", "p-value1",
   "B2", "SE2", "p-value2",
@@ -1150,7 +1282,7 @@ colnames(df_dm_2011_2023) <- c(
 
 
 # Create the gt table with tab_spanner
-gt::gt(df_dm_2011_2023) %>%
+gt::gt(df_dm_2011_2019) %>%
   cols_label(
     B1 = "B", SE1 = "SE", `p-value1` = "p-value",
     B2 = "B", SE2 = "SE", `p-value2` = "p-value",
@@ -1459,6 +1591,120 @@ gt::gt(df_drs_2011_2023) %>%
 
 ```{r}
 #| label: tbl-8
+#| tbl-cap: "Diabetic retinopathy screening coverage trajectory class characteristics 2020-2023" 
+#| fig-align: center
+
+
+
+df_drs_2020_2023 <- read.csv("df_drs_2020_2023.csv", sep=",") 
+
+df_drs_2020_2023 <- df_drs_2020_2023 %>% 
+  select(-1) 
+
+# Round numeric p-values
+df_drs_2020_2023 <- df_drs_2020_2023 %>%
+  mutate(across(contains("P"), ~ifelse(!is.na(.x) & .x != "<0.001", sprintf("%.3f", as.numeric(.x)), .x)))
+
+# Multiply columns containing "B" by 100 and round to two decimals
+df_drs_2020_2023 <- df_drs_2020_2023 %>%
+  dplyr::mutate(across(contains("B"), ~ifelse(!is.na(.x), .x * 100, .x))) %>%
+  dplyr::mutate(across(contains("SE"), ~ifelse(!is.na(.x), .x * 100, .x))) %>% 
+  dplyr::mutate(across(contains(c("B", "SE")), ~ifelse(!is.na(.x), round(.x, 2), .x)))
+
+# Replace NAs with empty spaces
+df_drs_2020_2023[is.na(df_drs_2020_2023)] <- ""
+
+# Rename columns for display
+colnames(df_drs_2020_2023) <- c(
+  "Metric",
+  "B1", "SE1", "p-value1",
+  "B2", "SE2", "p-value2",
+  "B3", "SE3", "p-value3",
+  "B4", "SE4", "p-value4",
+  "B5", "SE5", "p-value5",
+  "B6", "SE6", "p-value6"
+)
+
+
+
+# Create the gt table with tab_spanner
+gt::gt(df_drs_2020_2023) %>%
+  cols_label(
+    B1 = "B", SE1 = "SE", `p-value1` = "p-value",
+    B2 = "B", SE2 = "SE", `p-value2` = "p-value",
+    B3 = "B", SE3 = "SE", `p-value3` = "p-value",
+    B4 = "B", SE4 = "SE", `p-value4` = "p-value",
+    B5 = "B", SE5 = "SE", `p-value5` = "p-value",
+    B6 = "B", SE6 = "SE", `p-value6` = "p-value"
+  ) %>%
+  tab_spanner(
+    label = "Six-class Model",
+    columns = c("B6", "SE6", "p-value6")
+  ) %>% 
+  tab_spanner(
+    label = "Five-class Model",
+    columns = c("B5", "SE5", "p-value5")
+  ) %>% 
+  tab_spanner(
+    label = "Four-class Model",
+    columns = c("B4", "SE4", "p-value4")
+  ) %>% 
+  tab_spanner(
+    label = "Three-class Model",
+    columns = c("B3", "SE3", "p-value3")
+  ) %>% 
+  tab_spanner(
+    label = "Two-class Model",
+    columns = c("B2", "SE2", "p-value2")
+  ) %>% 
+  tab_spanner(
+    label = "One-class Model",
+    columns = c("B1", "SE1", "p-value1")
+  ) %>% 
+  tab_options(
+    table.font.size = 10,
+    data_row.padding = px(1),
+    table.border.top.color = "black",
+    heading.border.bottom.color = "black",
+    row_group.border.top.color = "black",
+    row_group.border.bottom.color = "white",
+    table.border.bottom.color = "white",
+    column_labels.border.top.color = "black",
+    column_labels.border.bottom.color = "black",
+    table_body.border.bottom.color = "black",
+    table_body.hlines.color = "white"
+  ) %>%
+  tab_row_group(
+    group = "Class 6",
+    rows = 11:12
+  ) %>%
+  tab_row_group(
+    group = "Class 5",
+    rows = 9:10
+  ) %>%
+  tab_row_group(
+    group = "Class 4",
+    rows = 7:8
+  ) %>%
+  tab_row_group(
+    group = "Class 3",
+    rows = 5:6
+  ) %>%
+  tab_row_group(
+    group = "Class 2",
+    rows = 3:4
+  ) %>%
+  tab_row_group(
+    group = "Class 1",
+    rows = 1:2
+  ) %>% 
+  tab_source_note(source_note = md(" **Abbreviations / notes :** B - is the intercept (or constant term), which represents the value of 𝑌 Y when all predictors are zero; SE - Standard Error. Note: p-value - Wald test measures the significance of each coefficient in the regression model"))
+
+
+```
+
+```{r}
+#| label: tbl-9
 #| tbl-cap: "Logistic regression 2011-2019"
 #| fig-align: center
 #| results: "asis"
@@ -1528,7 +1774,7 @@ table_body.hlines.color = "white"
 ```
 
 ```{r}
-#| label: tbl-9
+#| label: tbl-10
 #| tbl-cap: "Logistic regression 2011-2023"
 #| fig-align: left
 #| results: "asis"
@@ -1596,7 +1842,7 @@ table_body.hlines.color = "white"
 ```
 
 ```{r}
-#| label: tbl-10
+#| label: tbl-11
 #| tbl-cap: "Reporting of latent growth modeling approach using the GRoLTS checklist"
 #| fig-align: left
 
@@ -1624,7 +1870,7 @@ grolts %>%
 ```
 
 ```{r}
-#| label: tbl-11
+#| label: tbl-12
 #| tbl-cap: "Framework of eight steps to construct a latent class trajectory model"
 #| fig-align: left
 

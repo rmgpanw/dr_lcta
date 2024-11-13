@@ -1,6 +1,9 @@
   
   # Load libraries
-  libraries <- c(
+
+devtools::install_github("hlennon/LCTMtools", force=TRUE)
+library(LCTMtools)
+libraries <- c(
     "tidyverse", "knitr", "kableExtra", "ggplot2", "ggtext", 
     "stringr", "forcats", "Cairo", "extrafont", "hrbrthemes", 
     "directlabels", "ggrepel", "readxl", "extrafont", "scales", 
@@ -15,7 +18,7 @@
   lapply(libraries, library, character.only = TRUE)
   
   # EXPERIMENT 1 ------------------------------------------------------------
-  
+
   
   ## All series --------------------------------------------------------------
   
@@ -370,7 +373,7 @@ b <- dm_2011_2023_noq1 %>%
   mutate(id_region = ifelse(id_region==16, 8, id_region),
          id_region2 = match(id_region, unique(id_region))) %>%  #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
   spread(ano, dm_coverage) %>% 
-  select(comuna, comuna2, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2023")
+  select(comuna, comuna2, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")
 
 ab <- merge(a, b, by= "comuna2")
 
@@ -766,7 +769,9 @@ tab_drs_2011_2023_noq1 <- as.data.frame(lcmm::summarytable(m1drs_noq1, m2drs_noq
 ## Merge classification of size drs trajectory ------------------------------
 drs_2011_2023_noq1 <- left_join(coverage_2011_2023_noq1, round(m1drs_noq1$pprob,3), by = "comuna2") ##one trajectories
 drs_2011_2023_noq1$class <- as.factor(drs_2011_2023_noq1$class)
-View(drs_2011_2023_noq1)
+
+
+write.csv(drs_2011_2023_noq1, "drs_2011_2023_noq1.csv", row.names = F )
 
 drs2_2011_2023_noq1 <- left_join(coverage_2011_2023_noq1, round(m2drs_noq1$pprob,3), by = "comuna2") ##one trajectories
 drs2_2011_2023_noq1$class <- as.factor(drs2_2011_2023_noq1$class)
@@ -781,7 +786,7 @@ d <- drs2_2011_2023_noq1 %>%
   mutate(id_region = ifelse(id_region==16, 8, id_region),
          id_region2 = match(id_region, unique(id_region))) %>%  #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
   spread(ano, drs_coverage) %>% 
-  select(comuna, comuna2, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2023")
+  select(comuna, comuna2, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")
 
 
 cd <- merge(d, c, by= "comuna2")
@@ -1080,7 +1085,7 @@ coverage_2011_2019 <- coverage_2011_2019 %>%
   mutate(drs_coverage=replace(drs_coverage, drs_coverage>1, 1)) %>% 
   arrange(ano, comuna)
 
-##View(coverage_2011_2019)
+
 
 ## Categorise dm quintiles -------------------------------------------------
 
@@ -1956,7 +1961,7 @@ class2[!(class2$comuna %in% isde2$comuna), ]
 
 data_reglog2 <- right_join(class2, isde2) 
 
-##View(data_reglog)
+
 
 data_reglog2 <- data_reglog2 %>% 
   mutate(class_membership = ifelse(class==2, 1, 0)) 
@@ -1991,6 +1996,969 @@ data_reglog2 <- data_reglog2 %>%
                        ifelse(zona == 2, 'centro', 'sur')))
 
 write.csv(data_reglog2, "data_reglog2.csv")
+
+
+
+
+
+# EXPERIMENT 3 2020-2023 --------------------------------------------------
+
+coverage_2020_2023_noq1 <- coverage_2011_2023_noq1 %>% filter(ano %in% c(2020:2023))
+
+coverage_2020_2023_noq1 <- coverage_2020_2023_noq1 %>% 
+  select(-ano2) %>% 
+dplyr::mutate(ano2 = ano - 2020) 
+# HACER CONVERSION ANO2
+
+##  LCMM for DM coverage2 2011-2023-----------------------------------------
+
+m13dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2020_2023_noq1)
+m14dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2020_2023_noq1, B=m13dm_noq1)
+m15dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage_2020_2023_noq1, B=m13dm_noq1)
+m16dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 4, data = coverage_2020_2023_noq1, B=m13dm_noq1)
+m17dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2020_2023_noq1, B=m13dm_noq1)
+m18dm_noq1 <- lcmm::hlme(dm_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2020_2023_noq1, B=m13dm_noq1)
+
+# For c1
+# Extract values for c1
+model_dm3_c1 <- summary(m13dm_noq1)[1:2,1]
+
+# Standard errors for c1
+model_dm3_se_c1 <- summary(m13dm_noq1)[1:2,2]
+
+# p-values for c1
+model_dm3_p_c1 <- summary(m13dm_noq1)[1:2,4]
+model_dm3_p_c1 <- ifelse(model_dm3_p_c1 < 0.001, "<0.001", model_dm3_p_c1)
+
+# For c3
+# Extract values for c2
+model_dm3_c2.1 <- summary(m14dm_noq1)[c(1,3),1]
+model_dm3_c2.2 <- summary(m14dm_noq1)[c(2,4),1]
+model_dm3_c2 <- c(model_dm3_c2.1, model_dm3_c2.2)
+
+# Standard errors for c2
+model_dm3_se_c2.1 <- summary(m14dm_noq1)[c(1,3),2]
+model_dm3_se_c2.2 <- summary(m14dm_noq1)[c(2,4),2]
+model_dm3_se_c2 <- c(model_dm3_se_c2.1, model_dm3_se_c2.2)
+
+# p-values for c2
+model_dm3_p_c2.1 <- summary(m14dm_noq1)[c(1,3),4]
+model_dm3_p_c2.1 <- ifelse(model_dm3_p_c2.1 < 0.001, "<0.001", model_dm3_p_c2.1)
+model_dm3_p_c2.2 <- summary(m14dm_noq1)[c(2,4),4]
+model_dm3_p_c2.2 <- ifelse(model_dm3_p_c2.2 < 0.001, "<0.001", model_dm3_p_c2.2)
+model_dm3_p_c2 <- c(model_dm3_p_c2.1, model_dm3_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_dm3_c3.1 <- summary(m15dm_noq1)[c(1,4),1]
+model_dm3_c3.2 <- summary(m15dm_noq1)[c(2,5),1]
+model_dm3_c3.3 <- summary(m15dm_noq1)[c(3,6),1]
+model_dm3_c3 <- c(model_dm3_c3.1,model_dm3_c3.2,model_dm3_c3.3)
+
+# Standard errors for c3
+model_dm3_se_c3.1 <- summary(m15dm_noq1)[c(1,4),2]
+model_dm3_se_c3.2 <- summary(m15dm_noq1)[c(2,5),2]
+model_dm3_se_c3.3 <- summary(m15dm_noq1)[c(3,6),2]
+model_dm3_se_c3 <- c(model_dm3_se_c3.1, model_dm3_se_c3.2, model_dm3_se_c3.3)
+
+# p-values for c3
+model_dm3_p_c3.1 <- summary(m15dm_noq1)[c(1,4),4]
+model_dm3_p_c3.1 <- ifelse(model_dm3_p_c3.1 < 0.001, "<0.001", model_dm3_p_c3.1)
+model_dm3_p_c3.2 <- summary(m15dm_noq1)[c(2,5),4]
+model_dm3_p_c3.2 <- ifelse(model_dm3_p_c3.2 < 0.001, "<0.001", model_dm3_p_c3.2)
+model_dm3_p_c3.3 <- summary(m15dm_noq1)[c(3,6),4]
+model_dm3_p_c3.3 <- ifelse(model_dm3_p_c3.3 < 0.001, "<0.001", model_dm3_p_c3.3)
+model_dm3_p_c3 <- c(model_dm3_p_c3.1, model_dm3_p_c3.2, model_dm3_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_dm3_c4.1 <- summary(m16dm_noq1)[c(1,5),1]
+model_dm3_c4.2 <- summary(m16dm_noq1)[c(2,6),1]
+model_dm3_c4.3 <- summary(m16dm_noq1)[c(3,7),1]
+model_dm3_c4.4 <- summary(m16dm_noq1)[c(4,8),1]
+model_dm3_c4 <- c(model_dm3_c4.1, model_dm3_c4.2, model_dm3_c4.3, model_dm3_c4.4)
+
+# Standard errors for c4
+model_dm3_se_c4.1 <- summary(m16dm_noq1)[c(1,5),2]
+model_dm3_se_c4.2 <- summary(m16dm_noq1)[c(2,6),2]
+model_dm3_se_c4.3 <- summary(m16dm_noq1)[c(3,7),2]
+model_dm3_se_c4.4 <- summary(m16dm_noq1)[c(4,8),2]
+model_dm3_se_c4 <- c(model_dm3_se_c4.1, model_dm3_se_c4.2, model_dm3_se_c4.3, model_dm3_se_c4.4)
+
+# p-values for c4
+model_dm3_p_c4.1 <- summary(m16dm_noq1)[c(1,5),4]
+model_dm3_p_c4.1 <- ifelse(model_dm3_p_c4.1 < 0.001, "<0.001", model_dm3_p_c4.1)
+model_dm3_p_c4.2 <- summary(m16dm_noq1)[c(2,6),4]
+model_dm3_p_c4.2 <- ifelse(model_dm3_p_c4.2 < 0.001, "<0.001", model_dm3_p_c4.2)
+model_dm3_p_c4.3 <- summary(m16dm_noq1)[c(3,7),4]
+model_dm3_p_c4.3 <- ifelse(model_dm3_p_c4.3 < 0.001, "<0.001", model_dm3_p_c4.3)
+model_dm3_p_c4.4 <- summary(m16dm_noq1)[c(4,8),4]
+model_dm3_p_c4.4 <- ifelse(model_dm3_p_c4.4 < 0.001, "<0.001", model_dm3_p_c4.4)
+model_dm3_p_c4 <- c(model_dm3_p_c4.1, model_dm3_p_c4.2, model_dm3_p_c4.3, model_dm3_p_c4.4)
+
+# Extract values for c5
+model_dm3_c5.1 <- summary(m17dm_noq1)[c(1,6),1]
+model_dm3_c5.2 <- summary(m17dm_noq1)[c(2,7),1]
+model_dm3_c5.3 <- summary(m17dm_noq1)[c(3,8),1]
+model_dm3_c5.4 <- summary(m17dm_noq1)[c(4,9),1]
+model_dm3_c5.5 <- summary(m17dm_noq1)[c(5,10),1]
+model_dm3_c5 <- c(model_dm3_c5.1, model_dm3_c5.2, model_dm3_c5.3, model_dm3_c5.4, model_dm3_c5.5)
+
+# Standard errors for c5
+model_dm3_se_c5.1 <- summary(m17dm_noq1)[c(1,6),2]
+model_dm3_se_c5.2 <- summary(m17dm_noq1)[c(2,7),2]
+model_dm3_se_c5.3 <- summary(m17dm_noq1)[c(3,8),2]
+model_dm3_se_c5.4 <- summary(m17dm_noq1)[c(4,9),2]
+model_dm3_se_c5.5 <- summary(m17dm_noq1)[c(5,10),2]
+model_dm3_se_c5 <- c(model_dm3_se_c5.1, model_dm3_se_c5.2, model_dm3_se_c5.3, model_dm3_se_c5.4, model_dm3_se_c5.5)
+
+# p-values for c5
+model_dm3_p_c5.1 <- summary(m17dm_noq1)[c(1,6),4]
+model_dm3_p_c5.1 <- ifelse(model_dm3_p_c5.1 < 0.001, "<0.001", model_dm3_p_c5.1)
+model_dm3_p_c5.2 <- summary(m17dm_noq1)[c(2,7),4]
+model_dm3_p_c5.2 <- ifelse(model_dm3_p_c5.2 < 0.001, "<0.001", model_dm3_p_c5.2)
+model_dm3_p_c5.3 <- summary(m17dm_noq1)[c(3,8),4]
+model_dm3_p_c5.3 <- ifelse(model_dm3_p_c5.3 < 0.001, "<0.001", model_dm3_p_c5.3)
+model_dm3_p_c5.4 <- summary(m17dm_noq1)[c(4,9),4]
+model_dm3_p_c5.4 <- ifelse(model_dm3_p_c5.4 < 0.001, "<0.001", model_dm3_p_c5.4)
+model_dm3_p_c5.5 <- summary(m17dm_noq1)[c(5,10),4]
+model_dm3_p_c5.5 <- ifelse(model_dm3_p_c5.5 < 0.001, "<0.001", model_dm3_p_c5.5)
+model_dm3_p_c5 <- c(model_dm3_p_c5.1, model_dm3_p_c5.2, model_dm3_p_c5.3, model_dm3_p_c5.4, model_dm3_p_c5.5)
+
+# Extract values for c6
+model_dm3_c6.1 <- summary(m18dm_noq1)[c(1,7),1]
+model_dm3_c6.2 <- summary(m18dm_noq1)[c(2,8),1]
+model_dm3_c6.3 <- summary(m18dm_noq1)[c(3,9),1]
+model_dm3_c6.4 <- summary(m18dm_noq1)[c(4,10),1]
+model_dm3_c6.5 <- summary(m18dm_noq1)[c(5,11),1]
+model_dm3_c6.6 <- summary(m18dm_noq1)[c(6,12),1]
+model_dm3_c6 <- c(model_dm3_c6.1, model_dm3_c6.2, model_dm3_c6.3, model_dm3_c6.4, model_dm3_c6.5, model_dm3_c6.6)
+
+# Standard errors for c6
+model_dm3_se_c6.1 <- summary(m18dm_noq1)[c(1,7),2]
+model_dm3_se_c6.2 <- summary(m18dm_noq1)[c(2,8),2]
+model_dm3_se_c6.3 <- summary(m18dm_noq1)[c(3,9),2]
+model_dm3_se_c6.4 <- summary(m18dm_noq1)[c(4,10),2]
+model_dm3_se_c6.5 <- summary(m18dm_noq1)[c(5,11),2]
+model_dm3_se_c6.6 <- summary(m18dm_noq1)[c(6,12),2]
+model_dm3_se_c6 <- c(model_dm3_se_c6.1, model_dm3_se_c6.2, model_dm3_se_c6.3, model_dm3_se_c6.4, model_dm3_se_c6.5, model_dm3_se_c6.6)
+
+# p-values for c6
+model_dm3_p_c6.1 <- summary(m18dm_noq1)[c(1,7),4]
+model_dm3_p_c6.1 <- ifelse(model_dm3_p_c6.1 < 0.001, "<0.001", model_dm3_p_c6.1)
+model_dm3_p_c6.2 <- summary(m18dm_noq1)[c(2,8),4]
+model_dm3_p_c6.2 <- ifelse(model_dm3_p_c6.2 < 0.001, "<0.001", model_dm3_p_c6.2)
+model_dm3_p_c6.3 <- summary(m18dm_noq1)[c(3,9),4]
+model_dm3_p_c6.3 <- ifelse(model_dm3_p_c6.3 < 0.001, "<0.001", model_dm3_p_c6.3)
+model_dm3_p_c6.4 <- summary(m18dm_noq1)[c(4,10),4]
+model_dm3_p_c6.4 <- ifelse(model_dm3_p_c6.4 < 0.001, "<0.001", model_dm3_p_c6.4)
+model_dm3_p_c6.5 <- summary(m18dm_noq1)[c(5,11),4]
+model_dm3_p_c6.5 <- ifelse(model_dm3_p_c6.5 < 0.001, "<0.001", model_dm3_p_c6.5)
+model_dm3_p_c6.6 <- summary(m18dm_noq1)[c(6,12),4]
+model_dm3_p_c6.6 <- ifelse(model_dm3_p_c6.6 < 0.001, "<0.001", model_dm3_p_c6.6)
+model_dm3_p_c6 <- c(model_dm3_p_c6.1, model_dm3_p_c6.2, model_dm3_p_c6.3, model_dm3_p_c6.4, model_dm3_p_c6.5, model_dm3_p_c6.6)
+
+
+df_dm_2020_2023 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_dm3_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_dm3_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_dm3_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_dm3_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_dm3_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_dm3_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_dm3_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_dm3_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_dm3_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_dm3_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_dm3_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_dm3_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_dm3_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_dm3_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_dm3_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_dm3_c6,
+  Model_6_SE = model_dm3_se_c6,
+  Model_6_P = model_dm3_p_c6
+)
+
+write.csv(df_dm_2020_2023, "df_dm_2020_2023.csv")
+
+
+
+## Sensitivity analysis table for DGCC 2020-2023-----------------------------
+
+
+tab_dm_2020_2023_noq1 <- as.data.frame(lcmm::summarytable(m13dm_noq1, m14dm_noq1, m15dm_noq1, m16dm_noq1, m17dm_noq1, m18dm_noq1, 
+                                                          which=c("G", 
+                                                                  "loglik", 
+                                                                  "conv", 
+                                                                  "npm", 
+                                                                  "AIC", 
+                                                                  "BIC", 
+                                                                  "SABIC", 
+                                                                  "entropy", 
+                                                                  "ICL", 
+                                                                  "ICL1", 
+                                                                  "ICL2", 
+                                                                  "%class")))
+
+
+## Merge classification of size dm trajectory ------------------------------
+dm_2020_2023_noq1 <- left_join(coverage_2020_2023_noq1, round(m13dm_noq1$pprob,3), by = "comuna2") ##one trajectories
+dm_2020_2023_noq1$class <- as.factor(dm_2020_2023_noq1$class)
+
+
+dm2_2020_2023_noq1 <- left_join(coverage_2020_2023_noq1, round(m14dm_noq1$pprob,3), by = "comuna2") ##one trajectories
+dm2_2020_2023_noq1$class <- as.factor(dm2_2020_2023_noq1$class)
+
+
+write.csv(dm2_2020_2023_noq1, "dm2_2020_2023_noq1.csv", row.names = F )
+
+m <- m14dm_noq1$pprob
+
+n <- dm2_2020_2023_noq1 %>% 
+  select(comuna, comuna2, id_servicio, id_region, ano, dm_coverage, class) %>% 
+  mutate(id_region = ifelse(id_region==16, 8, id_region),
+         id_region2 = match(id_region, unique(id_region))) %>%  #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
+  spread(ano, dm_coverage) %>% 
+  select(comuna, comuna2, "2020", "2021", "2022", "2023")
+
+
+mn <- merge(n, m, by= "comuna2")
+
+
+#supplementary_data_DGCC_2020_2023 <- ab[1:nrow(a), -1] 
+supplementary_data_DGCC_2020_2023 <- mn %>% select(-comuna2)
+
+
+supplementary_data_DGCC_2020_2023 <- supplementary_data_DGCC_2020_2023 %>% 
+  mutate(completeness_2020_2023 = rowMeans(!is.na(select(., -comuna))),
+         completeness_2020_2023 = round(completeness_2020_2023*100, 1),
+         average_years = rowSums(!is.na(supplementary_data_DGCC_2020_2023[,2:4])))
+
+
+# Average completeness ----------------------------------------------------
+supplementary_data_DGCC_2020_2023 %>% 
+  dplyr::select(completeness_2020_2023) %>% 
+  summary() #  87.39 
+0.8739  *12
+
+# Average completeness for classes ----------------------------------------
+supplementary_data_DGCC_2020_2023 %>% 
+  filter(class==1) %>% 
+  select(completeness_2020_2023) %>% 
+  summary() #91.16  
+
+supplementary_data_DGCC_2020_2023 %>% 
+  filter(class==2) %>% 
+  select(completeness_2020_2023) %>% 
+  summary() #87.16
+
+
+# checkear variances ------------------------------------------------------
+
+o <- supplementary_data_DGCC_2020_2023 %>% 
+  filter(class==1)  %>% 
+  select(completeness_2020_2023)
+
+p <- supplementary_data_DGCC_2020_2023 %>% 
+  filter(class==2) %>% 
+  select(completeness_2020_2023)
+
+var.test(o$completeness_2020_2023, p$completeness_2020_2023) # las varianzas son distintas
+
+
+# t-test para varianza distinta -----------------------------------------------
+
+
+t.test(o$completeness_2020_2023, p$completeness_2020_2023, var.equal = F) # No Hay DES para completeness between trajectories
+
+
+write.csv(supplementary_data_DGCC_2020_2023, "supplementary_data_DGCC_2020_2023.csv")
+
+
+dm3_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m15dm_noq1$pprob,3), by = "comuna2") ##three trajectories
+dm3_2020_2023_noq1$class <- as.factor(dm3_2020_2023_noq1$class)
+
+dm4_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m16dm_noq1$pprob,3), by = "comuna2") ##four trajectories
+dm4_2020_2023_noq1$class <- as.factor(dm4_2020_2023_noq1$class)
+
+dm5_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m17dm_noq1$pprob,3), by = "comuna2") ##five trajectories
+dm5_2020_2023_noq1$class <- as.factor(dm5_2020_2023_noq1$class)
+
+dm6_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m18dm_noq1$pprob,3), by = "comuna2") ##five trajectories
+dm6_2020_2023_noq1$class <- as.factor(dm6_2020_2023_noq1$class)
+
+
+# MODEL ADEQUACY ----------------------------------------------------------
+
+## Model fit criteria ------------------------------------------------------
+
+model_fit_criteria_dm_2020_2023_noq1 <- tab_dm_2020_2023_noq1 %>% 
+  dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
+  dplyr::mutate(sample_size= c(m13dm_noq1$ns, m14dm_noq1$ns, m15dm_noq1$ns, m16dm_noq1$ns, m17dm_noq1$ns, m18dm_noq1$ns),
+                CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
+                AWE= -2*loglik + 2*(log(sample_size)+1.5),##𝐴𝑊𝐸 = −2(𝐿𝐿) +𝑑[𝑙𝑜𝑔(𝑛)+ 1.5]
+                SIC = -0.05*BIC,
+                BF = exp(lead(SIC)-SIC),##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC))))) %>%  
+  tibble::as.tibble() %>% 
+  tibble::rownames_to_column() %>% 
+  dplyr::select(-rowname) 
+
+
+write.csv(model_fit_criteria_dm_2020_2023_noq1, "model_fit_criteria_dm_2020_2023_noq1.csv", row.names = F)
+
+
+
+## Diagnostic criteria -----------------------------------------------------
+
+## average latent class posterior probability ------------------------------
+
+postprob(m13dm_noq1)
+postprob(m14dm_noq1)
+postprob(m15dm_noq1)
+postprob(m16dm_noq1)
+postprob(m17dm_noq1)
+postprob(m18dm_noq1)
+
+# Assuming postprob() returns a structured list
+posterior_probsm14dm_noq1 <- postprob(m14dm_noq1)  
+posterior_probsm15dm_noq1 <- postprob(m15dm_noq1)  
+posterior_probsm16dm_noq1 <- postprob(m16dm_noq1)  
+posterior_probsm17dm_noq1 <- postprob(m17dm_noq1)  
+posterior_probsm18dm_noq1 <- postprob(m18dm_noq1)  
+
+# Assuming you have a list of your model objects --------------------------
+
+models_list5 <- list(m14dm_noq1, m15dm_noq1, m16dm_noq1, m17dm_noq1, m18dm_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
+
+# Extract the lower OCC values for each model
+lower_occ_values5<- sapply(models_list5, function(model) {
+  occ_values5 <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values5[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_occ_values5)
+
+
+## APPA ---------------------------------------------------------------------
+
+
+# Extract the lower OCC values for each model
+lower_appa_values5 <- sapply(models_list5, function(model) {
+  appa_values5 <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values5[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values5)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
+# Extract the lower OCC values for each model
+highest_mismatch_values5 <- sapply(models_list5, function(model) {
+  mismatch_values5 <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values5[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values5)
+
+
+## VLLRT test --------------------------------------------------------------
+
+
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt5 <- list(
+  extract_p_value_from_lrt(m13dm_noq1$ns, tab_dm_2020_2023_noq1$loglik[1], tab_dm_2020_2023_noq1$npm[1], tab_dm_2020_2023_noq1$G[1], tab_dm_2020_2023_noq1$loglik[2], tab_dm_2020_2023_noq1$npm[2], tab_dm_2020_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m14dm_noq1$ns, tab_dm_2020_2023_noq1$loglik[2], tab_dm_2020_2023_noq1$npm[2], tab_dm_2020_2023_noq1$G[2], tab_dm_2020_2023_noq1$loglik[3], tab_dm_2020_2023_noq1$npm[3], tab_dm_2020_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m15dm_noq1$ns, tab_dm_2020_2023_noq1$loglik[3], tab_dm_2020_2023_noq1$npm[3], tab_dm_2020_2023_noq1$G[3], tab_dm_2020_2023_noq1$loglik[4], tab_dm_2020_2023_noq1$npm[4], tab_dm_2020_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m16dm_noq1$ns, tab_dm_2020_2023_noq1$loglik[4], tab_dm_2020_2023_noq1$npm[4], tab_dm_2020_2023_noq1$G[4], tab_dm_2020_2023_noq1$loglik[5], tab_dm_2020_2023_noq1$npm[5], tab_dm_2020_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m17dm_noq1$ns, tab_dm_2020_2023_noq1$loglik[5], tab_dm_2020_2023_noq1$npm[5], tab_dm_2020_2023_noq1$G[5], tab_dm_2020_2023_noq1$loglik[6], tab_dm_2020_2023_noq1$npm[6], tab_dm_2020_2023_noq1$G[6])
+)
+
+# Assuming outputs is already defined as your object
+values_vllrt5 <- sapply(outputs_vllrt5, function(x) gsub("^= ", "", x))
+
+# Print the vector
+print(values_vllrt5)
+
+
+## Diagnostic criteria table -----------------------------------------------
+
+
+diagnostic_criteria_dm_2020_2023_noq1 <- tab_dm_2020_2023_noq1 %>% 
+  select(G, entropy) %>% 
+  mutate(smallest_class_count = c(m13dm_noq1$ns, min(posterior_probsm14dm_noq1[[1]][1,]), min(posterior_probsm15dm_noq1[[1]][1,]), min(posterior_probsm16dm_noq1[[1]][1,]), min(posterior_probsm17dm_noq1[[1]][1,]), min(posterior_probsm18dm_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm14dm_noq1[[1]][2,]), min(posterior_probsm15dm_noq1[[1]][2,]), min(posterior_probsm16dm_noq1[[1]][2,]), min(posterior_probsm17dm_noq1[[1]][2,]), min(posterior_probsm18dm_noq1[[1]][2,])),
+         "Lowest APPA" = c(NA, lower_appa_values5),
+         "Highest MMV" =c(NA, highest_mismatch_values5),
+         "Lowest OCC" = c(NA, lower_occ_values5),
+         VLMRLRT = c(NA, values_vllrt5)
+  ) %>% 
+  tibble::as.tibble() %>% 
+  tibble::rownames_to_column() %>% 
+  dplyr::select(-rowname) 
+
+write.csv(diagnostic_criteria_dm_2020_2023_noq1, "diagnostic_criteria_dm_2020_2023_noq1.csv", row.names = F)
+
+## Plot trajectories -------------------------------------------------------
+# Define a generic function named create_plot2 for the second set of plots (DGCC)
+
+create_plot5 <- function(data) {
+  ggplot(data, aes(x = ano2, y = dm_coverage, colour = class, group = comuna2)) +
+    scale_x_continuous(breaks = 0:12, labels = 2011:2023) +
+    xlab("Year") +
+    ylab("DGCC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
+
+# Generate DGCC plots by applying create_plot5 to each dataset
+pdm_plots3 <- lapply(list(dm_2020_2023_noq1, dm2_2020_2023_noq1, dm3_2020_2023_noq1,
+                          dm4_2020_2023_noq1, dm5_2020_2023_noq1, dm6_2020_2023_noq1), create_plot5)
+
+# Arrange the plots in a grid layout
+gridExtra::grid.arrange(grobs = pdm_plots3)
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 4 2020-2023 --------------------------------------------------
+
+
+##  LCMM for DM coverage2 2011-2023-----------------------------------------
+
+m13drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, random = ~ano2, subject = "comuna2", ng = 1, data = coverage_2020_2023_noq1)
+m14drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 2, data = coverage_2020_2023_noq1, B=m13drs_noq1)
+m15drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 3, data = coverage_2020_2023_noq1, B=m13drs_noq1)
+m16drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 4, data = coverage_2020_2023_noq1, B=m13drs_noq1)
+m17drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 5, data = coverage_2020_2023_noq1, B=m13drs_noq1)
+m18drs_noq1 <- lcmm::hlme(drs_coverage ~ ano2, mixture = ~ano2, random = ~ano2, subject='comuna2', ng = 6, data = coverage_2020_2023_noq1, B=m13drs_noq1)
+
+# For c1
+# Extract values for c1
+model_drs3_c1 <- summary(m13drs_noq1)[1:2,1]
+
+# Standard errors for c1
+model_drs3_se_c1 <- summary(m13drs_noq1)[1:2,2]
+
+# p-values for c1
+model_drs3_p_c1 <- summary(m13drs_noq1)[1:2,4]
+model_drs3_p_c1 <- ifelse(model_drs3_p_c1 < 0.001, "<0.001", model_drs3_p_c1)
+
+# For c3
+# Extract values for c2
+model_drs3_c2.1 <- summary(m14drs_noq1)[c(1,3),1]
+model_drs3_c2.2 <- summary(m14drs_noq1)[c(2,4),1]
+model_drs3_c2 <- c(model_drs3_c2.1, model_drs3_c2.2)
+
+# Standard errors for c2
+model_drs3_se_c2.1 <- summary(m14drs_noq1)[c(1,3),2]
+model_drs3_se_c2.2 <- summary(m14drs_noq1)[c(2,4),2]
+model_drs3_se_c2 <- c(model_drs3_se_c2.1, model_drs3_se_c2.2)
+
+# p-values for c2
+model_drs3_p_c2.1 <- summary(m14drs_noq1)[c(1,3),4]
+model_drs3_p_c2.1 <- ifelse(model_drs3_p_c2.1 < 0.001, "<0.001", model_drs3_p_c2.1)
+model_drs3_p_c2.2 <- summary(m14drs_noq1)[c(2,4),4]
+model_drs3_p_c2.2 <- ifelse(model_drs3_p_c2.2 < 0.001, "<0.001", model_drs3_p_c2.2)
+model_drs3_p_c2 <- c(model_drs3_p_c2.1, model_drs3_p_c2.2)
+
+# For c3
+# Extract values for c3
+model_drs3_c3.1 <- summary(m15drs_noq1)[c(1,4),1]
+model_drs3_c3.2 <- summary(m15drs_noq1)[c(2,5),1]
+model_drs3_c3.3 <- summary(m15drs_noq1)[c(3,6),1]
+model_drs3_c3 <- c(model_drs3_c3.1,model_drs3_c3.2,model_drs3_c3.3)
+
+# Standard errors for c3
+model_drs3_se_c3.1 <- summary(m15drs_noq1)[c(1,4),2]
+model_drs3_se_c3.2 <- summary(m15drs_noq1)[c(2,5),2]
+model_drs3_se_c3.3 <- summary(m15drs_noq1)[c(3,6),2]
+model_drs3_se_c3 <- c(model_drs3_se_c3.1, model_drs3_se_c3.2, model_drs3_se_c3.3)
+
+# p-values for c3
+model_drs3_p_c3.1 <- summary(m15drs_noq1)[c(1,4),4]
+model_drs3_p_c3.1 <- ifelse(model_drs3_p_c3.1 < 0.001, "<0.001", model_drs3_p_c3.1)
+model_drs3_p_c3.2 <- summary(m15drs_noq1)[c(2,5),4]
+model_drs3_p_c3.2 <- ifelse(model_drs3_p_c3.2 < 0.001, "<0.001", model_drs3_p_c3.2)
+model_drs3_p_c3.3 <- summary(m15drs_noq1)[c(3,6),4]
+model_drs3_p_c3.3 <- ifelse(model_drs3_p_c3.3 < 0.001, "<0.001", model_drs3_p_c3.3)
+model_drs3_p_c3 <- c(model_drs3_p_c3.1, model_drs3_p_c3.2, model_drs3_p_c3.3)
+
+# For c4
+# Extract values for c4
+model_drs3_c4.1 <- summary(m16drs_noq1)[c(1,5),1]
+model_drs3_c4.2 <- summary(m16drs_noq1)[c(2,6),1]
+model_drs3_c4.3 <- summary(m16drs_noq1)[c(3,7),1]
+model_drs3_c4.4 <- summary(m16drs_noq1)[c(4,8),1]
+model_drs3_c4 <- c(model_drs3_c4.1, model_drs3_c4.2, model_drs3_c4.3, model_drs3_c4.4)
+
+# Standard errors for c4
+model_drs3_se_c4.1 <- summary(m16drs_noq1)[c(1,5),2]
+model_drs3_se_c4.2 <- summary(m16drs_noq1)[c(2,6),2]
+model_drs3_se_c4.3 <- summary(m16drs_noq1)[c(3,7),2]
+model_drs3_se_c4.4 <- summary(m16drs_noq1)[c(4,8),2]
+model_drs3_se_c4 <- c(model_drs3_se_c4.1, model_drs3_se_c4.2, model_drs3_se_c4.3, model_drs3_se_c4.4)
+
+# p-values for c4
+model_drs3_p_c4.1 <- summary(m16drs_noq1)[c(1,5),4]
+model_drs3_p_c4.1 <- ifelse(model_drs3_p_c4.1 < 0.001, "<0.001", model_drs3_p_c4.1)
+model_drs3_p_c4.2 <- summary(m16drs_noq1)[c(2,6),4]
+model_drs3_p_c4.2 <- ifelse(model_drs3_p_c4.2 < 0.001, "<0.001", model_drs3_p_c4.2)
+model_drs3_p_c4.3 <- summary(m16drs_noq1)[c(3,7),4]
+model_drs3_p_c4.3 <- ifelse(model_drs3_p_c4.3 < 0.001, "<0.001", model_drs3_p_c4.3)
+model_drs3_p_c4.4 <- summary(m16drs_noq1)[c(4,8),4]
+model_drs3_p_c4.4 <- ifelse(model_drs3_p_c4.4 < 0.001, "<0.001", model_drs3_p_c4.4)
+model_drs3_p_c4 <- c(model_drs3_p_c4.1, model_drs3_p_c4.2, model_drs3_p_c4.3, model_drs3_p_c4.4)
+
+# Extract values for c5
+model_drs3_c5.1 <- summary(m17drs_noq1)[c(1,6),1]
+model_drs3_c5.2 <- summary(m17drs_noq1)[c(2,7),1]
+model_drs3_c5.3 <- summary(m17drs_noq1)[c(3,8),1]
+model_drs3_c5.4 <- summary(m17drs_noq1)[c(4,9),1]
+model_drs3_c5.5 <- summary(m17drs_noq1)[c(5,10),1]
+model_drs3_c5 <- c(model_drs3_c5.1, model_drs3_c5.2, model_drs3_c5.3, model_drs3_c5.4, model_drs3_c5.5)
+
+# Standard errors for c5
+model_drs3_se_c5.1 <- summary(m17drs_noq1)[c(1,6),2]
+model_drs3_se_c5.2 <- summary(m17drs_noq1)[c(2,7),2]
+model_drs3_se_c5.3 <- summary(m17drs_noq1)[c(3,8),2]
+model_drs3_se_c5.4 <- summary(m17drs_noq1)[c(4,9),2]
+model_drs3_se_c5.5 <- summary(m17drs_noq1)[c(5,10),2]
+model_drs3_se_c5 <- c(model_drs3_se_c5.1, model_drs3_se_c5.2, model_drs3_se_c5.3, model_drs3_se_c5.4, model_drs3_se_c5.5)
+
+# p-values for c5
+model_drs3_p_c5.1 <- summary(m17drs_noq1)[c(1,6),4]
+model_drs3_p_c5.1 <- ifelse(model_drs3_p_c5.1 < 0.001, "<0.001", model_drs3_p_c5.1)
+model_drs3_p_c5.2 <- summary(m17drs_noq1)[c(2,7),4]
+model_drs3_p_c5.2 <- ifelse(model_drs3_p_c5.2 < 0.001, "<0.001", model_drs3_p_c5.2)
+model_drs3_p_c5.3 <- summary(m17drs_noq1)[c(3,8),4]
+model_drs3_p_c5.3 <- ifelse(model_drs3_p_c5.3 < 0.001, "<0.001", model_drs3_p_c5.3)
+model_drs3_p_c5.4 <- summary(m17drs_noq1)[c(4,9),4]
+model_drs3_p_c5.4 <- ifelse(model_drs3_p_c5.4 < 0.001, "<0.001", model_drs3_p_c5.4)
+model_drs3_p_c5.5 <- summary(m17drs_noq1)[c(5,10),4]
+model_drs3_p_c5.5 <- ifelse(model_drs3_p_c5.5 < 0.001, "<0.001", model_drs3_p_c5.5)
+model_drs3_p_c5 <- c(model_drs3_p_c5.1, model_drs3_p_c5.2, model_drs3_p_c5.3, model_drs3_p_c5.4, model_drs3_p_c5.5)
+
+# Extract values for c6
+model_drs3_c6.1 <- summary(m18drs_noq1)[c(1,7),1]
+model_drs3_c6.2 <- summary(m18drs_noq1)[c(2,8),1]
+model_drs3_c6.3 <- summary(m18drs_noq1)[c(3,9),1]
+model_drs3_c6.4 <- summary(m18drs_noq1)[c(4,10),1]
+model_drs3_c6.5 <- summary(m18drs_noq1)[c(5,11),1]
+model_drs3_c6.6 <- summary(m18drs_noq1)[c(6,12),1]
+model_drs3_c6 <- c(model_drs3_c6.1, model_drs3_c6.2, model_drs3_c6.3, model_drs3_c6.4, model_drs3_c6.5, model_drs3_c6.6)
+
+# Standard errors for c6
+model_drs3_se_c6.1 <- summary(m18drs_noq1)[c(1,7),2]
+model_drs3_se_c6.2 <- summary(m18drs_noq1)[c(2,8),2]
+model_drs3_se_c6.3 <- summary(m18drs_noq1)[c(3,9),2]
+model_drs3_se_c6.4 <- summary(m18drs_noq1)[c(4,10),2]
+model_drs3_se_c6.5 <- summary(m18drs_noq1)[c(5,11),2]
+model_drs3_se_c6.6 <- summary(m18drs_noq1)[c(6,12),2]
+model_drs3_se_c6 <- c(model_drs3_se_c6.1, model_drs3_se_c6.2, model_drs3_se_c6.3, model_drs3_se_c6.4, model_drs3_se_c6.5, model_drs3_se_c6.6)
+
+# p-values for c6
+model_drs3_p_c6.1 <- summary(m18drs_noq1)[c(1,7),4]
+model_drs3_p_c6.1 <- ifelse(model_drs3_p_c6.1 < 0.001, "<0.001", model_drs3_p_c6.1)
+model_drs3_p_c6.2 <- summary(m18drs_noq1)[c(2,8),4]
+model_drs3_p_c6.2 <- ifelse(model_drs3_p_c6.2 < 0.001, "<0.001", model_drs3_p_c6.2)
+model_drs3_p_c6.3 <- summary(m18drs_noq1)[c(3,9),4]
+model_drs3_p_c6.3 <- ifelse(model_drs3_p_c6.3 < 0.001, "<0.001", model_drs3_p_c6.3)
+model_drs3_p_c6.4 <- summary(m18drs_noq1)[c(4,10),4]
+model_drs3_p_c6.4 <- ifelse(model_drs3_p_c6.4 < 0.001, "<0.001", model_drs3_p_c6.4)
+model_drs3_p_c6.5 <- summary(m18drs_noq1)[c(5,11),4]
+model_drs3_p_c6.5 <- ifelse(model_drs3_p_c6.5 < 0.001, "<0.001", model_drs3_p_c6.5)
+model_drs3_p_c6.6 <- summary(m18drs_noq1)[c(6,12),4]
+model_drs3_p_c6.6 <- ifelse(model_drs3_p_c6.6 < 0.001, "<0.001", model_drs3_p_c6.6)
+model_drs3_p_c6 <- c(model_drs3_p_c6.1, model_drs3_p_c6.2, model_drs3_p_c6.3, model_drs3_p_c6.4, model_drs3_p_c6.5, model_drs3_p_c6.6)
+
+
+df_drs_2020_2023 <- data.frame(
+  Metric = rep(c('Intercept', 'Slope'), 6),
+  Model_1_B = c(model_drs3_c1, rep(NA, times = 10)),
+  Model_1_SE = c(model_drs3_se_c1, rep(NA, times = 10)),
+  Model_1_P = c(model_drs3_p_c1, rep(NA, times = 10)),
+  
+  Model_2_B = c(model_drs3_c2, rep(NA, times = 8)),
+  Model_2_SE = c(model_drs3_se_c2, rep(NA, times = 8)),
+  Model_2_P = c(model_drs3_p_c2, rep(NA, times = 8)),
+  
+  Model_3_B = c(model_drs3_c3, rep(NA, times = 6)),
+  Model_3_SE = c(model_drs3_se_c3, rep(NA, times = 6)),
+  Model_3_P = c(model_drs3_p_c3, rep(NA, times = 6)),
+  
+  Model_4_B = c(model_drs3_c4, rep(NA, times = 4)),
+  Model_4_SE = c(model_drs3_se_c4, rep(NA, times = 4)),
+  Model_4_P = c(model_drs3_p_c4, rep(NA, times = 4)),
+  
+  Model_5_B = c(model_drs3_c5, rep(NA, times = 2)),
+  Model_5_SE = c(model_drs3_se_c5, rep(NA, times = 2)),
+  Model_5_P = c(model_drs3_p_c5, rep(NA, times = 2)),
+  
+  Model_6_B = model_drs3_c6,
+  Model_6_SE = model_drs3_se_c6,
+  Model_6_P = model_drs3_p_c6
+)
+
+write.csv(df_drs_2020_2023, "df_drs_2020_2023.csv")
+
+
+
+## Sensitivity analysis table for DGCC 2020-2023-----------------------------
+
+
+tab_drs_2020_2023_noq1 <- as.data.frame(lcmm::summarytable(m13drs_noq1, m14drs_noq1, m15drs_noq1, m16drs_noq1, m17drs_noq1, m18drs_noq1, 
+                                                           which=c("G", 
+                                                                   "loglik", 
+                                                                   "conv", 
+                                                                   "npm", 
+                                                                   "AIC", 
+                                                                   "BIC", 
+                                                                   "SABIC", 
+                                                                   "entropy", 
+                                                                   "ICL", 
+                                                                   "ICL1", 
+                                                                   "ICL2", 
+                                                                   "%class")))
+
+
+## Merge classification of size drs trajectory ------------------------------
+drs_2020_2023_noq1 <- left_join(coverage_2020_2023_noq1, round(m13drs_noq1$pprob,3), by = "comuna2") ##one trajectories
+drs_2020_2023_noq1$class <- as.factor(drs_2020_2023_noq1$class)
+
+
+drs2_2020_2023_noq1 <- left_join(coverage_2020_2023_noq1, round(m14drs_noq1$pprob,3), by = "comuna2") ##one trajectories
+drs2_2020_2023_noq1$class <- as.factor(drs2_2020_2023_noq1$class)
+
+
+write.csv(drs2_2020_2023_noq1, "drs2_2020_2023_noq1.csv", row.names = F )
+
+q <- m14drs_noq1$pprob
+
+r <- drs2_2020_2023_noq1 %>% 
+  select(comuna, comuna2, id_servicio, id_region, ano, drs_coverage, class) %>% 
+  mutate(id_region = ifelse(id_region==16, 8, id_region),
+         id_region2 = match(id_region, unique(id_region))) %>%  #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
+  spread(ano, drs_coverage) %>% 
+  select(comuna, comuna2, "2020", "2021", "2022", "2023")
+
+
+qr <- merge(r, q, by= "comuna2")
+
+
+#supplementary_data_DGCC_2020_2023 <- ab[1:nrow(a), -1] 
+supplementary_data_DRSC_2020_2023 <- qr %>% select(-comuna2)
+
+
+supplementary_data_DRSC_2020_2023 <- supplementary_data_DRSC_2020_2023 %>% 
+  mutate(completeness_2020_2023 = rowMeans(!is.na(select(., -comuna))),
+         completeness_2020_2023 = round(completeness_2020_2023*100, 1),
+         average_years = rowSums(!is.na(supplementary_data_DRSC_2020_2023[,2:4])))
+
+
+# Average completeness ----------------------------------------------------
+supplementary_data_DRSC_2020_2023 %>% 
+  dplyr::select(completeness_2020_2023) %>% 
+  summary() #  87.39 
+0.8739  *12
+
+# Average completeness for classes ----------------------------------------
+supplementary_data_DRSC_2020_2023 %>% 
+  filter(class==1) %>% 
+  select(completeness_2020_2023) %>% 
+  summary() #91.16  
+
+supplementary_data_DRSC_2020_2023 %>% 
+  filter(class==2) %>% 
+  select(completeness_2020_2023) %>% 
+  summary() #87.16
+
+
+# checkear variances ------------------------------------------------------
+
+s <- supplementary_data_DRSC_2020_2023 %>% 
+  filter(class==1)  %>% 
+  select(completeness_2020_2023)
+
+t <- supplementary_data_DRSC_2020_2023 %>% 
+  filter(class==2) %>% 
+  select(completeness_2020_2023)
+
+var.test(s$completeness_2020_2023, t$completeness_2020_2023) # las varianzas son distintas
+
+
+# t-test para varianza distinta -----------------------------------------------
+
+
+t.test(o$completeness_2020_2023, p$completeness_2020_2023, var.equal = F) # No Hay DES para completeness between trajectories
+
+
+write.csv(supplementary_data_DRSC_2020_2023, "supplementary_data_DRSC_2020_2023.csv")
+
+
+drs3_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m15drs_noq1$pprob,3), by = "comuna2") ##three trajectories
+drs3_2020_2023_noq1$class <- as.factor(drs3_2020_2023_noq1$class)
+
+drs4_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m16drs_noq1$pprob,3), by = "comuna2") ##four trajectories
+drs4_2020_2023_noq1$class <- as.factor(drs4_2020_2023_noq1$class)
+
+drs5_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m17drs_noq1$pprob,3), by = "comuna2") ##five trajectories
+drs5_2020_2023_noq1$class <- as.factor(drs5_2020_2023_noq1$class)
+
+drs6_2020_2023_noq1 <- merge(coverage_2020_2023_noq1, round(m18drs_noq1$pprob,3), by = "comuna2") ##five trajectories
+drs6_2020_2023_noq1$class <- as.factor(drs6_2020_2023_noq1$class)
+
+
+# MODEL ADEQUACY ----------------------------------------------------------
+
+## Model fit criteria ------------------------------------------------------
+
+model_fit_criteria_drs_2020_2023_noq1 <- tab_drs_2020_2023_noq1 %>% 
+  dplyr::select(G,loglik, npm, AIC, BIC, SABIC) %>% 
+  dplyr::mutate(sample_size= c(m13drs_noq1$ns, m14drs_noq1$ns, m15drs_noq1$ns, m16drs_noq1$ns, m17drs_noq1$ns, m18drs_noq1$ns),
+                CAIC = -2*loglik + 2*(log(sample_size)+1),##𝐶𝐴𝐼𝐶 = −2(𝐿𝐿) + 𝑑[𝑙𝑜𝑔(𝑛) + 1]
+                AWE= -2*loglik + 2*(log(sample_size)+1.5),##𝐴𝑊𝐸 = −2(𝐿𝐿) +𝑑[𝑙𝑜𝑔(𝑛)+ 1.5]
+                SIC = -0.05*BIC,
+                BF = exp(lead(SIC)-SIC),##BF = exp[SICa − SICb], where Schwartz Information Criterion, is defined as SIC=-0.05*BIC
+                cmP = exp((SIC - max(SIC))/sum(exp(SIC - max(SIC))))) %>%  
+  tibble::as.tibble() %>% 
+  tibble::rownames_to_column() %>% 
+  dplyr::select(-rowname) 
+
+
+write.csv(model_fit_criteria_drs_2020_2023_noq1, "model_fit_criteria_drs_2020_2023_noq1.csv", row.names = F)
+
+
+
+## Diagnostic criteria -----------------------------------------------------
+
+## average latent class posterior probability ------------------------------
+
+postprob(m13drs_noq1)
+postprob(m14drs_noq1)
+postprob(m15drs_noq1)
+postprob(m16drs_noq1)
+postprob(m17drs_noq1)
+postprob(m18drs_noq1)
+
+# Assuming postprob() returns a structured list
+posterior_probsm14drs_noq1 <- postprob(m14drs_noq1)  
+posterior_probsm15drs_noq1 <- postprob(m15drs_noq1)  
+posterior_probsm16drs_noq1 <- postprob(m16drs_noq1)  
+posterior_probsm17drs_noq1 <- postprob(m17drs_noq1)  
+posterior_probsm18drs_noq1 <- postprob(m18drs_noq1)  
+
+# Assuming you have a list of your model objects --------------------------
+
+models_list5 <- list(m14drs_noq1, m15drs_noq1, m16drs_noq1, m17drs_noq1, m18drs_noq1)  # Replace with your actual model objects
+
+## OCC ---------------------------------------------------------------------
+
+# Extract the lower OCC values for each model
+lower_occ_values6 <- sapply(models_list6, function(model) {
+  occ_values6 <- LCTMtoolkit(model)$occ
+  min(as.numeric(occ_values6[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_occ_values6)
+
+
+## APPA ---------------------------------------------------------------------
+
+
+# Extract the lower OCC values for each model
+lower_appa_values6 <- sapply(models_list6, function(model) {
+  appa_values6 <- LCTMtoolkit(model)$appa
+  min(as.numeric(appa_values6[1,]), na.rm = TRUE)  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(lower_appa_values6)
+
+
+# Mismatch ----------------------------------------------------------------
+
+
+# Extract the lower OCC values for each model
+highest_mismatch_values6 <- sapply(models_list6, function(model) {
+  mismatch_values6 <- LCTMtoolkit(model)$mismatch
+  max(as.numeric(mismatch_values6[1,]))  # Assuming OCC is in the first row of the OCC matrix
+})
+
+# Print the lower OCC values
+print(highest_mismatch_values6)
+
+
+## VLLRT test --------------------------------------------------------------
+
+
+# Sample inputs for calc_lrt function calls Lo–Mendell–Rubin adjusted LRT  ---------------
+outputs_vllrt6 <- list(
+  extract_p_value_from_lrt(m13drs_noq1$ns, tab_drs_2020_2023_noq1$loglik[1], tab_drs_2020_2023_noq1$npm[1], tab_drs_2020_2023_noq1$G[1], tab_drs_2020_2023_noq1$loglik[2], tab_drs_2020_2023_noq1$npm[2], tab_drs_2020_2023_noq1$G[2]),
+  extract_p_value_from_lrt(m14drs_noq1$ns, tab_drs_2020_2023_noq1$loglik[2], tab_drs_2020_2023_noq1$npm[2], tab_drs_2020_2023_noq1$G[2], tab_drs_2020_2023_noq1$loglik[3], tab_drs_2020_2023_noq1$npm[3], tab_drs_2020_2023_noq1$G[3]),
+  extract_p_value_from_lrt(m15drs_noq1$ns, tab_drs_2020_2023_noq1$loglik[3], tab_drs_2020_2023_noq1$npm[3], tab_drs_2020_2023_noq1$G[3], tab_drs_2020_2023_noq1$loglik[4], tab_drs_2020_2023_noq1$npm[4], tab_drs_2020_2023_noq1$G[4]),
+  extract_p_value_from_lrt(m16drs_noq1$ns, tab_drs_2020_2023_noq1$loglik[4], tab_drs_2020_2023_noq1$npm[4], tab_drs_2020_2023_noq1$G[4], tab_drs_2020_2023_noq1$loglik[5], tab_drs_2020_2023_noq1$npm[5], tab_drs_2020_2023_noq1$G[5]),
+  extract_p_value_from_lrt(m17drs_noq1$ns, tab_drs_2020_2023_noq1$loglik[5], tab_drs_2020_2023_noq1$npm[5], tab_drs_2020_2023_noq1$G[5], tab_drs_2020_2023_noq1$loglik[6], tab_drs_2020_2023_noq1$npm[6], tab_drs_2020_2023_noq1$G[6])
+)
+
+# Assuming outputs is already defined as your object
+values_vllrt6 <- sapply(outputs_vllrt6, function(x) gsub("^= ", "", x))
+
+# Print the vector
+print(values_vllrt6)
+
+
+## Diagnostic criteria table -----------------------------------------------
+
+
+diagnostic_criteria_drs_2020_2023_noq1 <- tab_drs_2020_2023_noq1 %>% 
+  select(G, entropy) %>% 
+  mutate(smallest_class_count = c(m13drs_noq1$ns, min(posterior_probsm14drs_noq1[[1]][1,]), min(posterior_probsm15drs_noq1[[1]][1,]), min(posterior_probsm16drs_noq1[[1]][1,]), min(posterior_probsm17drs_noq1[[1]][1,]), min(posterior_probsm18drs_noq1[[1]][1,])),
+         smallest_class_size_perc = c(100, min(posterior_probsm14drs_noq1[[1]][2,]), min(posterior_probsm15drs_noq1[[1]][2,]), min(posterior_probsm16drs_noq1[[1]][2,]), min(posterior_probsm17drs_noq1[[1]][2,]), min(posterior_probsm18drs_noq1[[1]][2,])),
+         "Lowest APPA" = c(NA, lower_appa_values6),
+         "Highest MMV" =c(NA, highest_mismatch_values6),
+         "Lowest OCC" = c(NA, lower_occ_values6),
+         VLMRLRT = c(NA, values_vllrt6)
+  ) %>% 
+  tibble::as.tibble() %>% 
+  tibble::rownames_to_column() %>% 
+  dplyr::select(-rowname) 
+
+write.csv(diagnostic_criteria_drs_2020_2023_noq1, "diagnostic_criteria_drs_2020_2023_noq1.csv", row.names = F)
+
+## Plot trajectories -------------------------------------------------------
+# Define a generic function named create_plot2 for the second set of plots (DRSC)
+
+create_plot6 <- function(data) {
+  ggplot(data, aes(x = ano2, y = drs_coverage, colour = class, group = comuna2)) +
+    scale_x_continuous(breaks = 0:12, labels = 2011:2023) +
+    xlab("Year") +
+    ylab("DRSC") +
+    theme(legend.position = "none") +
+    geom_smooth(se = TRUE, method = "loess", aes(group = class))
+}
+
+# Generate DRSC plots by applying create_plot5 to each dataset
+drsc_plots3 <- lapply(list(drs_2020_2023_noq1, drs2_2020_2023_noq1, drs3_2020_2023_noq1,
+                           drs4_2020_2023_noq1, drs5_2020_2023_noq1, drs6_2020_2023_noq1), create_plot6)
+
+# Arrange the plots in a grid layout
+gridExtra::grid.arrange(grobs = drsc_plots3)
+
+
+
+## Índice sociodemográfico -------------------------------------------------
+isde3 <- read_excel("SocioEconominoSaludComunas.xlsx")
+
+isde3 <- isde3[,c(2,4)]
+
+isde3 <- isde3 %>% 
+  dplyr::mutate(comuna = ...2 ) %>% 
+  dplyr::select(comuna, index) %>% 
+  arrange(comuna)
+
+
+class3 <- drs2_2020_2023_noq1 %>% 
+  mutate(ano2=match(ano, unique(ano)),
+         id_region = ifelse(id_region==16, 8, id_region), #Tratar a Ñuble como si hubiera siempre pertencido a una misma region  
+         id_region2 = match(id_region, unique(id_region)),
+         zona = factor(zona),
+         id_servicio2 = match(id_servicio, unique(id_servicio))) %>% 
+  dplyr::group_by(comuna, comuna2, class,id_servicio, id_region, zona) %>% 
+  dplyr::summarise(mean_drs_coverage = mean(drs_coverage, na.rm=T),
+                   mean_dm_coverage = mean(dm_coverage, na.rm=T)) %>% 
+  distinct(comuna, .keep_all = TRUE) %>% 
+  mutate(comuna2 = cur_group_id()) 
+
+
+class3[!(class3$comuna %in% isde3$comuna), ] 
+
+isde3$comuna[isde3$comuna == "Aisen"] <- "Aisén"
+isde3$comuna[isde3$comuna =="Padre las Casas"] <- "Padre Las Casas"
+class3$comuna[174] = isde3$comuna[192] ## esto arregla PAC
+isde3$comuna[isde3$comuna =="San Juan de La Costa"] <- "San Juan de la Costa" 
+
+
+class3[!(class3$comuna %in% isde3$comuna), ] 
+
+
+data_reglog3 <- right_join(class3, isde3) 
+
+
+
+data_reglog3 <- data_reglog3 %>% 
+  mutate(class_membership = ifelse(class==2, 1, 0)) 
+
+
+data_reglog3$index_standardized <- scale(data_reglog3$index)
+
+
+rurality <- read_excel("Clasificacion-comunas-PNDR.xlsx")
+rurality <- janitor::clean_names(rurality) %>% 
+  select(comuna, tipo_com, clasificacion) %>% 
+  mutate(urbanisation = tipo_com,
+         comuna = str_to_title(comuna),
+         classification= clasificacion) %>% 
+  select(-tipo_com)
+
+rurality$comuna <- gsub("\\bDe\\b", "de", rurality$comuna, ignore.case = TRUE)
+rurality$comuna <- gsub("\\bDel\\b", "del", rurality$comuna, ignore.case = TRUE)
+rurality$comuna <- gsub("\\b La\\b", " la", rurality$comuna, ignore.case = TRUE)
+rurality$comuna[rurality$comuna == "Aysén"] <- "Aisén"
+rurality$comuna[rurality$comuna == "Coyhaique"] <- "Coihaique"
+rurality$comuna[rurality$comuna == "Alto Biobío"] <- "Alto Bío-Bío"
+
+rurality[!(rurality$comuna %in% data_reglog3$comuna), ] 
+
+data_reglog3[!(data_reglog3$comuna %in% rurality$comuna), ] 
+
+data_reglog3 <- right_join(data_reglog3, rurality) 
+
+data_reglog3 <- data_reglog3 %>%
+  mutate(zona = ifelse(zona == 1, 'norte', 
+                       ifelse(zona == 2, 'centro', 'sur')))
+
+write.csv(data_reglog3, "data_reglog3.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2068,7 +3036,7 @@ saveWorkbook(wb, "Supplementary_material.xlsx", overwrite = TRUE)
 
 
 
-## Regresion logística -----------------------------------------------------
+## Logistic regression -----------------------------------------------------
 
 model1 <- glm(class_membership ~ index_standardized, ##0= baja, 1= Alta; index 1= the lower the most deprived
               data=data_reglog,
@@ -2078,12 +3046,21 @@ summary(model1)
 tidy(model1, conf.int=T, exponentiate = T) 
 Logit(class_membership  ~ index_standardized, data=data_reglog) 
 Logit(class_membership  ~ index_standardized, data=data_reglog2) 
+Logit(class_membership  ~ index_standardized, data=data_reglog3) 
 
 
 Logit(class_membership  ~ classification, data=data_reglog) 
 Logit(class_membership  ~ classification, data=data_reglog2) 
+Logit(class_membership  ~ classification, data=data_reglog3) 
 
 Logit(class_membership  ~ zona, data=data_reglog) 
 Logit(class_membership  ~ zona, data=data_reglog2) 
+Logit(class_membership  ~ zona, data=data_reglog3) 
+
+
+
+
+
+
 
 
